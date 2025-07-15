@@ -52,6 +52,12 @@ public class Step01VariableTest extends PlainTestCase {
         // 裏でStringBuilderが呼び出されている。
         // このようなデザインになっている理由はデバッグやログ出力がしやすくなるためらしい。
         // https://stackoverflow.com/questions/4260723/concatenating-null-strings-in-java
+        // TODO noniwa [いいね] おお、良い記事を見つけましたね！ by jflute (2025/07/15)
+        // 確かに NullPointerの方がミスを防ぎやすいというのはありますが、つどつどチェックするってのがさすがに面倒かもですね。
+        // C#とかは空文字になるんですが、ログという点では空文字よりもnullって出たほうがわかりやすいというのはあります。
+        // ただ、昔のインターネット画面ではよく「こんにちは、nullさん」とか表示されることありました(^^。
+        // メール文面は今でも null って超時々ですが見かけますね。
+        // もし仮にNullPointer仕様だったら発生しないことなんでしょうけど...
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
@@ -65,6 +71,8 @@ public class Step01VariableTest extends PlainTestCase {
         // String classのobjectを保持する変数はobjectが格納されているメモリ領域を参照している。
         // そのため、sea変数はland変数が参照しているメモリ領域に格納されている"oneman"を参照する。
         // https://docs.oracle.com/javase/8/docs/api/java/lang/String.html
+        // TODO noniwa [いいね] yes, 変数はインスタンス自体を保持してるわけではなく、あくまで参照してるだけって感じで by jflute (2025/07/15)
+        // とても正確に表現できてると思います。
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
@@ -76,6 +84,8 @@ public class Step01VariableTest extends PlainTestCase {
         log(sea); // your answer? => 415(o)
         // Objectを代入した変数はその参照を保持し、primitive型の変数は値を直接持つ。
         // https://zenn.dev/yo__shi/articles/10a6562668d85e
+        // TODO noniwa [ざつだん] Javaはプリミティブ型があるところがちょっとややこしいところです by jflute (2025/07/15)
+        // ただ、超絶スピードを求める場面であれば、できるだけプリミティブ型で書くってのが使えるってのはありあす。
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
@@ -88,6 +98,12 @@ public class Step01VariableTest extends PlainTestCase {
         log(sea); // your answer? => 417(x) => 416(o)
         // BigDecimalはimmutableなクラスであるため、addメソッドをは新しいオブジェクトを返す。
         // seaにaddメソッドの戻り値を代入しないと、seaの値は変わらない。
+        // TODO noniwa [いいね] immutableという言葉が出てきたの素晴らしいです by jflute (2025/07/15)
+        // TODO noniwa [お試し課題] 試しに、IDE上でBigDecimal (変数の型宣言) にカーソルを当てると... by jflute (2025/07/15)
+        // ツールチップでjavadocが表示されるので、その一言目の単語を見てみてください(^^。
+
+        // TODO jflute #1on1 にて、さらに深堀りしていく予定 (2025/07/15)
+        // (↑これはくぼ用のtodoということで、そのままにしておいてください)
     }
 
     // ===================================================================================
@@ -128,6 +144,10 @@ public class Step01VariableTest extends PlainTestCase {
         String sea = instanceBroadway + "|" + instanceDockside + "|" + instanceHangar + "|" + instanceMagiclamp;
         log(sea); // your answer? => bigbang|1|null|magician(o)
         // helpInstanceVariableViaMethodで引数として渡されるinstanceHangarはローカル変数なので変更されない。
+        // TODO noniwa [いいね] Yes, 引数はあくまでローカル変数で、ある意味詰め替えられるわけですね by jflute (2025/07/15)
+        // 変数とインスタンスの関係性をよく理解されているようで何よりです。ここ間違える人多いので(^^。
+        
+        // TODO jflute #1on1 にて、インスタンスとは？話 (2025/07/15)
     }
 
     private void helpInstanceVariableViaMethod(String instanceMagiclamp) {
