@@ -52,12 +52,14 @@ public class Step01VariableTest extends PlainTestCase {
         // 裏でStringBuilderが呼び出されている。
         // このようなデザインになっている理由はデバッグやログ出力がしやすくなるためらしい。
         // https://stackoverflow.com/questions/4260723/concatenating-null-strings-in-java
-        // TODO noniwa [いいね] おお、良い記事を見つけましたね！ by jflute (2025/07/15)
+        // done noniwa おお、良い記事を見つけましたね！ by jflute (2025/07/15)
         // 確かに NullPointerの方がミスを防ぎやすいというのはありますが、つどつどチェックするってのがさすがに面倒かもですね。
         // C#とかは空文字になるんですが、ログという点では空文字よりもnullって出たほうがわかりやすいというのはあります。
         // ただ、昔のインターネット画面ではよく「こんにちは、nullさん」とか表示されることありました(^^。
         // メール文面は今でも null って超時々ですが見かけますね。
         // もし仮にNullPointer仕様だったら発生しないことなんでしょうけど...
+        // #1on1: メールのジレンマ: あんまり気合が(比較的)入らない領域なんだけど、慎重さは求められる
+        // #1on1: null文字列ポリシーのお話
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
@@ -71,7 +73,7 @@ public class Step01VariableTest extends PlainTestCase {
         // String classのobjectを保持する変数はobjectが格納されているメモリ領域を参照している。
         // そのため、sea変数はland変数が参照しているメモリ領域に格納されている"oneman"を参照する。
         // https://docs.oracle.com/javase/8/docs/api/java/lang/String.html
-        // TODO noniwa [いいね] yes, 変数はインスタンス自体を保持してるわけではなく、あくまで参照してるだけって感じで by jflute (2025/07/15)
+        // done noniwa [いいね] yes, 変数はインスタンス自体を保持してるわけではなく、あくまで参照してるだけって感じで by jflute (2025/07/15)
         // とても正確に表現できてると思います。
     }
 
@@ -84,8 +86,10 @@ public class Step01VariableTest extends PlainTestCase {
         log(sea); // your answer? => 415(o)
         // Objectを代入した変数はその参照を保持し、primitive型の変数は値を直接持つ。
         // https://zenn.dev/yo__shi/articles/10a6562668d85e
-        // TODO noniwa [ざつだん] Javaはプリミティブ型があるところがちょっとややこしいところです by jflute (2025/07/15)
+        // done noniwa [ざつだん] Javaはプリミティブ型があるところがちょっとややこしいところです by jflute (2025/07/15)
         // ただ、超絶スピードを求める場面であれば、できるだけプリミティブ型で書くってのが使えるってのはありあす。
+        // #1on1: プリミティブ型の現場での利用バランスのお話
+        // https://dbflute.seasar.org/ja/manual/topic/programming/java/beginners.html#primitivewrapper
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
@@ -98,12 +102,19 @@ public class Step01VariableTest extends PlainTestCase {
         log(sea); // your answer? => 417(x) => 416(o)
         // BigDecimalはimmutableなクラスであるため、addメソッドをは新しいオブジェクトを返す。
         // seaにaddメソッドの戻り値を代入しないと、seaの値は変わらない。
-        // TODO noniwa [いいね] immutableという言葉が出てきたの素晴らしいです by jflute (2025/07/15)
-        // TODO noniwa [お試し課題] 試しに、IDE上でBigDecimal (変数の型宣言) にカーソルを当てると... by jflute (2025/07/15)
+        // done noniwa [いいね] immutableという言葉が出てきたの素晴らしいです by jflute (2025/07/15)
+        // done noniwa [お試し課題] 試しに、IDE上でBigDecimal (変数の型宣言) にカーソルを当てると... by jflute (2025/07/15)
         // ツールチップでjavadocが表示されるので、その一言目の単語を見てみてください(^^。
 
-        // TODO jflute #1on1 にて、さらに深堀りしていく予定 (2025/07/15)
+        // done jflute #1on1 にて、さらに深堀りしていく予定 (2025/07/15)
         // (↑これはくぼ用のtodoということで、そのままにしておいてください)
+        // immutableのメリットの話: 人間の都合の話、可読性、状態管理など
+        // Javaでのimmutable: (くぼの解釈) バランス指向
+        // JavaDocの見方の話: メソッド補完時にcontrol+Jで表示
+        // #1on1: 質問 94のインスタンスはいつ破棄されるのか？
+        //  => ガベージコレクションでいつか
+        
+        // TODO jflute じかい #1on1 にソースコードリーディングも (2025/07/17)
     }
 
     // ===================================================================================
