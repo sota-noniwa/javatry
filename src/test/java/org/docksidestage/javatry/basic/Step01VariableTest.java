@@ -113,7 +113,7 @@ public class Step01VariableTest extends PlainTestCase {
         // JavaDocの見方の話: メソッド補完時にcontrol+Jで表示
         // #1on1: 質問 94のインスタンスはいつ破棄されるのか？
         //  => ガベージコレクションでいつか
-        
+
         // TODO jflute じかい #1on1 にソースコードリーディングも (2025/07/17)
     }
 
@@ -155,9 +155,9 @@ public class Step01VariableTest extends PlainTestCase {
         String sea = instanceBroadway + "|" + instanceDockside + "|" + instanceHangar + "|" + instanceMagiclamp;
         log(sea); // your answer? => bigbang|1|null|magician(o)
         // helpInstanceVariableViaMethodで引数として渡されるinstanceHangarはローカル変数なので変更されない。
-        // TODO noniwa [いいね] Yes, 引数はあくまでローカル変数で、ある意味詰め替えられるわけですね by jflute (2025/07/15)
+        // done noniwa [いいね] Yes, 引数はあくまでローカル変数で、ある意味詰め替えられるわけですね by jflute (2025/07/15)
         // 変数とインスタンスの関係性をよく理解されているようで何よりです。ここ間違える人多いので(^^。
-        
+
         // TODO jflute #1on1 にて、インスタンスとは？話 (2025/07/15)
     }
 
@@ -178,7 +178,10 @@ public class Step01VariableTest extends PlainTestCase {
         String sea = "harbor";
         int land = 415;
         helpMethodArgumentImmutableMethodcall(sea, land);
-        log(sea); // your answer? => 
+        log(sea); // your answer? => harbor(o)
+        // Stringはimmutableなので、一度インスタンス化されたら変わらない。
+        // sea.concat()では新しいインスタンスが生成され、helpMethodArgumentImmutableMethodcallメゾットのスコープ
+        // を抜けるとそのインスタンスへの参照は不可能になる。
     }
 
     private void helpMethodArgumentImmutableMethodcall(String sea, int land) {
@@ -195,12 +198,34 @@ public class Step01VariableTest extends PlainTestCase {
         StringBuilder sea = new StringBuilder("harbor");
         int land = 415;
         helpMethodArgumentMethodcall(sea, land);
-        log(sea); // your answer? => 
+        log(sea); // your answer? => harbor416(o)
+        // StringBuilderはmutableなので、インスタンス化された後も変更可能。
+        // StringBuilderクラスを見てみると、例えばnew StringBuilder("harbor")のようにStringを引数にとる場合は
+        // 引数の文字列の長さ+16(initial capacity)の長さのバッファを確保する。
+        // つまりこの場合、22文字分のバッファを確保する。
+        // 文字列の長さがこのバッファを超えると、古い文字列の長さの2倍+2文字分のバッファを確保し、
+        // 古い文字列をコピーして、新しいバッファに格納することで新しいオブジェクトを作ることなく、concatenationを実現している。
+        // 新しくバッファを作る際にcapacityを2倍にしているのだが、その際に掛け算ではなく処理がより早いbitwise left shiftを使っているのが面白い。
     }
 
     private void helpMethodArgumentMethodcall(StringBuilder sea, int land) {
         ++land;
         sea.append(land);
+    }
+
+    public void test_StringBuilder_append_performance_by_capacity() {
+        long startSmall = System.nanoTime();
+        StringBuilder sbWithSmallCapacity = new StringBuilder(6);
+        sbWithSmallCapacity.append("Hello world!");
+        long endSmall = System.nanoTime();
+
+        long startLarge = System.nanoTime();
+        StringBuilder sbWithLargeCapacity = new StringBuilder(30);
+        sbWithLargeCapacity.append("Hello world!");
+        long endLarge = System.nanoTime();
+
+        log("capacityを超えた場合の処理時間: " + (endSmall - startSmall) + "ns");
+        log("capacityを超えない場合の処理時間: " + (endLarge - startLarge) + "ns");
     }
 
     // -----------------------------------------------------
@@ -211,7 +236,16 @@ public class Step01VariableTest extends PlainTestCase {
         StringBuilder sea = new StringBuilder("harbor");
         int land = 415;
         helpMethodArgumentVariable(sea, land);
-        log(sea); // your answer? => 
+        log(sea); // your answer? => harbor(o)
+        // Javaでは、メゾットの引数は常に値渡し(pass by value)である。
+        // この場合、helperメゾットに渡されるのはseaのメモリアドレスのコピーである。
+        // つまり、このメゾット内のseaとhelperメゾット内のseaの2つの変数が同じStringBuilderインスタンスを参照している。
+        // helperメゾット内での再代入は、コピーしたsea変数の参照先を書き換えているだけなので、元のsea変数の参照先は変わらない
+        // helperメゾットの呼び出し時:
+        // sea(original) -> "harbor" <- sea(copy or local variable in helper method)
+        // helperメゾット内での再代入時:
+        // sea(original) -> "harbor", sea(copy) -> "harbor416"(新しく作成されたStringBuilderインスタンス)
+        // helperメゾット内でsea.append(land)を実行すればoriginalのsea変数の参照先を変更することができる。(2つのsea変数が同じメモリアドレスを参照しているため)
     }
 
     private void helpMethodArgumentVariable(StringBuilder sea, int land) {
@@ -241,6 +275,12 @@ public class Step01VariableTest extends PlainTestCase {
      */
     public void test_variable_writing() {
         // define variables here
+        String sea = "mystic";
+        Integer land = null;
+        int piari;
+        //        log(sea + ", " + land + ", " + piari);
+        // compile error: variable piari might not have been initialized
+        // 初期化してない変数はコンパイルエラーになる。
     }
 
     // ===================================================================================
@@ -252,11 +292,18 @@ public class Step01VariableTest extends PlainTestCase {
      * <pre>
      * _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
      * your question here (ここにあなたの質問を):
-     * 
+     * (メソッド終了時の変数 sb の中身は？)
      * _/_/_/_/_/_/_/_/_/_/
      * </pre>
      */
     public void test_variable_yourExercise() {
         // write your code here
+        StringBuilder sb = new StringBuilder("Hello");
+        myAppend(sb);
+        log(sb); // your answer? =>
+    }
+
+    private void myAppend(StringBuilder sb) {
+        sb.append("World");
     }
 }
