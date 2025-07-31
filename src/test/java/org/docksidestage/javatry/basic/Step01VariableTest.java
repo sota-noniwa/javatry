@@ -115,6 +115,9 @@ public class Step01VariableTest extends PlainTestCase {
         //  => ガベージコレクションでいつか
 
         // TODO jflute じかい #1on1 にソースコードリーディングも (2025/07/17)
+        // #1on1: add()のソースコードリーディング、インスタンス変数の宣言を見たり、
+        // staticのadd()の方を見たりなど。
+        // 「漠然読みで構造を把握して、フォーカス読みでピンポイントで目的を知るための情報を得る」
     }
 
     // ===================================================================================
@@ -154,11 +157,12 @@ public class Step01VariableTest extends PlainTestCase {
         helpInstanceVariableViaMethod(instanceMagiclamp);
         String sea = instanceBroadway + "|" + instanceDockside + "|" + instanceHangar + "|" + instanceMagiclamp;
         log(sea); // your answer? => bigbang|1|null|magician(o)
-        // helpInstanceVariableViaMethodで引数として渡されるinstanceHangarはローカル変数なので変更されない。
+        // helpInstanceVariableViaMethodで引数として渡されるinstanceMagiclampはローカル変数なので変更されない。
         // done noniwa [いいね] Yes, 引数はあくまでローカル変数で、ある意味詰め替えられるわけですね by jflute (2025/07/15)
         // 変数とインスタンスの関係性をよく理解されているようで何よりです。ここ間違える人多いので(^^。
 
-        // TODO jflute #1on1 にて、インスタンスとは？話 (2025/07/15)
+        // done jflute #1on1 にて、インスタンスとは？話 (2025/07/15)
+        // #1on1: 設計図から実際のメモリ上に展開した(物体!?データ!?)もの (一軒家の例え話)
     }
 
     private void helpInstanceVariableViaMethod(String instanceMagiclamp) {
@@ -182,7 +186,7 @@ public class Step01VariableTest extends PlainTestCase {
         // Stringはimmutableなので、一度インスタンス化されたら変わらない。
         // sea.concat()では新しいインスタンスが生成され、helpMethodArgumentImmutableMethodcallメゾットのスコープ
         // を抜けるとそのインスタンスへの参照は不可能になる。
-        // TODO noniwa [いいね] yes, immutableしっかり捉えていますね by jflute (2025/07/31)
+        // done noniwa [いいね] yes, immutableしっかり捉えていますね by jflute (2025/07/31)
     }
 
     private void helpMethodArgumentImmutableMethodcall(String sea, int land) {
@@ -207,8 +211,20 @@ public class Step01VariableTest extends PlainTestCase {
         // 文字列の長さがこのバッファを超えると、古い文字列の長さの2倍+2文字分のバッファを確保し、
         // 古い文字列をコピーして、新しいバッファに格納することで新しいオブジェクトを作ることなく、concatenationを実現している。
         // 新しくバッファを作る際にcapacityを2倍にしているのだが、その際に掛け算ではなく処理がより早いbitwise left shiftを使っているのが面白い。
-        // TODO noniwa [いいね] すごい！内部の挙動まで調べてるの素晴らしいです。 by jflute (2025/07/31)
+        // done noniwa [いいね] すごい！内部の挙動まで調べてるの素晴らしいです。 by jflute (2025/07/31)
         // 自分、bitwise left shift まで意識したことなかったです(^^。1on1でぜひ一緒にソースコード追ってみましょう。
+        //String[] value = new String[] { "a", "b", "c", "d" };
+        //int result = (value.length << 1);
+        //log(result);
+        // #1on1: ソースコード追ってみた。ArrayListのコードも追ってみた。
+        // 業務で事前にサイズがわかっていれば、initial capacityを指定してnewすることもできる。
+        // ただ、事前にわかる場面も少ないし、現代だとインフラが高性能なので、細かいところ気にしないでいい場面が多い。
+        // #1on1: 妥協の精度。わかってて妥協するのと、よくわかってなくてなんとなく妥協するのでは、全然違う。 (2025/07/31)
+        // AとBの切り捨てのメリット/デメリットの判断のジレンマ、理由のある妥協 by noniwa
+        // #1on1: 実際にStringBuilder, ArrayListのこの仕組みが直接役に立つことは少ないかもしれないけど...
+        // こういった仕組みをしてってて、パフォーマンスの観点を持っていることが、応用につながる。
+        // 動的な(拡張できる)データの特徴をここで学んだと捉えてもらえたらと。
+        // 学んだことを抽象化して汎用的な知識にする習慣を。
     }
 
     private void helpMethodArgumentMethodcall(StringBuilder sea, int land) {
@@ -229,7 +245,7 @@ public class Step01VariableTest extends PlainTestCase {
 
         log("capacityを超えた場合の処理時間: " + (endSmall - startSmall) + "ns");
         log("capacityを超えない場合の処理時間: " + (endLarge - startLarge) + "ns");
-        // TODO noniwa [いいね] おおぉ、結果違いいますね。ナノ秒で見ると差がわかりやすいですね by jflute (2025/07/31)
+        // done noniwa [いいね] おおぉ、結果違いいますね。ナノ秒で見ると差がわかりやすいですね by jflute (2025/07/31)
     }
 
     // -----------------------------------------------------
@@ -250,8 +266,13 @@ public class Step01VariableTest extends PlainTestCase {
         // helperメゾット内での再代入時:
         // sea(original) -> "harbor", sea(copy) -> "harbor416"(新しく作成されたStringBuilderインスタンス)
         // helperメゾット内でsea.append(land)を実行すればoriginalのsea変数の参照先を変更することができる。(2つのsea変数が同じメモリアドレスを参照しているため)
-        // TODO noniwa [いいね] 詳しい変数とインスタンスの関係性の挙動をしっかり把握されていますね！ by jflute (2025/07/31)
-        // TODO jflute 1on1にて、値渡しと参照渡しという言葉について (2025/07/31)
+        // done noniwa [いいね] 詳しい変数とインスタンスの関係性の挙動をしっかり把握されていますね！ by jflute (2025/07/31)
+        // done jflute #1on1 にて、値渡しと参照渡しという言葉について (2025/07/31)
+        // この記事の場合:
+        // 　値渡し: intなどのプリミティブ型の値をコピー
+        // 　参照渡し: オブジェクト型のインスタンスへのアドレス(参照)をコピー
+        // https://zenn.dev/yutabeee/articles/3512fe4001d8d3
+        // ※個人的には↑なイメージで、ただ言葉の定義としてはちょっと世の中ブレがあるのかも？？？
     }
 
     private void helpMethodArgumentVariable(StringBuilder sea, int land) {
@@ -309,7 +330,7 @@ public class Step01VariableTest extends PlainTestCase {
         myAppend(sb);
         log(sb); // your answer? =>
     }
-    // TODO noniwa [いいね] 変数とインスタンスの本質的なことを問うエクササイズでいいですね^^ by jflute (2025/07/31)
+    // done noniwa [いいね] 変数とインスタンスの本質的なことを問うエクササイズでいいですね^^ by jflute (2025/07/31)
 
     private void myAppend(StringBuilder sb) {
         sb.append("World");
