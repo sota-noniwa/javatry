@@ -182,6 +182,7 @@ public class Step01VariableTest extends PlainTestCase {
         // Stringはimmutableなので、一度インスタンス化されたら変わらない。
         // sea.concat()では新しいインスタンスが生成され、helpMethodArgumentImmutableMethodcallメゾットのスコープ
         // を抜けるとそのインスタンスへの参照は不可能になる。
+        // TODO noniwa [いいね] yes, immutableしっかり捉えていますね by jflute (2025/07/31)
     }
 
     private void helpMethodArgumentImmutableMethodcall(String sea, int land) {
@@ -206,6 +207,8 @@ public class Step01VariableTest extends PlainTestCase {
         // 文字列の長さがこのバッファを超えると、古い文字列の長さの2倍+2文字分のバッファを確保し、
         // 古い文字列をコピーして、新しいバッファに格納することで新しいオブジェクトを作ることなく、concatenationを実現している。
         // 新しくバッファを作る際にcapacityを2倍にしているのだが、その際に掛け算ではなく処理がより早いbitwise left shiftを使っているのが面白い。
+        // TODO noniwa [いいね] すごい！内部の挙動まで調べてるの素晴らしいです。 by jflute (2025/07/31)
+        // 自分、bitwise left shift まで意識したことなかったです(^^。1on1でぜひ一緒にソースコード追ってみましょう。
     }
 
     private void helpMethodArgumentMethodcall(StringBuilder sea, int land) {
@@ -226,6 +229,7 @@ public class Step01VariableTest extends PlainTestCase {
 
         log("capacityを超えた場合の処理時間: " + (endSmall - startSmall) + "ns");
         log("capacityを超えない場合の処理時間: " + (endLarge - startLarge) + "ns");
+        // TODO noniwa [いいね] おおぉ、結果違いいますね。ナノ秒で見ると差がわかりやすいですね by jflute (2025/07/31)
     }
 
     // -----------------------------------------------------
@@ -246,6 +250,8 @@ public class Step01VariableTest extends PlainTestCase {
         // helperメゾット内での再代入時:
         // sea(original) -> "harbor", sea(copy) -> "harbor416"(新しく作成されたStringBuilderインスタンス)
         // helperメゾット内でsea.append(land)を実行すればoriginalのsea変数の参照先を変更することができる。(2つのsea変数が同じメモリアドレスを参照しているため)
+        // TODO noniwa [いいね] 詳しい変数とインスタンスの関係性の挙動をしっかり把握されていますね！ by jflute (2025/07/31)
+        // TODO jflute 1on1にて、値渡しと参照渡しという言葉について (2025/07/31)
     }
 
     private void helpMethodArgumentVariable(StringBuilder sea, int land) {
@@ -281,6 +287,7 @@ public class Step01VariableTest extends PlainTestCase {
         //        log(sea + ", " + land + ", " + piari);
         // compile error: variable piari might not have been initialized
         // 初期化してない変数はコンパイルエラーになる。
+        // TODO noniwa [ふぉろー] piariはインスタンス変数ということで、メソッドの外に宣言してみてください by jflute (2025/07/31)
     }
 
     // ===================================================================================
@@ -302,6 +309,7 @@ public class Step01VariableTest extends PlainTestCase {
         myAppend(sb);
         log(sb); // your answer? =>
     }
+    // TODO noniwa [いいね] 変数とインスタンスの本質的なことを問うエクササイズでいいですね^^ by jflute (2025/07/31)
 
     private void myAppend(StringBuilder sb) {
         sb.append("World");
