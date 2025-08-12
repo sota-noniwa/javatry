@@ -300,15 +300,15 @@ public class Step01VariableTest extends PlainTestCase {
      * o すべての変数をlog()でカンマ区切りの文字列で表示
      * </pre>
      */
+    int piari;
     public void test_variable_writing() {
         // define variables here
         String sea = "mystic";
         Integer land = null;
-        int piari;
-        //        log(sea + ", " + land + ", " + piari);
+        log(sea + ", " + land + ", " + piari);
         // compile error: variable piari might not have been initialized
         // 初期化してない変数はコンパイルエラーになる。
-        // TODO noniwa [ふぉろー] piariはインスタンス変数ということで、メソッドの外に宣言してみてください by jflute (2025/07/31)
+        // done noniwa [ふぉろー] piariはインスタンス変数ということで、メソッドの外に宣言してみてください by jflute (2025/07/31)
     }
 
     // ===================================================================================

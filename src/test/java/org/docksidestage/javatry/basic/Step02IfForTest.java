@@ -41,7 +41,7 @@ public class Step02IfForTest extends PlainTestCase {
         if (sea >= 904) {
             sea = 2001;
         }
-        log(sea); // your answer? => 2001
+        log(sea); // your answer? => 2001(o)
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
@@ -52,7 +52,7 @@ public class Step02IfForTest extends PlainTestCase {
         } else {
             sea = 7;
         }
-        log(sea); // your answer? => 
+        log(sea); // your answer? => 7(o)
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
@@ -67,7 +67,8 @@ public class Step02IfForTest extends PlainTestCase {
         } else {
             sea = 9;
         }
-        log(sea); // your answer? => 
+        log(sea); // your answer? => 7(o)
+        // このコードの場合、上の条件から順に条件(ステートメント)がチェックされ、一度trueになると後の条件は無視される。
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
@@ -97,7 +98,8 @@ public class Step02IfForTest extends PlainTestCase {
         if (land) {
             sea = 10;
         }
-        log(sea); // your answer? => 
+        log(sea); // your answer? => 10(o)
+        // コントロールフローを意識して読み解く
     }
 
     // ===================================================================================
@@ -113,7 +115,8 @@ public class Step02IfForTest extends PlainTestCase {
                 sea = stage;
             }
         }
-        log(sea); // your answer? => 
+        log(sea); // your answer? => dockside(o)
+        // stageList内のindexが1のエレメントをseaに代入する
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
@@ -123,7 +126,8 @@ public class Step02IfForTest extends PlainTestCase {
         for (String stage : stageList) {
             sea = stage;
         }
-        log(sea); // your answer? => 
+        log(sea); // your answer? => magiclamp(o)
+        // 順番にリストの要素を代入しているので、最終的には最後の要素がseaが参照するオブジェクトとなる。
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
@@ -139,7 +143,8 @@ public class Step02IfForTest extends PlainTestCase {
                 break;
             }
         }
-        log(sea); // your answer? => 
+        log(sea); // your answer? => hangar(o)
+        // 条件をよく見て最終的な値を求める
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
@@ -155,7 +160,7 @@ public class Step02IfForTest extends PlainTestCase {
             }
         });
         String sea = sb.toString();
-        log(sea); // your answer? => 
+        log(sea); // your answer? => dockside(o)
     }
 
     // ===================================================================================
@@ -167,6 +172,16 @@ public class Step02IfForTest extends PlainTestCase {
      */
     public void test_iffor_making() {
         // write if-for here
+        List<String> stageList = prepareStageList();
+        List<String> stageListA = new ArrayList<>();
+        for (String stage : stageList) {
+            if (stage.contains("a")) {
+                stageListA.add(stage);
+            }
+        }
+        for (String stage : stageListA) {
+            log(stage);
+        }
     }
 
     // ===================================================================================
@@ -179,16 +194,57 @@ public class Step02IfForTest extends PlainTestCase {
     public void test_iffor_refactor_foreach_to_forEach() {
         List<String> stageList = prepareStageList();
         String sea = null;
-        for (String stage : stageList) {
-            if (stage.startsWith("br")) {
-                continue;
-            }
-            sea = stage;
+        //        for (String stage : stageList) {
+        //            if (stage.startsWith("br")) {
+        //                continue;
+        //            }
+        //            sea = stage;
+        //            if (stage.contains("ga")) {
+        //                break;
+        //            }
+        //        }
+
+        //        stageList.forEach(stage -> {sea = stage;}); // can't access sea within lambda expression
+        StageFlag stageFlag = new StageFlag();
+        stageList.forEach(stage -> {
+            if (stageFlag.getFlag())
+                return;
+            if (stage.startsWith("br"))
+                return;
+            stageFlag.setStage(stage);
             if (stage.contains("ga")) {
-                break;
+                stageFlag.setFlag(true);
             }
-        }
+        });
+        sea = stageFlag.getStage();
         log(sea); // should be same as before-fix
+        // ラムダ式の中では、ラムダ式の外で定義されたローカル変数を参照することはできるが値を変更することはできない。
+        // ラムダ式は非同期処理なので、ここで値の変更を許してしまうと最終的なseaの値が一意に定まらない。(thread safeでない)
+        // 同様の理由で、ラムダ式の外でsea変数の値を変更する場合はラムダ式の中で参照することはできなくなる。
+        // 参照先のオブジェクトの状態を変更することはできるが、推奨はされていない。
+        // https://relearn-java.com/lambda/#%E3%83%A9%E3%83%A0%E3%83%80%E5%BC%8F%E3%81%AE%E5%A4%96%E3%81%AE%E3%83%AD%E3%83%BC%E3%82%AB%E3%83%AB%E5%A4%89%E6%95%B0%E3%81%B8%E3%81%AE%E3%82%A2%E3%82%AF%E3%82%BB%E3%82%B9
+        // TODO jflute オブジェクトの状態を変更することについて、上の記事では「ラムダ式の中で副作用を伴う処理を行うことは 関数型言語の思想から外れるため、このような使い方は望ましくありません。」とありますが、Javaはオブジェクト指向言語ではないの？と疑問に思いましたが、どう思われますか？
+    }
+
+    private class StageFlag {
+        private String stage = null;
+        private Boolean flag = false;
+
+        public StageFlag() {
+        }
+
+        public String getStage() {
+            return stage;
+        }
+        public void setStage(String stage) {
+            this.stage = stage;
+        }
+        public Boolean getFlag() {
+            return flag;
+        }
+        public void setFlag(Boolean flag) {
+            this.flag = flag;
+        }
     }
 
     /**
@@ -197,12 +253,20 @@ public class Step02IfForTest extends PlainTestCase {
      * <pre>
      * _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
      * your question here (ここにあなたの質問を):
-     * 
+     * 出力結果を予想してください。
      * _/_/_/_/_/_/_/_/_/_/
      * </pre>
      */
     public void test_iffor_yourExercise() {
         // write your code here
+        List<String> stageList = prepareStageList();
+        int count = 0;
+        for (String stage : stageList) {
+            if (stage.length() > 7) {
+                count++;
+            }
+        }
+        log(count);
     }
 
     // ===================================================================================
