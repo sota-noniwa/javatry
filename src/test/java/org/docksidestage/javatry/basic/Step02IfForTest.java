@@ -20,6 +20,7 @@ import java.util.List;
 
 import org.docksidestage.unit.PlainTestCase;
 
+// TODO noniwa javadocのauthorお願いしますm(_ _)m by jflute (2025/08/15)
 /**
  * The test of if-for. <br>
  * Operate exercise as javadoc. If it's question style, write your answer before test execution. <br>
@@ -101,6 +102,7 @@ public class Step02IfForTest extends PlainTestCase {
         log(sea); // your answer? => 10(o)
         // コントロールフローを意識して読み解く
         // TODO noniwa [いいね] コントロールフローが複雑ですからね。ぜひ1on1でさらに聞かせてください^^ by jflute (2025/08/14)
+        // #1on1: 再び「漠然読みで構造を把握して、フォーカス読みでピンポイントで目的を知るための情報を得る」
     }
 
     // ===================================================================================
@@ -129,7 +131,9 @@ public class Step02IfForTest extends PlainTestCase {
         }
         log(sea); // your answer? => magiclamp(o)
         // 順番にリストの要素を代入しているので、最終的には最後の要素がseaが参照するオブジェクトとなる。
-        // TODO jflute 1on1にて、forと拡張for文のお話 (2025/08/14)
+        // done jflute 1on1にて、forと拡張for文のお話 (2025/08/14)
+        // #1on1: 普通のfor文って言ったときどっち指すか？個人的には拡張for文を指す人が多い印象。
+        // 文法用語と現場用語のお話、前回クラスメソッドの話をした、インスタンスメソッドも。
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
@@ -163,7 +167,15 @@ public class Step02IfForTest extends PlainTestCase {
         });
         String sea = sb.toString();
         log(sea); // your answer? => dockside(o)
-        // TODO jflute 1on1にて、forEach()メソッドのお話 (2025/08/14)
+        // done jflute 1on1にて、forEach()メソッドのお話 (2025/08/14)
+        // 1995: いんとあいfor文
+        // 2005あたり: 拡張for文
+        // 2015あたり: forEach()メソッド
+        // 拡張for文に比べて、forEach()メソッドの良いところ。
+        // (forEach()は機能落ちしているが...)
+        // 逆に、スコープを狭めることで安全性 by noniwaさん
+        // + 可読性 :: immutableと似た話
+        // できないことが、デメリットではなく、メリットになることもある。
     }
 
     // ===================================================================================
@@ -208,8 +220,8 @@ public class Step02IfForTest extends PlainTestCase {
         //        }
 
         //        stageList.forEach(stage -> {sea = stage;}); // can't access sea within lambda expression
-        // TODO tabata [いいね] mutableなクラスを自作したのですごいです^^ by jflute (2025/08/14)
-        // TODO tabata StageFlagはflagだけじゃなく、stage自身も保持しているので、名前でFlagと限定すると紛らわしいので... by jflute (2025/08/14)
+        // TODO noniwa [いいね] mutableなクラスを自作したのですごいです^^ by jflute (2025/08/14)
+        // TODO noniwa StageFlagはflagだけじゃなく、stage自身も保持しているので、名前でFlagと限定すると紛らわしいので... by jflute (2025/08/14)
         // stageのループの状態を示すクラスということで、StageLoopState どうでしょう？(あくまで一例ということで)
         StageFlag stageFlag = new StageFlag();
         stageList.forEach(stage -> {
@@ -229,8 +241,8 @@ public class Step02IfForTest extends PlainTestCase {
         // 同様の理由で、ラムダ式の外でsea変数の値を変更する場合はラムダ式の中で参照することはできなくなる。
         // 参照先のオブジェクトの状態を変更することはできるが、推奨はされていない。
         // https://relearn-java.com/lambda/#%E3%83%A9%E3%83%A0%E3%83%80%E5%BC%8F%E3%81%AE%E5%A4%96%E3%81%AE%E3%83%AD%E3%83%BC%E3%82%AB%E3%83%AB%E5%A4%89%E6%95%B0%E3%81%B8%E3%81%AE%E3%82%A2%E3%82%AF%E3%82%BB%E3%82%B9
-        // TODO done jflute オブジェクトの状態を変更することについて、上の記事では「ラムダ式の中で副作用を伴う処理を行うことは 関数型言語の思想から外れるため、このような使い方は望ましくありません。」とありますが、Javaはオブジェクト指向言語ではないの？と疑問に思いましたが、どう思われますか？
-        // TODO tabata [へんじ] Javaはオブジェクト指向言語と銘打っていますが、実際には色々な思想が入り込んでいる言語です。 by jflute (2025/08/14)
+        // done jflute オブジェクトの状態を変更することについて、上の記事では「ラムダ式の中で副作用を伴う処理を行うことは 関数型言語の思想から外れるため、このような使い方は望ましくありません。」とありますが、Javaはオブジェクト指向言語ではないの？と疑問に思いましたが、どう思われますか？
+        // done noniwa [へんじ] Javaはオブジェクト指向言語と銘打っていますが、実際には色々な思想が入り込んでいる言語です。 by jflute (2025/08/14)
         // 例えば、staticメソッドのようにオブジェクト指向とは少々離れて手続き型的な(と個人的には感じる)機能など。
         // Java8で導入されたラムダ式やforEach()メソッドは、関数型プログラミングの思想に影響されて導入されたものと解釈しています。
         // 極端な言い方すると、「メインはオブジェクト指向言語だけど、わりといいとこ取りしようとしてる言語 (できてるかどうかは別として)」
@@ -279,7 +291,7 @@ public class Step02IfForTest extends PlainTestCase {
             }
         }
         log(count);
-        // TODO tabata [いいね] ふぅ、合ってた。目で数えました(^^。 by jflute (2025/08/14)
+        // TODO noniwa [いいね] ふぅ、合ってた。目で数えました(^^。 by jflute (2025/08/14)
     }
 
     // ===================================================================================
