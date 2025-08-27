@@ -20,6 +20,39 @@ import java.util.List;
 
 import org.docksidestage.unit.PlainTestCase;
 
+// #1on1: ちょっとざつだん by noniwaさん
+// o 低レイヤーの勉強が好き
+// o ネットワーク/OS/データベースinternal
+// o 即効性はなさそう？？？
+//
+// o JavaScript, Kotlin, DDD, SQLは即効性
+// o そっちの方がいいかも？？？
+//
+// ↓↓↓ (with くぼ)
+//
+// o 低レイヤーはすべての土台になるので、あながち全く別の方向っていうわけじゃない
+// o 業務時間外の勉強であれば自由だし...
+// o 低レイヤーはできるときにやっておいたほうがいい (年取ってからなかなか大変)
+// o 自分で興味持って勉強進めていけるものがあるというのは素晴らしい
+// o 興味は変わってくるとは思う
+//
+// べてらんの人たちは何に興味を？ by noniwaさん
+// o OSS？
+// o 9割は即効性？ by jflute
+// o OSSにフォーカス当てる人もある種の低レイヤー (アプリから見れば) by jflute
+// o 年取ると...のお話 by jflute
+//
+// DBFluteを作ったきっかけは？ by noniwaさん
+// o 炎上プロジェクトの連続でどうにかならないか？の気持ちが強かった
+// o それでたまたまTorqueというO/Rマッパーを触る機会があって拡張し始めた
+
+// TODO noniwa [読み物課題] 独学のきっかけ、技術欲、問題解決欲、自己成長欲 by jflute (2025/08/27)
+// https://jflute.hatenadiary.jp/entry/20160210/selfgrowth
+
+// TODO noniwa [読み物課題] まず何より、目の前の道具を使いこなしてください by jflute (2025/08/27)
+// https://jflute.hatenadiary.jp/entry/20180223/mastercurrent
+
+
 // TODO noniwa javadocのauthorお願いしますm(_ _)m by jflute (2025/08/15)
 /**
  * The test of if-for. <br>
