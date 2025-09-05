@@ -15,6 +15,9 @@
  */
 package org.docksidestage.javatry.basic;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.docksidestage.unit.PlainTestCase;
 
 /**
@@ -22,7 +25,7 @@ import org.docksidestage.unit.PlainTestCase;
  * Operate exercise as javadoc. If it's question style, write your answer before test execution. <br>
  * (javadocの通りにエクササイズを実施。質問形式の場合はテストを実行する前に考えて答えを書いてみましょう)
  * @author jflute
- * @author your_name_here
+ * @author noniwa
  */
 public class Step04MethodTest extends PlainTestCase {
 
@@ -35,15 +38,15 @@ public class Step04MethodTest extends PlainTestCase {
      */
     public void test_method_call_basic() {
         String sea = supplySomething();
-        log(sea); // your answer? =>
+        log(sea); // your answer? => over(o)
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_method_call_many() {
-        String sea = functionSomething("mystic");
+        String sea = functionSomething("mystic"); // sea変数に影響するのはここだけ
         consumeSomething(supplySomething());
         runnableSomething();
-        log(sea); // your answer? => 
+        log(sea); // your answer? => mysmys(o)
     }
 
     private String functionSomething(String name) {
@@ -72,17 +75,18 @@ public class Step04MethodTest extends PlainTestCase {
         St4MutableStage mutable = new St4MutableStage();
         int sea = 904;
         boolean land = false;
-        helloMutable(sea - 4, land, mutable);
+        helloMutable(sea - 4, land, mutable); // sea = 904, land = false, mutable.getStageName() = mystic
         if (!land) {
             sea = sea + mutable.getStageName().length();
         }
-        log(sea); // your answer? => 
+        log(sea); // your answer? => 910(o)
+        // 引数は値渡しなのでオリジナルの変数の値を変えないが、setterによる変更はメソッド外でも反映される
     }
 
     private int helloMutable(int sea, Boolean land, St4MutableStage piari) {
         sea++;
         land = true;
-        piari.setStageName("mystic");
+        piari.setStageName("mystic"); // setterによる変更
         return sea;
     }
 
@@ -108,14 +112,14 @@ public class Step04MethodTest extends PlainTestCase {
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_method_instanceVariable() {
         hasAnnualPassport = true;
-        int sea = inParkCount;
-        offAnnualPassport(hasAnnualPassport);
+        int sea = inParkCount; // 影響なし
+        offAnnualPassport(hasAnnualPassport); // 影響なし
         for (int i = 0; i < 100; i++) {
             goToPark();
         }
-        ++sea;
+        ++sea; // 影響なし
         sea = inParkCount;
-        log(sea); // your answer? => 
+        log(sea); // your answer? => 100(o)
     }
 
     private void offAnnualPassport(boolean hasAnnualPassport) {
@@ -152,12 +156,60 @@ public class Step04MethodTest extends PlainTestCase {
      */
     public void test_method_making() {
         // use after making these methods
-        //String replaced = replaceCwithB(replaceAwithB("ABC"));
-        //String sea = quote(replaced, "'");
-        //if (isAvailableLogging()) {
-        //    showSea(sea);
-        //}
+        String replaced = replaceCwithB(replaceAwithB("ABC"));
+        String sea = quote(replaced, "'");
+        if (isAvailableLogging()) {
+            showSea(sea);
+        }
     }
 
-    // write methods here
+    private Boolean availableLogging = true;
+
+    // replaceAwithB, replaceCwithBメソッドを一般化するならreplaceXwithY(String s, String x, String y)を作るのもあり
+    private String replaceAwithB(String s) {
+        StringBuilder replaced = new StringBuilder();
+        for (char c: s.toCharArray()) {
+            if (c == 'A') {
+                replaced.append('B');
+            } else {
+                replaced.append(c);
+            }
+        }
+        return replaced.toString();
+    }
+
+    private String replaceCwithB(String s) {
+        StringBuilder replaced = new StringBuilder();
+        for (char c: s.toCharArray()) {
+            if (c == 'C') {
+                replaced.append('B');
+            } else {
+                replaced.append(c);
+            }
+        }
+        return replaced.toString();
+    }
+
+    // ２回同じループがあるので、ヘルパーメソッドとして抜き出すのもあり
+    private String quote(String s, String quotation) {
+        StringBuilder quoted = new StringBuilder();
+        for (char c: quotation.toCharArray()) {
+            quoted.append(c);
+        }
+        for (char c: s.toCharArray()) {
+            quoted.append(c);
+        }
+        for (char c: quotation.toCharArray()) {
+            quoted.append(c);
+        }
+        return quoted.toString();
+    }
+
+    private Boolean isAvailableLogging() {
+        return availableLogging;
+    }
+
+    private void showSea(String s) {
+        log(s);
+    }
 }

@@ -46,20 +46,26 @@ import org.docksidestage.unit.PlainTestCase;
 // o 炎上プロジェクトの連続でどうにかならないか？の気持ちが強かった
 // o それでたまたまTorqueというO/Rマッパーを触る機会があって拡張し始めた
 
-// TODO noniwa [読み物課題] 独学のきっかけ、技術欲、問題解決欲、自己成長欲 by jflute (2025/08/27)
+// done noniwa [読み物課題] 独学のきっかけ、技術欲、問題解決欲、自己成長欲 by jflute (2025/08/27)
 // https://jflute.hatenadiary.jp/entry/20160210/selfgrowth
+// TODO jflute [感想]
+// 私は技術欲5、問題解決欲3、自己成長欲2だと思いました。自身の学んだことを実務を通してより深く理解できることが何よりも楽しいです。
+// ただ、ビジネス全体を見る力やヒューマンスキルに関しては意識的に強化していく必要があると感じています。
+// 技術は問題解決の手段ということを忘れずに、手段と目的を履き違えないようにしていきたいです。
 
-// TODO noniwa [読み物課題] まず何より、目の前の道具を使いこなしてください by jflute (2025/08/27)
+// done noniwa [読み物課題] まず何より、目の前の道具を使いこなしてください by jflute (2025/08/27)
 // https://jflute.hatenadiary.jp/entry/20180223/mastercurrent
+// TODO jflute [感想]
+// 「まずは目の前のチャーハン」耳が痛かったです。自身が興味があるが仕事で即効性のない勉強とかはショートケーキに当たるんだろうなと感じました。
+// お金をもらっている身として、自身の好きな勉強と会社で成果を出すための勉強のバランスを考えていきたいです。
 
-
-// TODO noniwa javadocのauthorお願いしますm(_ _)m by jflute (2025/08/15)
+// done noniwa javadocのauthorお願いしますm(_ _)m by jflute (2025/08/15)
 /**
  * The test of if-for. <br>
  * Operate exercise as javadoc. If it's question style, write your answer before test execution. <br>
  * (javadocの通りにエクササイズを実施。質問形式の場合はテストを実行する前に考えて答えを書いてみましょう)
  * @author jflute
- * @author your_name_here
+ * @author noniwa
  */
 public class Step02IfForTest extends PlainTestCase {
 
@@ -134,7 +140,7 @@ public class Step02IfForTest extends PlainTestCase {
         }
         log(sea); // your answer? => 10(o)
         // コントロールフローを意識して読み解く
-        // TODO noniwa [いいね] コントロールフローが複雑ですからね。ぜひ1on1でさらに聞かせてください^^ by jflute (2025/08/14)
+        // done noniwa [いいね] コントロールフローが複雑ですからね。ぜひ1on1でさらに聞かせてください^^ by jflute (2025/08/14)
         // #1on1: 再び「漠然読みで構造を把握して、フォーカス読みでピンポイントで目的を知るための情報を得る」
     }
 
@@ -253,8 +259,8 @@ public class Step02IfForTest extends PlainTestCase {
         //        }
 
         //        stageList.forEach(stage -> {sea = stage;}); // can't access sea within lambda expression
-        // TODO noniwa [いいね] mutableなクラスを自作したのですごいです^^ by jflute (2025/08/14)
-        // TODO noniwa StageFlagはflagだけじゃなく、stage自身も保持しているので、名前でFlagと限定すると紛らわしいので... by jflute (2025/08/14)
+        // done noniwa [いいね] mutableなクラスを自作したのですごいです^^ by jflute (2025/08/14)
+        // done noniwa StageFlagはflagだけじゃなく、stage自身も保持しているので、名前でFlagと限定すると紛らわしいので... by jflute (2025/08/14)
         // stageのループの状態を示すクラスということで、StageLoopState どうでしょう？(あくまで一例ということで)
         StageFlag stageFlag = new StageFlag();
         stageList.forEach(stage -> {
@@ -324,7 +330,7 @@ public class Step02IfForTest extends PlainTestCase {
             }
         }
         log(count);
-        // TODO noniwa [いいね] ふぅ、合ってた。目で数えました(^^。 by jflute (2025/08/14)
+        // done noniwa [いいね] ふぅ、合ってた。目で数えました(^^。 by jflute (2025/08/14)
     }
 
     // ===================================================================================

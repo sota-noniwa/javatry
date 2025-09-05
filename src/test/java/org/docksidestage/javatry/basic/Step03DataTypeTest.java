@@ -26,7 +26,7 @@ import org.docksidestage.unit.PlainTestCase;
  * Operate exercise as javadoc. If it's question style, write your answer before test execution. <br>
  * (javadocの通りにエクササイズを実施。質問形式の場合はテストを実行する前に考えて答えを書いてみましょう)
  * @author jflute
- * @author your_name_here
+ * @author noniwa
  */
 public class Step03DataTypeTest extends PlainTestCase {
 
@@ -45,16 +45,16 @@ public class Step03DataTypeTest extends PlainTestCase {
         Boolean dstore = true;
         BigDecimal amba = new BigDecimal("9.4");
 
-        piari = piari.plusDays(1);
-        land = piari.getYear();
-        bonvo = bonvo.plusMonths(1);
-        land = bonvo.getMonthValue();
-        land--;
+        piari = piari.plusDays(1); // 2001-09-05
+        land = piari.getYear(); // 2001
+        bonvo = bonvo.plusMonths(1); // 2001-10-04
+        land = bonvo.getMonthValue(); // 10
+        land--; // 09
         if (dstore) {
-            BigDecimal addedDecimal = amba.add(new BigDecimal(land));
+            BigDecimal addedDecimal = amba.add(new BigDecimal(land)); // 18.4
             sea = String.valueOf(addedDecimal);
         }
-        log(sea); // your answer? => 
+        log(sea); // your answer? => 18.4(o)
     }
 
     // ===================================================================================
@@ -70,19 +70,20 @@ public class Step03DataTypeTest extends PlainTestCase {
         double amba = 2.3d;
         char miraco = 'a';
         boolean dohotel = miraco == 'a';
-        if (dohotel && dstore >= piari) {
+        if (dohotel && dstore >= piari) { // true
             bonvo = sea;
             land = (short) bonvo;
             bonvo = piari;
             sea = (byte) land;
             if (amba == 2.3D) {
-                sea = (byte) amba;
+                sea = (byte) amba; // byte 2
             }
         }
-        if ((int) dstore > piari) {
+        if ((int) dstore > piari) { // int 1 > int 1
             sea = 0;
         }
-        log(sea); // your answer? => 
+        log(sea); // your answer? => 2(o)
+        // seaはint型なので小数点以下は切り捨て
     }
 
     // ===================================================================================
@@ -92,7 +93,8 @@ public class Step03DataTypeTest extends PlainTestCase {
     public void test_datatype_object() {
         St3ImmutableStage stage = new St3ImmutableStage("hangar");
         String sea = stage.getStageName();
-        log(sea); // your answer? => 
+        log(sea); // your answer? => hanger(o)
+        // St3ImmutableStage.stageNameもseaもString型なのでデータロスは起こらない
     }
 
     private static class St3ImmutableStage {
