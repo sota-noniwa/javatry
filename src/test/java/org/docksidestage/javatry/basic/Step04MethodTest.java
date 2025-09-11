@@ -163,9 +163,11 @@ public class Step04MethodTest extends PlainTestCase {
         }
     }
 
+    // TODO jflute 1on1にて、オブジェクトのBooleanのお話 (2025/09/11)
     private Boolean availableLogging = true;
 
     // replaceAwithB, replaceCwithBメソッドを一般化するならreplaceXwithY(String s, String x, String y)を作るのもあり
+    // TODO tabata その思いつき自体が素晴らしいです。実際やってみます？（＾＾ by jflute (2025/09/11)
     private String replaceAwithB(String s) {
         StringBuilder replaced = new StringBuilder();
         for (char c: s.toCharArray()) {
@@ -191,6 +193,7 @@ public class Step04MethodTest extends PlainTestCase {
     }
 
     // ２回同じループがあるので、ヘルパーメソッドとして抜き出すのもあり
+    // TODO jflute 確かに。ということで1on1でふぉろー予定 (2025/09/11)
     private String quote(String s, String quotation) {
         StringBuilder quoted = new StringBuilder();
         for (char c: quotation.toCharArray()) {

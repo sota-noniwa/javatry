@@ -95,6 +95,7 @@ public class Step03DataTypeTest extends PlainTestCase {
         String sea = stage.getStageName();
         log(sea); // your answer? => hanger(o)
         // St3ImmutableStage.stageNameもseaもString型なのでデータロスは起こらない
+        // TODO jflute 1on1にてふぉろー予定 (2025/09/11)
     }
 
     private static class St3ImmutableStage {
