@@ -95,9 +95,12 @@ public class Step03DataTypeTest extends PlainTestCase {
         String sea = stage.getStageName();
         log(sea); // your answer? => hanger(o)
         // St3ImmutableStage.stageNameもseaもString型なのでデータロスは起こらない
-        // TODO jflute 1on1にてふぉろー予定 (2025/09/11)
+        // done jflute 1on1にてふぉろー予定 (2025/09/11)
     }
 
+    // #1on1: String も BigDecimal もこれと同じ構造をしている。 (2025/09/12)
+    // Stringってchar[]なんですね by にのわさん
+    // 良いところに注目してますね。オブジェクトとはなんぞや？の本質につながる話かも
     private static class St3ImmutableStage {
 
         private final String stageName;

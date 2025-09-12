@@ -163,12 +163,18 @@ public class Step04MethodTest extends PlainTestCase {
         }
     }
 
-    // TODO jflute 1on1にて、オブジェクトのBooleanのお話 (2025/09/11)
+    // done jflute 1on1にて、オブジェクトのBooleanのお話 (2025/09/11)
+    // #1on1: booleanに関しては、プリミティブのbooleanが使われることがほとんど。
+    // true/falseだけなのにオブジェクトは大げさ？ by のにわさん => Good
+    // あと、nullを表現できてしまって、true/false以外の状態を作ってしまう。
     private Boolean availableLogging = true;
 
     // replaceAwithB, replaceCwithBメソッドを一般化するならreplaceXwithY(String s, String x, String y)を作るのもあり
-    // TODO tabata その思いつき自体が素晴らしいです。実際やってみます？（＾＾ by jflute (2025/09/11)
+    // done tabata その思いつき自体が素晴らしいです。実際やってみます？（＾＾ by jflute (2025/09/11)
+    // TODO jflute 次回1on1にて、Stringのreplaceの話 (2025/09/12)
     private String replaceAwithB(String s) {
+        //replaceXwithY(s, 'A', 'B'); // 一例
+        
         StringBuilder replaced = new StringBuilder();
         for (char c: s.toCharArray()) {
             if (c == 'A') {
@@ -181,6 +187,8 @@ public class Step04MethodTest extends PlainTestCase {
     }
 
     private String replaceCwithB(String s) {
+        //replaceXwithY(s, 'C', 'B'); // 一例
+
         StringBuilder replaced = new StringBuilder();
         for (char c: s.toCharArray()) {
             if (c == 'C') {
@@ -192,6 +200,20 @@ public class Step04MethodTest extends PlainTestCase {
         return replaced.toString();
     }
 
+    // #1on1: 1on1でのライブコーディングで作ってみた (2025/09/12)
+    // コンパイルエラーから補完していく技: IntelliJならoption+Enter
+    //private String replaceXwithY(String s, char fromChar, char toChar) {
+    //    StringBuilder replaced = new StringBuilder();
+    //    for (char c: s.toCharArray()) {
+    //        if (c == fromChar) {
+    //            replaced.append(toChar);
+    //        } else {
+    //            replaced.append(c);
+    //        }
+    //    }
+    //    return replaced.toString();
+    //}
+    
     // ２回同じループがあるので、ヘルパーメソッドとして抜き出すのもあり
     // TODO jflute 確かに。ということで1on1でふぉろー予定 (2025/09/11)
     private String quote(String s, String quotation) {
