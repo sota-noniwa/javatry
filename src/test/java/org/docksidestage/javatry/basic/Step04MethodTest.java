@@ -20,6 +20,14 @@ import java.util.List;
 
 import org.docksidestage.unit.PlainTestCase;
 
+// TODO: jflute [興味]
+// この前ある研修を受けた時にあった話ですが、
+// 閉区間を文字列で返すメソッドがあるとして 例:range(1,3)で呼び出すと戻り値は"[1,3]"
+// range(num1, num2)の形で定義してrange(1,3)とrange(3,1)どちらでも動く仕様にするか
+// range(lower, upper)の形で定義してrange(1,3)で動く、range(3,1)ではエラーを投げる仕様にするか
+// 「壊れないシステムを作る」か「意図しない動きをさせるくらいなら壊れてしまえ」派ですね。
+// 久保さんはどちら派ですか？
+
 /**
  * The test of method. <br>
  * Operate exercise as javadoc. If it's question style, write your answer before test execution. <br>
