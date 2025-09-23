@@ -56,15 +56,17 @@ public class TicketBooth {
      * @throws TicketSoldOutException When ticket in booth is sold out.
      * @throws TicketShortMoneyException When the specified money is short for purchase.
      */
-    public int buyOneDayPassport(int handedMoney) {
-        return processTicketPurchase(handedMoney, TicketType.ONE_DAY_PASSPORT);
+    public TicketBuyResult buyOneDayPassport(int handedMoney) {
+        Ticket ticket = processTicketPurchase(handedMoney, TicketType.ONE_DAY_PASSPORT);
+        return new TicketBuyResult(ticket, handedMoney - ONE_DAY_PRICE);
     }
 
-    public int buyTwoDayPassport(int handedMoney) {
-        return processTicketPurchase(handedMoney, TicketType.TWO_DAY_PASSPORT);
+    public TicketBuyResult buyTwoDayPassport(int handedMoney) {
+        Ticket ticket = processTicketPurchase(handedMoney, TicketType.TWO_DAY_PASSPORT);
+        return new TicketBuyResult(ticket, handedMoney - TWO_DAY_PRICE);
     }
 
-    private int processTicketPurchase(int handedMoney, TicketType ticketType) {
+    private Ticket processTicketPurchase(int handedMoney, TicketType ticketType) {
         if (ticketType == TicketType.ONE_DAY_PASSPORT) {
             if (oneDayPassportQuantity <= 0) {
                 throw new TicketSoldOutException("Sold out");
@@ -74,7 +76,7 @@ public class TicketBooth {
             }
             salesProceeds += ONE_DAY_PRICE;
             --oneDayPassportQuantity;
-            return handedMoney - ONE_DAY_PRICE;
+            return new Ticket(ONE_DAY_PRICE);
         } else if (ticketType == TicketType.TWO_DAY_PASSPORT) {
             if (twoDayPassportQuantity <= 0) {
                 throw new TicketSoldOutException("Sold out");
@@ -84,7 +86,7 @@ public class TicketBooth {
             }
             salesProceeds += TWO_DAY_PRICE;
             --twoDayPassportQuantity;
-            return handedMoney - TWO_DAY_PRICE;
+            return new Ticket(TWO_DAY_PRICE);
         } else {
             throw new InvalidTicketTypeException("Invalid ticket type: " + ticketType);
         }
