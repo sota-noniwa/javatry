@@ -23,12 +23,12 @@ import org.docksidestage.unit.PlainTestCase;
  * The test of class. <br>
  * Operate exercise as javadoc. If it's question style, write your answer before test execution. <br>
  * (javadocの通りにエクササイズを実施。質問形式の場合はテストを実行する前に考えて答えを書いてみましょう) <br>
- * 
+ *
  * If ambiguous requirement exists, you can determine specification that seems appropriate. <br>
  * (要件が曖昧なところがあれば、適切だと思われる仕様を決めても良いです)
- * 
+ *
  * @author jflute
- * @author your_name_here
+ * @author noniwa
  */
 public class Step05ClassTest extends PlainTestCase {
 
@@ -41,9 +41,10 @@ public class Step05ClassTest extends PlainTestCase {
      */
     public void test_class_howToUse_basic() {
         TicketBooth booth = new TicketBooth();
-        booth.buyOneDayPassport(7400);
-        int sea = booth.getQuantity();
-        log(sea); // your answer? => 
+        booth.buyOneDayPassport((Integer) 7400);
+        int sea = booth.getOneDayPassportQuantity();
+        log(sea); // your answer? => 9(o)
+        // TicketBoothクラスの実装を見て判断する
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
@@ -51,32 +52,37 @@ public class Step05ClassTest extends PlainTestCase {
         TicketBooth booth = new TicketBooth();
         booth.buyOneDayPassport(10000);
         Integer sea = booth.getSalesProceeds();
-        log(sea); // your answer? => 
+        log(sea); // your answer? => 10000(o)
+        // 本来お釣りを返してチケットの代金を売上金額に計上するべきだが、受け取った金額を全てお釣りに計上している
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_class_howToUse_nosales() {
         TicketBooth booth = new TicketBooth();
         Integer sea = booth.getSalesProceeds();
-        log(sea); // your answer? => 
+        log(sea); // your answer? => null(o)
+        // salesProceedsはオブジェクト生成時はnull, そしてnullはlogメソッドでStringとして出力される
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_class_howToUse_wrongQuantity() {
         Integer sea = doTest_class_ticket_wrongQuantity();
-        log(sea); // your answer? => 
+        log(sea); // your answer? => 9(o)
+        // OneDayPassportは買えていないがquantityのデクリメントは処理されている
+        // 現実世界の意味としてはチケットを売っていないのにブースにあるチケットが1枚減っているということになるので
+        // "パスポートを売る&チケットの数を減らす"の処理は一つのトランザクションとして処理する必要がある
     }
 
     private Integer doTest_class_ticket_wrongQuantity() {
         TicketBooth booth = new TicketBooth();
-        int handedMoney = 7399;
+        int handedMoney = 7399; // insufficient amount of money
         try {
             booth.buyOneDayPassport(handedMoney);
             fail("always exception but none");
         } catch (TicketShortMoneyException continued) {
             log("Failed to buy one-day passport: money=" + handedMoney, continued);
         }
-        return booth.getQuantity();
+        return booth.getOneDayPassportQuantity();
     }
 
     // ===================================================================================
@@ -89,6 +95,7 @@ public class Step05ClassTest extends PlainTestCase {
     public void test_class_letsFix_ticketQuantityReduction() {
         Integer sea = doTest_class_ticket_wrongQuantity();
         log(sea); // should be max quantity, visual check here
+        // fixed: チケット枚数を示すquantityをデクリメントする処理を例外処理の後に移動させた
     }
 
     /**
@@ -100,6 +107,8 @@ public class Step05ClassTest extends PlainTestCase {
         booth.buyOneDayPassport(10000);
         Integer sea = booth.getSalesProceeds();
         log(sea); // should be same as one-day price, visual check here
+        // fixed: salesProceedsの初期値をnullから0に変え、メソッド呼び出ごとにONE_DAY_PRICEをsalesProceedsに足していく
+        // salesProceedsとbuyOneDayPassportの引数の型がIntegerである必要がないため、int型に変える
     }
 
     /**
@@ -108,13 +117,15 @@ public class Step05ClassTest extends PlainTestCase {
      */
     public void test_class_letsFix_makeMethod_twoday() {
         // uncomment after making the method
-        //TicketBooth booth = new TicketBooth();
-        //int money = 14000;
-        //int change = booth.buyTwoDayPassport(money);
-        //Integer sea = booth.getSalesProceeds() + change;
-        //log(sea); // should be same as money
-
+        TicketBooth booth = new TicketBooth();
+        int money = 14000;
+        int change = booth.buyTwoDayPassport(money);
+        Integer sea = booth.getSalesProceeds() + change;
+        log(sea); // should be same as money
         // and show two-day passport quantity here
+        // buyTwoDayPassportメソッドを作る。実装はほぼbuyOneDayPassportと同じ
+        // クラス変数TWO_DAY_PRICEを定義し、quantityを消してoneDayPassportQuantityとtwoDayPassportQuantityでそれぞれのチケット枚数を管理する
+        // Memo: コードの変更点を比較しやすいように一旦ここでcommitしておく
     }
 
     /**
@@ -124,7 +135,7 @@ public class Step05ClassTest extends PlainTestCase {
     public void test_class_letsFix_refactor_recycle() {
         TicketBooth booth = new TicketBooth();
         booth.buyOneDayPassport(10000);
-        log(booth.getQuantity(), booth.getSalesProceeds()); // should be same as before-fix
+        log(booth.getOneDayPassportQuantity(), booth.getSalesProceeds()); // should be same as before-fix
     }
 
     // ===================================================================================

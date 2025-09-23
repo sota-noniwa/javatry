@@ -188,7 +188,7 @@ public class Step04MethodTest extends PlainTestCase {
     private Boolean availableLogging = true;
 
     // replaceAwithB, replaceCwithBメソッドを一般化するならreplaceXwithY(String s, String x, String y)を作るのもあり
-    // done tabata その思いつき自体が素晴らしいです。実際やってみます？（＾＾ by jflute (2025/09/11)
+    // done noniwa その思いつき自体が素晴らしいです。実際やってみます？（＾＾ by jflute (2025/09/11)
     // TODO jflute 次回1on1にて、Stringのreplaceの話 (2025/09/12)
     private String replaceAwithB(String s) {
         //replaceXwithY(s, 'A', 'B'); // 一例
