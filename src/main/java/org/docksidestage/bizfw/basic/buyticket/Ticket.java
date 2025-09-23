@@ -24,23 +24,36 @@ public class Ticket {
     //                                                                           Attribute
     //                                                                           =========
     private final int displayPrice; // written on ticket, park guest can watch this
-    private boolean alreadyIn; // true means this ticket is unavailable
+    private int remainingDays; // remaining days that a park guest can enter with the ticket
 
     // ===================================================================================
     //                                                                         Constructor
     //                                                                         ===========
+
     public Ticket(int displayPrice) {
         this.displayPrice = displayPrice;
+    }
+
+    public Ticket(TicketType ticketType) {
+        if (ticketType == TicketType.ONE_DAY_PASSPORT) {
+            this.displayPrice = 7400;
+            remainingDays = 1;
+        } else if (ticketType == TicketType.TWO_DAY_PASSPORT) {
+            this.displayPrice = 13200;
+            remainingDays = 2;
+        } else {
+            throw new IllegalStateException("Ticket type not supported: " + ticketType);
+        }
     }
 
     // ===================================================================================
     //                                                                             In Park
     //                                                                             =======
     public void doInPark() {
-        if (alreadyIn) {
-            throw new IllegalStateException("Already in park by this ticket: displayedPrice=" + displayPrice);
+        if (remainingDays <= 0) {
+            throw new IllegalStateException("The ticket has already expired: displayedPrice=" + displayPrice);
         }
-        alreadyIn = true;
+        remainingDays--;
     }
 
     // ===================================================================================
@@ -50,7 +63,11 @@ public class Ticket {
         return displayPrice;
     }
 
-    public boolean isAlreadyIn() {
-        return alreadyIn;
+    public boolean hasExpired() {
+        return remainingDays <= 0;
+    }
+
+    public int getRemainingDays() {
+        return remainingDays;
     }
 }

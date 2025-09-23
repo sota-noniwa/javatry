@@ -182,6 +182,18 @@ public class Step05ClassTest extends PlainTestCase {
      */
     public void test_class_moreFix_usePluralDays() {
         // your confirmation code here
+        TicketBooth booth = new TicketBooth();
+        int handedMoney = 20000;
+        TicketBuyResult buyResult = booth.buyTwoDayPassport(handedMoney);
+        Ticket twoDayPassport = buyResult.getTicket();
+        twoDayPassport.doInPark();
+        twoDayPassport.hasExpired(); // should be false
+        twoDayPassport.doInPark();
+        twoDayPassport.hasExpired(); // should be false
+        twoDayPassport.doInPark(); // should throw an Exception
+        // TicketのコンストラクターでTicketTypeを引数として渡すようにした
+        // Ticketクラスのフィールドの各初期値はTicketTypeによって決まる仕様にした
+        // 後何日チケットを使用することができるかをremainingDaysという変数で管理した
     }
 
     /**

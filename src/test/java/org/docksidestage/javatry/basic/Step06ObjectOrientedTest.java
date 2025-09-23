@@ -173,7 +173,7 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
     }
 
     private void saveBuyingHistory(TicketBooth booth, Ticket ticket) {
-        if (ticket.isAlreadyIn()) {
+        if (ticket.hasExpired()) {
             // only logging here (normally e.g. DB insert)
             doShowTicketBooth(booth);
             doShowYourTicket(ticket);
@@ -185,7 +185,7 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
     }
 
     private void doShowYourTicket(Ticket ticket) {
-        log("Your Ticket: displayPrice={}, alreadyIn={}", ticket.getDisplayPrice(), ticket.isAlreadyIn());
+        log("Your Ticket: displayPrice={}, alreadyIn={}", ticket.getDisplayPrice(), ticket.hasExpired());
     }
 
     // write your memo here:

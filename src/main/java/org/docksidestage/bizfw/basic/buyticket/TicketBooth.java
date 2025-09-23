@@ -76,7 +76,7 @@ public class TicketBooth {
             }
             salesProceeds += ONE_DAY_PRICE;
             --oneDayPassportQuantity;
-            return new Ticket(ONE_DAY_PRICE);
+            return new Ticket(TicketType.ONE_DAY_PASSPORT);
         } else if (ticketType == TicketType.TWO_DAY_PASSPORT) {
             if (twoDayPassportQuantity <= 0) {
                 throw new TicketSoldOutException("Sold out");
@@ -86,7 +86,7 @@ public class TicketBooth {
             }
             salesProceeds += TWO_DAY_PRICE;
             --twoDayPassportQuantity;
-            return new Ticket(TWO_DAY_PRICE);
+            return new Ticket(TicketType.TWO_DAY_PASSPORT);
         } else {
             throw new InvalidTicketTypeException("Invalid ticket type: " + ticketType);
         }
