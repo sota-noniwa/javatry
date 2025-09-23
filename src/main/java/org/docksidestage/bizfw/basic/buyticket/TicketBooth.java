@@ -23,15 +23,14 @@ public class TicketBooth {
     // ===================================================================================
     //                                                                          Definition
     //                                                                          ==========
-    private static final int MAX_QUANTITY = 10;
     private static final int ONE_DAY_PRICE = 7400; // when 2019/06/15
     private static final int TWO_DAY_PRICE = 13200;
 
     // ===================================================================================
     //                                                                           Attribute
     //                                                                           =========
-    private int oneDayPassportQuantity = MAX_QUANTITY;
-    private int twoDayPassportQuantity = MAX_QUANTITY;
+    private int oneDayPassportQuantity = 10;
+    private int twoDayPassportQuantity = 10;
     private int salesProceeds = 0;
 
     // ===================================================================================
@@ -58,27 +57,37 @@ public class TicketBooth {
      * @throws TicketShortMoneyException When the specified money is short for purchase.
      */
     public int buyOneDayPassport(int handedMoney) {
-        if (oneDayPassportQuantity <= 0) {
-            throw new TicketSoldOutException("Sold out");
-        }
-        if (handedMoney < ONE_DAY_PRICE) {
-            throw new TicketShortMoneyException("Short money: " + handedMoney);
-        }
-        salesProceeds += ONE_DAY_PRICE;
-        --oneDayPassportQuantity;
-        return handedMoney - ONE_DAY_PRICE;
+        return processTicketPurchase(handedMoney, TicketType.ONE_DAY_PASSPORT);
     }
 
     public int buyTwoDayPassport(int handedMoney) {
-        if (twoDayPassportQuantity <= 0) {
-            throw new TicketSoldOutException("Sold out");
+        return processTicketPurchase(handedMoney, TicketType.TWO_DAY_PASSPORT);
+    }
+
+    private int processTicketPurchase(int handedMoney, TicketType ticketType) {
+        if (ticketType == TicketType.ONE_DAY_PASSPORT) {
+            if (oneDayPassportQuantity <= 0) {
+                throw new TicketSoldOutException("Sold out");
+            }
+            if (handedMoney < ONE_DAY_PRICE) {
+                throw new TicketShortMoneyException("Short money: " + handedMoney);
+            }
+            salesProceeds += ONE_DAY_PRICE;
+            --oneDayPassportQuantity;
+            return handedMoney - ONE_DAY_PRICE;
+        } else if (ticketType == TicketType.TWO_DAY_PASSPORT) {
+            if (twoDayPassportQuantity <= 0) {
+                throw new TicketSoldOutException("Sold out");
+            }
+            if (handedMoney < TWO_DAY_PRICE) {
+                throw new TicketShortMoneyException("Short money: " + handedMoney);
+            }
+            salesProceeds += TWO_DAY_PRICE;
+            --twoDayPassportQuantity;
+            return handedMoney - TWO_DAY_PRICE;
+        } else {
+            throw new InvalidTicketTypeException("Invalid ticket type: " + ticketType);
         }
-        if (handedMoney < TWO_DAY_PRICE) {
-            throw new TicketShortMoneyException("Short money: " + handedMoney);
-        }
-        salesProceeds += TWO_DAY_PRICE;
-        --twoDayPassportQuantity;
-        return handedMoney - TWO_DAY_PRICE;
     }
 
     public static class TicketSoldOutException extends RuntimeException {
@@ -95,6 +104,15 @@ public class TicketBooth {
         private static final long serialVersionUID = 1L;
 
         public TicketShortMoneyException(String msg) {
+            super(msg);
+        }
+    }
+
+    public static class InvalidTicketTypeException extends RuntimeException {
+
+        private static final long serialVersionUID = 1L;
+
+        public InvalidTicketTypeException(String msg) {
             super(msg);
         }
     }

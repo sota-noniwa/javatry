@@ -136,6 +136,10 @@ public class Step05ClassTest extends PlainTestCase {
         TicketBooth booth = new TicketBooth();
         booth.buyOneDayPassport(10000);
         log(booth.getOneDayPassportQuantity(), booth.getSalesProceeds()); // should be same as before-fix
+        // 1つ前の問題でoneDayPassportQuantityとtwoDayPassportQuantityを作成したので、クラス変数のMAX_QUANTITYがいらないことに気付き、削除した
+        // (もしoneDayPassとtwoDayPassのMAX_QUANTITYを一緒にしたいならあっても良いが、そこを揃えたいという要望はないと仮定する)
+        // enumのTicketTypeを作って、この値に良ってprivateメソッド内で条件分岐して処理を行う
+        // 定義されていないTicketTypeのエラーとしてInvalidTicketTypeExceptionを作った
     }
 
     // ===================================================================================
