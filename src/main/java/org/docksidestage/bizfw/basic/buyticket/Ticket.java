@@ -31,10 +31,6 @@ public class Ticket {
     //                                                                         Constructor
     //                                                                         ===========
 
-    public Ticket(int displayPrice) {
-        this.displayPrice = displayPrice;
-    }
-
     public Ticket(TicketType type) {
         if (type == TicketType.ONE_DAY_PASSPORT) {
             this.type = type;
