@@ -49,9 +49,9 @@ public class Ticket {
     // ===================================================================================
     //                                                                             In Park
     //                                                                             =======
-    public void doInPark() {
+    public void useForOneDay() {
         if (remainingDays <= 0) {
-            throw new IllegalStateException("The ticket has already expired: displayedPrice=" + displayPrice);
+            throw new IllegalStateException("Ticket has already expired: displayedPrice: " + displayPrice);
         }
         remainingDays--;
     }

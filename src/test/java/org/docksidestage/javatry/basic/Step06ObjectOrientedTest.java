@@ -158,7 +158,7 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         //
         // [do in park now!!!]
         //
-        ticket.doInPark();
+        ticket.useForOneDay();
 
         // *doInPark() has this process:
         //if (alreadyIn) {
