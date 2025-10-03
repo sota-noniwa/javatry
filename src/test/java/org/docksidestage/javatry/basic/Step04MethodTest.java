@@ -189,10 +189,12 @@ public class Step04MethodTest extends PlainTestCase {
 
     // replaceAwithB, replaceCwithBメソッドを一般化するならreplaceXwithY(String s, String x, String y)を作るのもあり
     // done noniwa その思いつき自体が素晴らしいです。実際やってみます？（＾＾ by jflute (2025/09/11)
-    // TODO jflute 次回1on1にて、Stringのreplaceの話 (2025/09/12)
+    // done jflute 次回1on1にて、Stringのreplaceの話 (2025/09/12)
+    // 一応、Stringにもreplace()が備わっている話:
+    //  e.g. s.replace('A', 'B');
     private String replaceAwithB(String s) {
         //replaceXwithY(s, 'A', 'B'); // 一例
-        
+
         StringBuilder replaced = new StringBuilder();
         for (char c: s.toCharArray()) {
             if (c == 'A') {
@@ -234,6 +236,25 @@ public class Step04MethodTest extends PlainTestCase {
     
     // ２回同じループがあるので、ヘルパーメソッドとして抜き出すのもあり
     // TODO jflute 確かに。ということで1on1でふぉろー予定 (2025/09/11)
+    /* #1on1 e.g. こういうのもアリ (2025/09/26)
+    private String quote(String s, String quotation) {
+        StringBuilder quoted = new StringBuilder();
+        appendStr(quoted, quotation);
+        appendStr(quoted, s);
+        appendStr(quoted, quotation);
+        return quoted.toString();
+    }
+
+    private void appendStr(StringBuilder sb, String str) {
+        for (char c: str.toCharArray()) {
+            sb.append(c);
+        }
+    }
+     */
+    // #1on1: あと、一応 append(String str) もあるので、charで追加しなくても大丈夫 (2025/09/26)
+    //quoted.append(quotation);
+    //quoted.append(s);
+    //quoted.append(quotation);
     private String quote(String s, String quotation) {
         StringBuilder quoted = new StringBuilder();
         for (char c: quotation.toCharArray()) {

@@ -29,6 +29,13 @@ public class TicketBooth {
     // ===================================================================================
     //                                                                           Attribute
     //                                                                           =========
+    // #1on1: 在庫の共有の話 (2025/09/26)
+    // 在庫の共有は現実的ではないと思った by のにわさん
+    // 細かい業務の選択肢を想像できる開発者になってほしいので素晴らしい。
+    // #1on1: 一緒に読んだ
+    // // 既存コードちょい直したい、いつやる？
+    // https://jflute.hatenadiary.jp/entry/20250913/whenrefactor
+    //
     private int oneDayPassportQuantity = 10;
     private int twoDayPassportQuantity = 10;
     private int salesProceeds = 0;
