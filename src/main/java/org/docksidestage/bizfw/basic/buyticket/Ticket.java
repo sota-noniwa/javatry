@@ -23,6 +23,7 @@ public class Ticket {
     // ===================================================================================
     //                                                                           Attribute
     //                                                                           =========
+    private TicketType type;
     private final int displayPrice; // written on ticket, park guest can watch this
     private int remainingDays; // remaining days that a park guest can enter with the ticket
 
@@ -34,15 +35,17 @@ public class Ticket {
         this.displayPrice = displayPrice;
     }
 
-    public Ticket(TicketType ticketType) {
-        if (ticketType == TicketType.ONE_DAY_PASSPORT) {
+    public Ticket(TicketType type) {
+        if (type == TicketType.ONE_DAY_PASSPORT) {
+            this.type = type;
             this.displayPrice = 7400;
             remainingDays = 1;
-        } else if (ticketType == TicketType.TWO_DAY_PASSPORT) {
+        } else if (type == TicketType.TWO_DAY_PASSPORT) {
+            this.type = type;
             this.displayPrice = 13200;
             remainingDays = 2;
         } else {
-            throw new IllegalStateException("Ticket type not supported: " + ticketType);
+            throw new IllegalStateException("Ticket type not supported: " + type);
         }
     }
 
@@ -59,6 +62,10 @@ public class Ticket {
     // ===================================================================================
     //                                                                            Accessor
     //                                                                            ========
+    public TicketType getType() {
+        return type;
+    }
+
     public int getDisplayPrice() {
         return displayPrice;
     }
