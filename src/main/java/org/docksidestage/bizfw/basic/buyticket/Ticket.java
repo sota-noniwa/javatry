@@ -89,13 +89,13 @@ public class Ticket {
     public static Ticket issueRegular(TicketType type) {
         int price;
         int remainingDays;
-        if (type == ONE_DAY_PASSPORT) {
+        if (type == ONE_DAY) {
             price = 7400;
             remainingDays = 1;
-        } else if (type == TWO_DAY_PASSPORT) {
+        } else if (type == TWO_DAY) {
             price = 13200;
             remainingDays = 2;
-        } else if (type == FOUR_DAY_PASSPORT) {
+        } else if (type == FOUR_DAY) {
             price = 22400;
             remainingDays = 4;
         } else {
@@ -105,7 +105,7 @@ public class Ticket {
     }
 
     public static Ticket issueNight(TicketType type) {
-        if (type == NIGHT_ONLY_TWO_DAY_PASSPORT) {
+        if (type == NIGHT_ONLY_TWO_DAY) {
             return new Ticket(type, 7400, true, 2);
         } else {
             throw new WrongMethodTypeException("Call issueRegular method for a regular ticket");

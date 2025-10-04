@@ -15,10 +15,11 @@
  */
 package org.docksidestage.javatry.basic;
 
+import static org.docksidestage.bizfw.basic.buyticket.TicketType.*;
+
 import org.docksidestage.bizfw.basic.buyticket.Ticket;
 import org.docksidestage.bizfw.basic.buyticket.TicketBooth;
 import org.docksidestage.bizfw.basic.buyticket.TicketBuyResult;
-import org.docksidestage.bizfw.basic.buyticket.TicketType;
 import org.docksidestage.bizfw.basic.objanimal.Animal;
 import org.docksidestage.bizfw.basic.objanimal.BarkedSound;
 import org.docksidestage.bizfw.basic.objanimal.Cat;
@@ -136,7 +137,7 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         //
         // if step05 has been finished, you can use this code by jflute (2019/06/15)
         //Ticket ticket = booth.buyOneDayPassport(10000);
-        TicketBuyResult receipt = booth.buyTicket(TicketType.ONE_DAY_PASSPORT, 10000); // as temporary, remove if you finished step05
+        TicketBuyResult receipt = booth.buyTicket(ONE_DAY, 10000); // as temporary, remove if you finished step05
         Ticket ticket = receipt.getTicket(); // also here
 
         // *buyOneDayPassport() has this process:
@@ -183,7 +184,7 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
     }
 
     private void doShowTicketBooth(TicketBooth booth) {
-        log("Ticket Booth: quantity={}, salesProceeds={}", booth.getOneDayPassportQuantity(), booth.getSalesProceeds());
+        log("Ticket Booth: quantity={}, salesProceeds={}", booth.getTicketQuantity(ONE_DAY), booth.getSalesProceeds());
     }
 
     private void doShowYourTicket(Ticket ticket) {

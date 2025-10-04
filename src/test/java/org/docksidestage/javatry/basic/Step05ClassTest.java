@@ -46,8 +46,8 @@ public class Step05ClassTest extends PlainTestCase {
      */
     public void test_class_howToUse_basic() {
         TicketBooth booth = new TicketBooth();
-        booth.buyTicket(ONE_DAY_PASSPORT, 7400);
-        int sea = booth.getOneDayPassportQuantity();
+        booth.buyTicket(ONE_DAY, 7400);
+        int sea = booth.getTicketQuantity(ONE_DAY);
         log(sea); // your answer? => 9(o)
         // TicketBoothクラスの実装を見て判断する
     }
@@ -55,7 +55,7 @@ public class Step05ClassTest extends PlainTestCase {
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_class_howToUse_overpay() {
         TicketBooth booth = new TicketBooth();
-        booth.buyTicket(ONE_DAY_PASSPORT, 10000);
+        booth.buyTicket(ONE_DAY, 10000);
         Integer sea = booth.getSalesProceeds();
         log(sea); // your answer? => 10000(o)
         // 本来お釣りを返してチケットの代金を売上金額に計上するべきだが、受け取った金額を全てお釣りに計上している
@@ -82,12 +82,12 @@ public class Step05ClassTest extends PlainTestCase {
         TicketBooth booth = new TicketBooth();
         int handedMoney = 7399; // insufficient amount of money
         try {
-            booth.buyTicket(ONE_DAY_PASSPORT, handedMoney);
+            booth.buyTicket(ONE_DAY, handedMoney);
             fail("always exception but none");
         } catch (TicketShortMoneyException continued) {
             log("Failed to buy one-day passport: money=" + handedMoney, continued);
         }
-        return booth.getOneDayPassportQuantity();
+        return booth.getTicketQuantity(ONE_DAY);
     }
 
     // ===================================================================================
@@ -126,7 +126,7 @@ public class Step05ClassTest extends PlainTestCase {
      */
     public void test_class_letsFix_salesProceedsIncrease() {
         TicketBooth booth = new TicketBooth();
-        booth.buyTicket(ONE_DAY_PASSPORT, 10000);
+        booth.buyTicket(ONE_DAY, 10000);
         Integer sea = booth.getSalesProceeds();
         log(sea); // should be same as one-day price, visual check here
         // fixed: salesProceedsの初期値をnullから0に変え、メソッド呼び出ごとにONE_DAY_PRICEをsalesProceedsに足していく
@@ -141,7 +141,7 @@ public class Step05ClassTest extends PlainTestCase {
         // uncomment after making the method
         TicketBooth booth = new TicketBooth();
         int money = 14000;
-        int change = booth.buyTicket(TWO_DAY_PASSPORT, money).getChange();
+        int change = booth.buyTicket(TWO_DAY, money).getChange();
         Integer sea = booth.getSalesProceeds() + change;
         log(sea); // should be same as money
         // and show two-day passport quantity here
@@ -157,8 +157,8 @@ public class Step05ClassTest extends PlainTestCase {
      */
     public void test_class_letsFix_refactor_recycle() {
         TicketBooth booth = new TicketBooth();
-        booth.buyTicket(ONE_DAY_PASSPORT, 10000);
-        log(booth.getOneDayPassportQuantity(), booth.getSalesProceeds()); // should be same as before-fix
+        booth.buyTicket(ONE_DAY, 10000);
+        log(booth.getTicketQuantity(ONE_DAY), booth.getSalesProceeds()); // should be same as before-fix
         // 1つ前の問題でoneDayPassportQuantityとtwoDayPassportQuantityを作成したので、クラス変数のMAX_QUANTITYがいらないことに気付き、削除した
         // (もしoneDayPassとtwoDayPassのMAX_QUANTITYを一緒にしたいならあっても良いが、そこを揃えたいという要望はないと仮定する)
         // enumのTicketTypeを作って、この値に良ってprivateメソッド内で条件分岐して処理を行う
@@ -175,7 +175,7 @@ public class Step05ClassTest extends PlainTestCase {
     public void test_class_moreFix_return_ticket() {
         // uncomment out after modifying the method
         TicketBooth booth = new TicketBooth();
-        Ticket oneDayPassport = booth.buyTicket(ONE_DAY_PASSPORT, 10000).getTicket();
+        Ticket oneDayPassport = booth.buyTicket(ONE_DAY, 10000).getTicket();
         log(oneDayPassport.getPrice()); // should be same as one-day price
         log(oneDayPassport.hasExpired()); // should be false
         oneDayPassport.useForOneDay();
@@ -191,7 +191,7 @@ public class Step05ClassTest extends PlainTestCase {
         // uncomment after modifying the method
         TicketBooth booth = new TicketBooth();
         int handedMoney = 20000;
-        TicketBuyResult buyResult = booth.buyTicket(TWO_DAY_PASSPORT, handedMoney);
+        TicketBuyResult buyResult = booth.buyTicket(TWO_DAY, handedMoney);
         Ticket twoDayPassport = buyResult.getTicket();
         int change = buyResult.getChange();
         log(twoDayPassport.getPrice() + change); // should be same as money
@@ -205,7 +205,7 @@ public class Step05ClassTest extends PlainTestCase {
         // your confirmation code here
         TicketBooth booth = new TicketBooth();
         int handedMoney = 20000;
-        TicketBuyResult buyResult = booth.buyTicket(TWO_DAY_PASSPORT, handedMoney);
+        TicketBuyResult buyResult = booth.buyTicket(TWO_DAY, handedMoney);
         Ticket twoDayPassport = buyResult.getTicket();
         twoDayPassport.useForOneDay();
         twoDayPassport.hasExpired(); // should be false
@@ -224,9 +224,9 @@ public class Step05ClassTest extends PlainTestCase {
     public void test_class_moreFix_whetherTicketType() {
         // uncomment when you implement this exercise
         TicketBooth booth = new TicketBooth();
-        Ticket oneDayPassport = booth.buyTicket(ONE_DAY_PASSPORT, 10000).getTicket();
+        Ticket oneDayPassport = booth.buyTicket(ONE_DAY, 10000).getTicket();
         showTicketIfNeeds(oneDayPassport);
-        TicketBuyResult buyResult = booth.buyTicket(TWO_DAY_PASSPORT, 15000);
+        TicketBuyResult buyResult = booth.buyTicket(TWO_DAY, 15000);
         Ticket twoDayPassport = buyResult.getTicket();
         showTicketIfNeeds(twoDayPassport);
     }
@@ -251,8 +251,8 @@ public class Step05ClassTest extends PlainTestCase {
     public void test_class_moreFix_wonder_four() {
         // your confirmation code here
         TicketBooth booth = new TicketBooth();
-        TicketBuyResult buyResult = booth.buyTicket(FOUR_DAY_PASSPORT, 22400);
-        assertEquals(FOUR_DAY_PASSPORT, buyResult.getTicket().getType());
+        TicketBuyResult buyResult = booth.buyTicket(FOUR_DAY, 22400);
+        assertEquals(FOUR_DAY, buyResult.getTicket().getType());
         // TicketクラスでTicketType, priceを管理する仕様に変更し、constructorをprivateにしてfactoryメソッドを作成した
         // 理由はBoothクラスはクライアント（ゲスト）へのサービス提供を責務として持ち、TicketクラスにはTicketTypeと対応するpriceの整合性や自身のオブジェクト生成を担当してほしいから
     }
@@ -264,7 +264,7 @@ public class Step05ClassTest extends PlainTestCase {
     public void test_class_moreFix_wonder_night() {
         // your confirmation code here
         TicketBooth booth = new TicketBooth();
-        TicketBuyResult buyResult = booth.buyTicket(NIGHT_ONLY_TWO_DAY_PASSPORT, 7500);
+        TicketBuyResult buyResult = booth.buyTicket(NIGHT_ONLY_TWO_DAY, 7500);
         log(buyResult.getTicket().getType());
         buyResult.getTicket().useForOneDay();
     }
@@ -278,6 +278,11 @@ public class Step05ClassTest extends PlainTestCase {
      */
     public void test_class_moreFix_yourRefactoring() {
         // your confirmation code here
+        // TicketBoothクラスでチケットごとの枚数をMapデータ構造で管理する仕様にした
+        // constructorでそれぞれの枚数を引数として取得し、boothごとに枚数をコントロールできる仕様も考えたが、YAGNI原則に従って現状は固定値を入れている
+        // consumeTicketメソッドを一般化してコンパクトにした
+        // getOneDayPassportQuantityメソッドを一般化し、メソッド名をgetTicketQuantityに変更した
+        // ticketとpassportが同じ意味として使われている気がしたので、統一してticketと呼ぶことにした
     }
 
     /**

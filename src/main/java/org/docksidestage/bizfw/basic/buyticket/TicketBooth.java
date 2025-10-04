@@ -17,6 +17,9 @@ package org.docksidestage.bizfw.basic.buyticket;
 
 import static org.docksidestage.bizfw.basic.buyticket.TicketType.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author jflute
  */
@@ -36,16 +39,17 @@ public class TicketBooth {
     // // 既存コードちょい直したい、いつやる？
     // https://jflute.hatenadiary.jp/entry/20250913/whenrefactor
     //
-    private int oneDayPassportQuantity = 10;
-    private int twoDayPassportQuantity = 10;
-    private int fourDayPassportQuantity = 10;
-    private int nightOnlyTwoDayPassportQuantity = 10;
+    private final Map<TicketType, Integer> ticketQuantity = new HashMap<>();
     private int salesProceeds = 0;
 
     // ===================================================================================
     //                                                                         Constructor
     //                                                                         ===========
     public TicketBooth() {
+        ticketQuantity.put(ONE_DAY, 10);
+        ticketQuantity.put(TWO_DAY, 10);
+        ticketQuantity.put(FOUR_DAY, 10);
+        ticketQuantity.put(NIGHT_ONLY_TWO_DAY, 10);
     }
 
     // ===================================================================================
@@ -61,7 +65,7 @@ public class TicketBooth {
     // */
     /**
      * Buy a ticket, method for park guest.
-     * @param ticketType Type of ticket e.g. ONE_DAY_PASSPORT.
+     * @param ticketType Type of ticket e.g. ONE_DAY.
      * @param handedMoney The money (amount) handed over from park guest. (NotNull, NotMinus)
      * @throws TicketSoldOutException When ticket in booth is sold out.
      * @throws TicketShortMoneyException When the specified money is short for purchase.
@@ -69,7 +73,7 @@ public class TicketBooth {
      */
     public TicketBuyResult buyTicket(TicketType ticketType, int handedMoney) {
         Ticket ticket;
-        if (ticketType == NIGHT_ONLY_TWO_DAY_PASSPORT) {
+        if (ticketType == NIGHT_ONLY_TWO_DAY) {
             ticket = Ticket.issueNight(ticketType);
         } else {
             ticket = Ticket.issueRegular(ticketType);
@@ -78,39 +82,25 @@ public class TicketBooth {
             throw new TicketShortMoneyException("Short money: " + handedMoney);
         }
         consumeTicket(ticket.getType());
+        salesProceeds += ticket.getPrice();
         return new TicketBuyResult(ticket, handedMoney - ticket.getPrice());
     }
 
     private void consumeTicket(TicketType ticketType) {
-        if (ticketType == ONE_DAY_PASSPORT) {
-            if (oneDayPassportQuantity == 0) {
-                throw new TicketSoldOutException("Sold out");
-            }
-            oneDayPassportQuantity--;
-        } else if (ticketType == TWO_DAY_PASSPORT) {
-            if (twoDayPassportQuantity == 0) {
-                throw new TicketSoldOutException("Sold out");
-            }
-            twoDayPassportQuantity--;
-        } else if (ticketType == FOUR_DAY_PASSPORT) {
-            if (fourDayPassportQuantity == 0) {
-                throw new TicketSoldOutException("Sold out");
-            }
-            fourDayPassportQuantity--;
-        } else if (ticketType == NIGHT_ONLY_TWO_DAY_PASSPORT) {
-            if (nightOnlyTwoDayPassportQuantity == 0) {
-                throw new TicketSoldOutException("Sold out");
-            }
-        } else {
+        if (!ticketQuantity.containsKey(ticketType)) {
             throw new InvalidTicketTypeException("Ticket type not supported: " + ticketType);
         }
+        if (ticketQuantity.get(ticketType) <= 0) {
+            throw new TicketSoldOutException("Sold out");
+        }
+        ticketQuantity.put(ticketType, ticketQuantity.get(ticketType) - 1);
     }
 
     // ===================================================================================
     //                                                                            Accessor
     //                                                                            ========
-    public int getOneDayPassportQuantity() {
-        return oneDayPassportQuantity;
+    public int getTicketQuantity(TicketType ticketType) {
+        return ticketQuantity.get(ticketType);
     }
 
     public Integer getSalesProceeds() {
