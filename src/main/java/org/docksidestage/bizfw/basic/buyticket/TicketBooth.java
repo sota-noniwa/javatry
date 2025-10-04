@@ -23,8 +23,6 @@ public class TicketBooth {
     // ===================================================================================
     //                                                                          Definition
     //                                                                          ==========
-    private static final int ONE_DAY_PRICE = 7400; // when 2019/06/15
-    private static final int TWO_DAY_PRICE = 13200;
 
     // ===================================================================================
     //                                                                           Attribute
@@ -38,6 +36,7 @@ public class TicketBooth {
     //
     private int oneDayPassportQuantity = 10;
     private int twoDayPassportQuantity = 10;
+    private int fourDayPassportQuantity = 10;
     private int salesProceeds = 0;
 
     // ===================================================================================
@@ -58,44 +57,40 @@ public class TicketBooth {
     // * @throws TicketShortMoneyException 買うのに金額が足りなかったら
     // */
     /**
-     * Buy one-day passport, method for park guest.
+     * Buy a ticket, method for park guest.
+     * @param ticketType Type of ticket e.g. ONE_DAY_PASSPORT.
      * @param handedMoney The money (amount) handed over from park guest. (NotNull, NotMinus)
      * @throws TicketSoldOutException When ticket in booth is sold out.
      * @throws TicketShortMoneyException When the specified money is short for purchase.
+     * @throws InvalidTicketTypeException When ticket type is not supported.
      */
-    public TicketBuyResult buyOneDayPassport(int handedMoney) {
-        Ticket ticket = processTicketPurchase(handedMoney, TicketType.ONE_DAY_PASSPORT);
-        return new TicketBuyResult(ticket, handedMoney - ONE_DAY_PRICE);
+    public TicketBuyResult buyTicket(TicketType ticketType, int handedMoney) {
+        Ticket ticket = Ticket.issue(ticketType);
+        if (handedMoney < ticket.getPrice()) {
+            throw new TicketShortMoneyException("Short money: " + handedMoney);
+        }
+        consumeTicket(ticket.getType());
+        return new TicketBuyResult(ticket,  handedMoney - ticket.getPrice());
     }
 
-    public TicketBuyResult buyTwoDayPassport(int handedMoney) {
-        Ticket ticket = processTicketPurchase(handedMoney, TicketType.TWO_DAY_PASSPORT);
-        return new TicketBuyResult(ticket, handedMoney - TWO_DAY_PRICE);
-    }
-
-    private Ticket processTicketPurchase(int handedMoney, TicketType ticketType) {
+    private void consumeTicket(TicketType ticketType) {
         if (ticketType == TicketType.ONE_DAY_PASSPORT) {
-            if (oneDayPassportQuantity <= 0) {
+            if (oneDayPassportQuantity == 0) {
                 throw new TicketSoldOutException("Sold out");
             }
-            if (handedMoney < ONE_DAY_PRICE) {
-                throw new TicketShortMoneyException("Short money: " + handedMoney);
-            }
-            salesProceeds += ONE_DAY_PRICE;
-            --oneDayPassportQuantity;
-            return new Ticket(TicketType.ONE_DAY_PASSPORT);
+            oneDayPassportQuantity--;
         } else if (ticketType == TicketType.TWO_DAY_PASSPORT) {
-            if (twoDayPassportQuantity <= 0) {
+            if (twoDayPassportQuantity == 0) {
                 throw new TicketSoldOutException("Sold out");
             }
-            if (handedMoney < TWO_DAY_PRICE) {
-                throw new TicketShortMoneyException("Short money: " + handedMoney);
+            twoDayPassportQuantity--;
+        } else if (ticketType == TicketType.FOUR_DAY_PASSPORT) {
+            if (fourDayPassportQuantity == 0) {
+                throw new TicketSoldOutException("Sold out");
             }
-            salesProceeds += TWO_DAY_PRICE;
-            --twoDayPassportQuantity;
-            return new Ticket(TicketType.TWO_DAY_PASSPORT);
+            fourDayPassportQuantity--;
         } else {
-            throw new InvalidTicketTypeException("Invalid ticket type: " + ticketType);
+            throw new InvalidTicketTypeException("Ticket type not supported: " + ticketType);
         }
     }
 

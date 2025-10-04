@@ -15,6 +15,8 @@
  */
 package org.docksidestage.bizfw.basic.buyticket;
 
+import static org.docksidestage.bizfw.basic.buyticket.TicketType.*;
+
 /**
  * @author jflute
  */
@@ -23,26 +25,17 @@ public class Ticket {
     // ===================================================================================
     //                                                                           Attribute
     //                                                                           =========
-    private TicketType type;
-    private final int displayPrice; // written on ticket, park guest can watch this
+    private final TicketType type;
+    private final int price; // written on ticket, park guest can watch this
     private int remainingDays; // remaining days that a park guest can enter with the ticket
 
     // ===================================================================================
     //                                                                         Constructor
     //                                                                         ===========
-
-    public Ticket(TicketType type) {
-        if (type == TicketType.ONE_DAY_PASSPORT) {
-            this.type = type;
-            this.displayPrice = 7400;
-            remainingDays = 1;
-        } else if (type == TicketType.TWO_DAY_PASSPORT) {
-            this.type = type;
-            this.displayPrice = 13200;
-            remainingDays = 2;
-        } else {
-            throw new IllegalStateException("Ticket type not supported: " + type);
-        }
+    private Ticket(TicketType type, int price, int remainingDays) {
+        this.type = type;
+        this.price = price;
+        this.remainingDays = remainingDays;
     }
 
     // ===================================================================================
@@ -50,7 +43,7 @@ public class Ticket {
     //                                                                             =======
     public void useForOneDay() {
         if (remainingDays <= 0) {
-            throw new IllegalStateException("Ticket has already expired: displayedPrice: " + displayPrice);
+            throw new IllegalStateException("Ticket has already expired: displayedPrice: " + price);
         }
         remainingDays--;
     }
@@ -62,15 +55,36 @@ public class Ticket {
         return type;
     }
 
-    public int getDisplayPrice() {
-        return displayPrice;
+    public int getPrice() {
+        return price;
+    }
+
+    public int getRemainingDays() {
+        return remainingDays;
     }
 
     public boolean hasExpired() {
         return remainingDays <= 0;
     }
 
-    public int getRemainingDays() {
-        return remainingDays;
+    // ===================================================================================
+    //                                                                      Factory method
+    //                                                                            ========
+    public static Ticket issue(TicketType type) {
+        int price;
+        int remainingDays;
+        if (type == ONE_DAY_PASSPORT) {
+            price = 7400;
+            remainingDays = 1;
+        } else if (type == TWO_DAY_PASSPORT) {
+            price = 13200;
+            remainingDays = 2;
+        } else if (type == FOUR_DAY_PASSPORT) {
+            price = 22400;
+            remainingDays = 4;
+        } else {
+            throw new IllegalStateException("Ticket type not supported: " + type);
+        }
+        return new Ticket(type, price, remainingDays);
     }
 }
