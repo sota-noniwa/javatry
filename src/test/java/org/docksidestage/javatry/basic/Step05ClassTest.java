@@ -251,11 +251,10 @@ public class Step05ClassTest extends PlainTestCase {
     public void test_class_moreFix_wonder_four() {
         // your confirmation code here
         TicketBooth booth = new TicketBooth();
-        TicketBuyResult buyResult = booth.buyTicket(TicketType.FOUR_DAY_PASSPORT, 22400);
+        TicketBuyResult buyResult = booth.buyTicket(FOUR_DAY_PASSPORT, 22400);
         assertEquals(FOUR_DAY_PASSPORT, buyResult.getTicket().getType());
         // TicketクラスでTicketType, priceを管理する仕様に変更し、constructorをprivateにしてfactoryメソッドを作成した
         // 理由はBoothクラスはクライアント（ゲスト）へのサービス提供を責務として持ち、TicketクラスにはTicketTypeと対応するpriceの整合性や自身のオブジェクト生成を担当してほしいから
-        //
     }
 
     /**
@@ -264,6 +263,10 @@ public class Step05ClassTest extends PlainTestCase {
      */
     public void test_class_moreFix_wonder_night() {
         // your confirmation code here
+        TicketBooth booth = new TicketBooth();
+        TicketBuyResult buyResult = booth.buyTicket(NIGHT_ONLY_TWO_DAY_PASSPORT, 7500);
+        log(buyResult.getTicket().getType());
+        buyResult.getTicket().useForOneDay();
     }
 
     // ===================================================================================

@@ -17,24 +17,36 @@ package org.docksidestage.bizfw.basic.buyticket;
 
 import static org.docksidestage.bizfw.basic.buyticket.TicketType.*;
 
+import java.lang.invoke.WrongMethodTypeException;
+import java.time.LocalTime;
+
 /**
  * @author jflute
  */
 public class Ticket {
 
     // ===================================================================================
+    //                                                                          Definition
+    //                                                                           =========
+    // a night ticket can be used from NIGHT_START_TIME to NIGHT_END_TIME
+    private static final LocalTime NIGHT_START_TIME = LocalTime.of(18, 0);
+    private static final LocalTime NIGHT_END_TIME = LocalTime.of(22, 0);
+
+    // ===================================================================================
     //                                                                           Attribute
     //                                                                           =========
     private final TicketType type;
     private final int price; // written on ticket, park guest can watch this
+    private final boolean isNightTicket;
     private int remainingDays; // remaining days that a park guest can enter with the ticket
 
     // ===================================================================================
     //                                                                         Constructor
     //                                                                         ===========
-    private Ticket(TicketType type, int price, int remainingDays) {
+    private Ticket(TicketType type, int price, boolean isNightTicket, int remainingDays) {
         this.type = type;
         this.price = price;
+        this.isNightTicket = isNightTicket;
         this.remainingDays = remainingDays;
     }
 
@@ -43,7 +55,11 @@ public class Ticket {
     //                                                                             =======
     public void useForOneDay() {
         if (remainingDays <= 0) {
-            throw new IllegalStateException("Ticket has already expired: displayedPrice: " + price);
+            throw new IllegalStateException("Ticket has already expired");
+        }
+        LocalTime now = LocalTime.now();
+        if (isNightTicket && !(now.isAfter(NIGHT_START_TIME) && now.isBefore(NIGHT_END_TIME))) {
+            throw new TicketBooth.InvalidTicketTimeException("Night ticket can be used only at night time");
         }
         remainingDays--;
     }
@@ -70,7 +86,7 @@ public class Ticket {
     // ===================================================================================
     //                                                                      Factory method
     //                                                                            ========
-    public static Ticket issue(TicketType type) {
+    public static Ticket issueRegular(TicketType type) {
         int price;
         int remainingDays;
         if (type == ONE_DAY_PASSPORT) {
@@ -83,8 +99,16 @@ public class Ticket {
             price = 22400;
             remainingDays = 4;
         } else {
-            throw new IllegalStateException("Ticket type not supported: " + type);
+            throw new WrongMethodTypeException("Call issueNight method for a night ticket");
         }
-        return new Ticket(type, price, remainingDays);
+        return new Ticket(type, price, false, remainingDays);
+    }
+
+    public static Ticket issueNight(TicketType type) {
+        if (type == NIGHT_ONLY_TWO_DAY_PASSPORT) {
+            return new Ticket(type, 7400, true, 2);
+        } else {
+            throw new WrongMethodTypeException("Call issueRegular method for a regular ticket");
+        }
     }
 }

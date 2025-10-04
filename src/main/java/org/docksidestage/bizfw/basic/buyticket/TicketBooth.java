@@ -15,6 +15,8 @@
  */
 package org.docksidestage.bizfw.basic.buyticket;
 
+import static org.docksidestage.bizfw.basic.buyticket.TicketType.*;
+
 /**
  * @author jflute
  */
@@ -37,6 +39,7 @@ public class TicketBooth {
     private int oneDayPassportQuantity = 10;
     private int twoDayPassportQuantity = 10;
     private int fourDayPassportQuantity = 10;
+    private int nightOnlyTwoDayPassportQuantity = 10;
     private int salesProceeds = 0;
 
     // ===================================================================================
@@ -65,35 +68,58 @@ public class TicketBooth {
      * @throws InvalidTicketTypeException When ticket type is not supported.
      */
     public TicketBuyResult buyTicket(TicketType ticketType, int handedMoney) {
-        Ticket ticket = Ticket.issue(ticketType);
+        Ticket ticket;
+        if (ticketType == NIGHT_ONLY_TWO_DAY_PASSPORT) {
+            ticket = Ticket.issueNight(ticketType);
+        } else {
+            ticket = Ticket.issueRegular(ticketType);
+        }
         if (handedMoney < ticket.getPrice()) {
             throw new TicketShortMoneyException("Short money: " + handedMoney);
         }
         consumeTicket(ticket.getType());
-        return new TicketBuyResult(ticket,  handedMoney - ticket.getPrice());
+        return new TicketBuyResult(ticket, handedMoney - ticket.getPrice());
     }
 
     private void consumeTicket(TicketType ticketType) {
-        if (ticketType == TicketType.ONE_DAY_PASSPORT) {
+        if (ticketType == ONE_DAY_PASSPORT) {
             if (oneDayPassportQuantity == 0) {
                 throw new TicketSoldOutException("Sold out");
             }
             oneDayPassportQuantity--;
-        } else if (ticketType == TicketType.TWO_DAY_PASSPORT) {
+        } else if (ticketType == TWO_DAY_PASSPORT) {
             if (twoDayPassportQuantity == 0) {
                 throw new TicketSoldOutException("Sold out");
             }
             twoDayPassportQuantity--;
-        } else if (ticketType == TicketType.FOUR_DAY_PASSPORT) {
+        } else if (ticketType == FOUR_DAY_PASSPORT) {
             if (fourDayPassportQuantity == 0) {
                 throw new TicketSoldOutException("Sold out");
             }
             fourDayPassportQuantity--;
+        } else if (ticketType == NIGHT_ONLY_TWO_DAY_PASSPORT) {
+            if (nightOnlyTwoDayPassportQuantity == 0) {
+                throw new TicketSoldOutException("Sold out");
+            }
         } else {
             throw new InvalidTicketTypeException("Ticket type not supported: " + ticketType);
         }
     }
 
+    // ===================================================================================
+    //                                                                            Accessor
+    //                                                                            ========
+    public int getOneDayPassportQuantity() {
+        return oneDayPassportQuantity;
+    }
+
+    public Integer getSalesProceeds() {
+        return salesProceeds;
+    }
+
+    // ===================================================================================
+    //                                                                           Exception
+    //                                                                            ========
     public static class TicketSoldOutException extends RuntimeException {
 
         private static final long serialVersionUID = 1L;
@@ -121,14 +147,22 @@ public class TicketBooth {
         }
     }
 
-    // ===================================================================================
-    //                                                                            Accessor
-    //                                                                            ========
-    public int getOneDayPassportQuantity() {
-        return oneDayPassportQuantity;
+    public static class InvalidTicketTimeException extends RuntimeException {
+
+        private static final long serialVersionUID = 1L;
+
+        public InvalidTicketTimeException(String msg) {
+            super(msg);
+        }
     }
 
-    public Integer getSalesProceeds() {
-        return salesProceeds;
+    public static class TicketAlreadyExpiredException extends RuntimeException {
+
+        private static final long serialVersionUID = 1L;
+
+        public TicketAlreadyExpiredException(String msg) {
+            super(msg);
+        }
     }
+
 }
