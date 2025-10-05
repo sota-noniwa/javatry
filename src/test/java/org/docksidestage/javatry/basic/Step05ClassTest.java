@@ -211,7 +211,7 @@ public class Step05ClassTest extends PlainTestCase {
         twoDayPassport.hasExpired(); // should be false
         twoDayPassport.useForOneDay();
         twoDayPassport.hasExpired(); // should be false
-        assertException(IllegalStateException.class, () -> twoDayPassport.useForOneDay()); // should throw an Exception
+        assertException(Ticket.TicketAlreadyExpiredException.class, () -> twoDayPassport.useForOneDay()); // should throw an Exception
         // TicketのコンストラクターでTicketTypeを引数として渡すようにした
         // Ticketクラスのフィールドの各初期値はTicketTypeによって決まる仕様にした
         // 後何日チケットを使用することができるかをremainingDaysという変数で管理した
@@ -263,6 +263,7 @@ public class Step05ClassTest extends PlainTestCase {
      */
     public void test_class_moreFix_wonder_night() {
         // your confirmation code here
+        // This test fails if it's not nighttime right now.
         TicketBooth booth = new TicketBooth();
         TicketBuyResult buyResult = booth.buyTicket(NIGHT_ONLY_TWO_DAY, 7500);
         log(buyResult.getTicket().getType());
@@ -278,6 +279,22 @@ public class Step05ClassTest extends PlainTestCase {
      */
     public void test_class_moreFix_yourRefactoring() {
         // your confirmation code here
+        TicketBooth booth = new TicketBooth();
+        log("TWO_DAY ticket's quantity: " + booth.getTicketQuantity(TWO_DAY));
+        TicketBuyResult buyResult = booth.buyTicket(TWO_DAY, 20000);
+        log("A customer bought " + buyResult.getTicket().getType() + " ticket and received " + buyResult.getChange() + " yen in change");
+        log("TWO_DAY ticket's quantity: " + booth.getTicketQuantity(TWO_DAY));
+        log("Sales proceeds: " + booth.getSalesProceeds());
+        Ticket ticket = buyResult.getTicket();
+        log("The customer checks the ticket...");
+        log("Remaining days: " + ticket.getRemainingDays() + ", price: " + ticket.getPrice() + " yen");
+        log("The customer uses ticket");
+        ticket.useForOneDay();
+        log("The ticket has expired?: " + ticket.hasExpired());
+        log("Remaining days: " + ticket.getRemainingDays());
+        log("The customer uses ticket");
+        ticket.useForOneDay();
+        log("The ticket has expired?: " + ticket.hasExpired());
         // TicketBoothクラスでチケットごとの枚数をMapデータ構造で管理する仕様にした
         // constructorでそれぞれの枚数を引数として取得し、boothごとに枚数をコントロールできる仕様も考えたが、YAGNI原則に従って現状は固定値を入れている
         // consumeTicketメソッドを一般化してコンパクトにした
@@ -294,6 +311,7 @@ public class Step05ClassTest extends PlainTestCase {
      */
     public void test_class_moreFix_yourSuperJavaDoc() {
         // your confirmation code here
+        // done
     }
 
     // ===================================================================================
@@ -307,5 +325,6 @@ public class Step05ClassTest extends PlainTestCase {
      */
     public void test_class_moreFix_zonedQuantity() {
         // your confirmation code here
+        // already done
     }
 }

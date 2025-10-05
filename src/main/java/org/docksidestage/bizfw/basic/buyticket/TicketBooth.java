@@ -17,7 +17,7 @@ package org.docksidestage.bizfw.basic.buyticket;
 
 import static org.docksidestage.bizfw.basic.buyticket.TicketType.*;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 
 /**
@@ -39,17 +39,18 @@ public class TicketBooth {
     // // 既存コードちょい直したい、いつやる？
     // https://jflute.hatenadiary.jp/entry/20250913/whenrefactor
     //
-    private final Map<TicketType, Integer> ticketQuantity = new HashMap<>();
+    private final Map<TicketType, Integer> regularTicketsQuantity = new EnumMap<>(TicketType.class);
+    private final Map<TicketType, Integer> nightTicketsQuantity = new EnumMap<>(TicketType.class);
     private int salesProceeds = 0;
 
     // ===================================================================================
     //                                                                         Constructor
     //                                                                         ===========
     public TicketBooth() {
-        ticketQuantity.put(ONE_DAY, 10);
-        ticketQuantity.put(TWO_DAY, 10);
-        ticketQuantity.put(FOUR_DAY, 10);
-        ticketQuantity.put(NIGHT_ONLY_TWO_DAY, 10);
+        regularTicketsQuantity.put(ONE_DAY, 10);
+        regularTicketsQuantity.put(TWO_DAY, 10);
+        regularTicketsQuantity.put(FOUR_DAY, 10);
+        nightTicketsQuantity.put(NIGHT_ONLY_TWO_DAY, 10);
     }
 
     // ===================================================================================
@@ -67,16 +68,19 @@ public class TicketBooth {
      * Buy a ticket, method for park guest.
      * @param ticketType Type of ticket e.g. ONE_DAY.
      * @param handedMoney The money (amount) handed over from park guest. (NotNull, NotMinus)
+     * @return An object contains information about bought ticket and change.
      * @throws TicketSoldOutException When ticket in booth is sold out.
      * @throws TicketShortMoneyException When the specified money is short for purchase.
      * @throws InvalidTicketTypeException When ticket type is not supported.
      */
     public TicketBuyResult buyTicket(TicketType ticketType, int handedMoney) {
         Ticket ticket;
-        if (ticketType == NIGHT_ONLY_TWO_DAY) {
+        if (regularTicketsQuantity.containsKey(ticketType)) {
+            ticket = Ticket.issueRegular(ticketType);
+        } else if (nightTicketsQuantity.containsKey(ticketType)) {
             ticket = Ticket.issueNight(ticketType);
         } else {
-            ticket = Ticket.issueRegular(ticketType);
+            throw new InvalidTicketTypeException("Ticket type not supported: " + ticketType);
         }
         if (handedMoney < ticket.getPrice()) {
             throw new TicketShortMoneyException("Short money: " + handedMoney);
@@ -87,20 +91,30 @@ public class TicketBooth {
     }
 
     private void consumeTicket(TicketType ticketType) {
-        if (!ticketQuantity.containsKey(ticketType)) {
-            throw new InvalidTicketTypeException("Ticket type not supported: " + ticketType);
+        if (regularTicketsQuantity.containsKey(ticketType)) {
+            if (regularTicketsQuantity.get(ticketType) <= 0) {
+                throw new TicketSoldOutException("Sold out");
+            }
+            regularTicketsQuantity.put(ticketType, regularTicketsQuantity.get(ticketType) - 1);
+        } else {
+            if (nightTicketsQuantity.get(ticketType) <= 0) {
+                throw new TicketSoldOutException("Sold out");
+            }
+            nightTicketsQuantity.put(ticketType, nightTicketsQuantity.get(ticketType) - 1);
         }
-        if (ticketQuantity.get(ticketType) <= 0) {
-            throw new TicketSoldOutException("Sold out");
-        }
-        ticketQuantity.put(ticketType, ticketQuantity.get(ticketType) - 1);
     }
 
     // ===================================================================================
     //                                                                            Accessor
     //                                                                            ========
     public int getTicketQuantity(TicketType ticketType) {
-        return ticketQuantity.get(ticketType);
+        if (regularTicketsQuantity.containsKey(ticketType)) {
+            return regularTicketsQuantity.get(ticketType);
+        } else if (nightTicketsQuantity.containsKey(ticketType)) {
+            return nightTicketsQuantity.get(ticketType);
+        } else {
+            throw new InvalidTicketTypeException("Ticket type not supported: " + ticketType);
+        }
     }
 
     public Integer getSalesProceeds() {
@@ -136,23 +150,4 @@ public class TicketBooth {
             super(msg);
         }
     }
-
-    public static class InvalidTicketTimeException extends RuntimeException {
-
-        private static final long serialVersionUID = 1L;
-
-        public InvalidTicketTimeException(String msg) {
-            super(msg);
-        }
-    }
-
-    public static class TicketAlreadyExpiredException extends RuntimeException {
-
-        private static final long serialVersionUID = 1L;
-
-        public TicketAlreadyExpiredException(String msg) {
-            super(msg);
-        }
-    }
-
 }

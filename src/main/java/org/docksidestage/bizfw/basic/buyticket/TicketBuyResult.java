@@ -13,6 +13,7 @@ public class TicketBuyResult {
     public Ticket getTicket() {
         return ticket;
     }
+
     public int getChange() {
         return change;
     }

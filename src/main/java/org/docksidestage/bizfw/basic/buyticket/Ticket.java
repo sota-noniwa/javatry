@@ -53,13 +53,18 @@ public class Ticket {
     // ===================================================================================
     //                                                                             In Park
     //                                                                             =======
+    /**
+     * Use the ticket for one day.
+     * @throws TicketAlreadyExpiredException When the ticket has already expired (no remaining days).
+     * @throws InvalidTicketTimeException When a night ticket is used outside the allowed nighttime.
+     */
     public void useForOneDay() {
         if (remainingDays <= 0) {
-            throw new IllegalStateException("Ticket has already expired");
+            throw new TicketAlreadyExpiredException("Ticket has already expired");
         }
         LocalTime now = LocalTime.now();
         if (isNightTicket && !(now.isAfter(NIGHT_START_TIME) && now.isBefore(NIGHT_END_TIME))) {
-            throw new TicketBooth.InvalidTicketTimeException("Night ticket can be used only at night time");
+            throw new InvalidTicketTimeException("Night ticket can be used only at night time");
         }
         remainingDays--;
     }
@@ -67,18 +72,30 @@ public class Ticket {
     // ===================================================================================
     //                                                                            Accessor
     //                                                                            ========
+    /**
+     * @return The type of ticket e.g. ONE_DAY.
+     */
     public TicketType getType() {
         return type;
     }
 
+    /**
+     * @return The price of the ticket.
+     */
     public int getPrice() {
         return price;
     }
 
+    /**
+     * @return The remaining days of entry on the ticket.
+     */
     public int getRemainingDays() {
         return remainingDays;
     }
 
+    /**
+     * @return True if the ticket is no longer valid, otherwise false.
+     */
     public boolean hasExpired() {
         return remainingDays <= 0;
     }
@@ -86,6 +103,13 @@ public class Ticket {
     // ===================================================================================
     //                                                                      Factory method
     //                                                                            ========
+    /**
+     * Issues a regular ticket for the specific type.
+     * Supported types are ONE_DAY, TWO_DAY, and FOUR_DAY.
+     * @param type The type of regular ticket to issue.
+     * @return A new Ticket instance for the specified type.
+     * @throws WrongMethodTypeException When the specified type is not a regular ticket.
+     */
     public static Ticket issueRegular(TicketType type) {
         int price;
         int remainingDays;
@@ -104,11 +128,39 @@ public class Ticket {
         return new Ticket(type, price, false, remainingDays);
     }
 
+    /**
+     * Issues a night ticket for the specific type.
+     * Supported types are NIGHT_ONLY_TWO_DAY.
+     * @param type The type of night ticket to issue.
+     * @return A new Ticket instance for the specified type.
+     * @throws WrongMethodTypeException When the specified type is not a night ticket.
+     */
     public static Ticket issueNight(TicketType type) {
         if (type == NIGHT_ONLY_TWO_DAY) {
             return new Ticket(type, 7400, true, 2);
         } else {
             throw new WrongMethodTypeException("Call issueRegular method for a regular ticket");
+        }
+    }
+
+    // ===================================================================================
+    //                                                                           Exception
+    //                                                                            ========
+    public static class InvalidTicketTimeException extends RuntimeException {
+
+        private static final long serialVersionUID = 1L;
+
+        public InvalidTicketTimeException(String msg) {
+            super(msg);
+        }
+    }
+
+    public static class TicketAlreadyExpiredException extends RuntimeException {
+
+        private static final long serialVersionUID = 1L;
+
+        public TicketAlreadyExpiredException(String msg) {
+            super(msg);
         }
     }
 }
