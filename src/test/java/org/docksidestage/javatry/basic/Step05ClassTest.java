@@ -233,8 +233,13 @@ public class Step05ClassTest extends PlainTestCase {
 
     // uncomment when you implement this exercise
     private void showTicketIfNeeds(Ticket ticket) {
+        // #1on1: TwoDayをピンポイントで判定するとするとこんな感じ
+        //if (ticket.getType().equals(TicketType.TWO_DAY)) {
+        //    ...
+        //}
         TicketType ticketType = ticket.getType();
         for (TicketType type : TicketType.values()) {
+            // #1on1: enumだと、インスタンス限定されているので == でも大丈夫
             if (ticketType == type) {
                 log("Ticket type: " + type);
             }

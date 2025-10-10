@@ -62,6 +62,9 @@ public class Ticket {
         if (remainingDays <= 0) {
             throw new TicketAlreadyExpiredException("Ticket has already expired");
         }
+        // TODO jflute 次回1on1, UnitTestでの挙動の話 (2025/10/10)
+        
+        // TODO noniwa 18時ぴったりが弾かれるけど意図しているか？してなければ自然な形に by jflute (2025/10/10)
         LocalTime now = LocalTime.now();
         if (isNightTicket && !(now.isAfter(NIGHT_START_TIME) && now.isBefore(NIGHT_END_TIME))) {
             throw new InvalidTicketTimeException("Night ticket can be used only at night time");
@@ -72,6 +75,10 @@ public class Ticket {
     // ===================================================================================
     //                                                                            Accessor
     //                                                                            ========
+    // #1on1: getは取ることが目的なので、概要を省略して、@returnだけ付けるのGood (2025/10/10)
+    // #1on1: 質問: くぼさんどんくらいコメント書く？ 
+    // ケースバイケースだけど、他人がメンテする想定なら NxBatchRecorder みたいに書く。
+    // DBFluteのAbstractSqlClauseもちょこっとだけ見て、if文の補足コメントなど。
     /**
      * @return The type of ticket e.g. ONE_DAY.
      */
@@ -80,7 +87,7 @@ public class Ticket {
     }
 
     /**
-     * @return The price of the ticket.
+     * @return チケットの料金.
      */
     public int getPrice() {
         return price;
@@ -103,6 +110,7 @@ public class Ticket {
     // ===================================================================================
     //                                                                      Factory method
     //                                                                            ========
+    // TODO jflute 次回1on1にて、Ticketのコメントもうちょいじっくり (2025/10/10)
     /**
      * Issues a regular ticket for the specific type.
      * Supported types are ONE_DAY, TWO_DAY, and FOUR_DAY.
@@ -111,6 +119,7 @@ public class Ticket {
      * @throws WrongMethodTypeException When the specified type is not a regular ticket.
      */
     public static Ticket issueRegular(TicketType type) {
+        // TODO noniwa チケット種別が増えた時、できるだけenumの追加だけで済ませたい by jflute (2025/10/10)
         int price;
         int remainingDays;
         if (type == ONE_DAY) {

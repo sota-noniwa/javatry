@@ -39,6 +39,14 @@ public class TicketBooth {
     // // 既存コードちょい直したい、いつやる？
     // https://jflute.hatenadiary.jp/entry/20250913/whenrefactor
     //
+    // #1on1: regularとnightを分けている理由は？ (2025/10/10)
+    // → nightだけ夜だけ使える判定が必要だから？？？
+    // → あまりBoothでlogicを持たせなくなった？？？
+    //
+    // チケット種別ごとに列挙してたのをMapに集約した理由:
+    // → oneDay, twoDay, と列挙すると間違いやすいのでMap
+    //    → それはGoodだけど、regularとnightを分けた理由は？
+    //
     private final Map<TicketType, Integer> regularTicketsQuantity = new EnumMap<>(TicketType.class);
     private final Map<TicketType, Integer> nightTicketsQuantity = new EnumMap<>(TicketType.class);
     private int salesProceeds = 0;
@@ -47,6 +55,7 @@ public class TicketBooth {
     //                                                                         Constructor
     //                                                                         ===========
     public TicketBooth() {
+        // #1on1: ここでどのチケット種別がnightなのか？を定義しているに等しい (2025/10/10)
         regularTicketsQuantity.put(ONE_DAY, 10);
         regularTicketsQuantity.put(TWO_DAY, 10);
         regularTicketsQuantity.put(FOUR_DAY, 10);
@@ -64,6 +73,7 @@ public class TicketBooth {
     // * @throws TicketSoldOutException ブース内のチケットが売り切れだったら
     // * @throws TicketShortMoneyException 買うのに金額が足りなかったら
     // */
+    // done noniwa [いいね] e.g. ONE_DAY の例えば列挙がとてもわかりやすい by jflute (2025/10/10)
     /**
      * Buy a ticket, method for park guest.
      * @param ticketType Type of ticket e.g. ONE_DAY.
@@ -74,6 +84,9 @@ public class TicketBooth {
      * @throws InvalidTicketTypeException When ticket type is not supported.
      */
     public TicketBuyResult buyTicket(TicketType ticketType, int handedMoney) {
+        // TODO noniwa nightかどうかの判定を、enumだけでできないか？ by jflute (2025/10/10)
+        // (現状、BoothのMapの割り振りでnightを判定している)
+        // 本来、そのチケット(種別)が、nightかどうか？という情報はどこで持つのが自然だろうか？
         Ticket ticket;
         if (regularTicketsQuantity.containsKey(ticketType)) {
             ticket = Ticket.issueRegular(ticketType);
