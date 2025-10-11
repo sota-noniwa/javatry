@@ -188,7 +188,7 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
     }
 
     private void doShowYourTicket(Ticket ticket) {
-        log("Your Ticket: displayPrice={}, alreadyIn={}", ticket.getPrice(), ticket.hasExpired());
+        log("Your Ticket: displayPrice={}, alreadyIn={}", ticket.getType().getPrice(), ticket.hasExpired());
     }
 
     // write your memo here:

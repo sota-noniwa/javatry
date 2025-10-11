@@ -15,8 +15,6 @@
  */
 package org.docksidestage.bizfw.basic.buyticket;
 
-import static org.docksidestage.bizfw.basic.buyticket.TicketType.*;
-
 import java.lang.invoke.WrongMethodTypeException;
 import java.time.LocalTime;
 
@@ -36,17 +34,13 @@ public class Ticket {
     //                                                                           Attribute
     //                                                                           =========
     private final TicketType type;
-    private final int price; // written on ticket, park guest can watch this
-    private final boolean isNightTicket;
     private int remainingDays; // remaining days that a park guest can enter with the ticket
 
     // ===================================================================================
     //                                                                         Constructor
     //                                                                         ===========
-    private Ticket(TicketType type, int price, boolean isNightTicket, int remainingDays) {
+    private Ticket(TicketType type, int remainingDays) {
         this.type = type;
-        this.price = price;
-        this.isNightTicket = isNightTicket;
         this.remainingDays = remainingDays;
     }
 
@@ -63,13 +57,24 @@ public class Ticket {
             throw new TicketAlreadyExpiredException("Ticket has already expired");
         }
         // TODO jflute 次回1on1, UnitTestでの挙動の話 (2025/10/10)
-        
-        // TODO noniwa 18時ぴったりが弾かれるけど意図しているか？してなければ自然な形に by jflute (2025/10/10)
-        LocalTime now = LocalTime.now();
-        if (isNightTicket && !(now.isAfter(NIGHT_START_TIME) && now.isBefore(NIGHT_END_TIME))) {
+
+        // done noniwa 18時ぴったりが弾かれるけど意図しているか？してなければ自然な形に by jflute (2025/10/10)
+        // TODO jflute 18:00:00〜21:59:59まではNightTicketが使える仕様にしました
+        if (type.isNightTicket() && !isNightTicketInValidTime()) {
             throw new InvalidTicketTimeException("Night ticket can be used only at night time");
         }
         remainingDays--;
+    }
+
+    private boolean isNightTicketInValidTime() {
+        // ======================================== Test cases
+//        LocalTime now = LocalTime.of(17, 59, 59); // false
+//        LocalTime now = LocalTime.of(18, 0, 0); // true
+//        LocalTime now = LocalTime.of(21, 59, 59); // true
+//        LocalTime now = LocalTime.of(22, 0, 0); // false
+        // ===================================================
+        LocalTime now = LocalTime.now();
+        return (!now.isBefore(NIGHT_START_TIME) && now.isBefore(NIGHT_END_TIME));
     }
 
     // ===================================================================================
@@ -84,13 +89,6 @@ public class Ticket {
      */
     public TicketType getType() {
         return type;
-    }
-
-    /**
-     * @return チケットの料金.
-     */
-    public int getPrice() {
-        return price;
     }
 
     /**
@@ -118,38 +116,10 @@ public class Ticket {
      * @return A new Ticket instance for the specified type.
      * @throws WrongMethodTypeException When the specified type is not a regular ticket.
      */
-    public static Ticket issueRegular(TicketType type) {
-        // TODO noniwa チケット種別が増えた時、できるだけenumの追加だけで済ませたい by jflute (2025/10/10)
-        int price;
-        int remainingDays;
-        if (type == ONE_DAY) {
-            price = 7400;
-            remainingDays = 1;
-        } else if (type == TWO_DAY) {
-            price = 13200;
-            remainingDays = 2;
-        } else if (type == FOUR_DAY) {
-            price = 22400;
-            remainingDays = 4;
-        } else {
-            throw new WrongMethodTypeException("Call issueNight method for a night ticket");
-        }
-        return new Ticket(type, price, false, remainingDays);
-    }
-
-    /**
-     * Issues a night ticket for the specific type.
-     * Supported types are NIGHT_ONLY_TWO_DAY.
-     * @param type The type of night ticket to issue.
-     * @return A new Ticket instance for the specified type.
-     * @throws WrongMethodTypeException When the specified type is not a night ticket.
-     */
-    public static Ticket issueNight(TicketType type) {
-        if (type == NIGHT_ONLY_TWO_DAY) {
-            return new Ticket(type, 7400, true, 2);
-        } else {
-            throw new WrongMethodTypeException("Call issueRegular method for a regular ticket");
-        }
+    public static Ticket issue(TicketType type) {
+        // done noniwa チケット種別が増えた時、できるだけenumの追加だけで済ませたい by jflute (2025/10/10)
+        // TODO jflute TicketType内で固定値を定義してあげたことでファクトリーメソッドがすっきりしました！
+        return new Ticket(type, type.getValidDays());
     }
 
     // ===================================================================================

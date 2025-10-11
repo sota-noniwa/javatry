@@ -15,10 +15,36 @@ package org.docksidestage.bizfw.basic.buyticket;
 // ↓ そして、これが文法になる。ということで、実はクラス。
 
 public enum TicketType {
-    ONE_DAY,
-    TWO_DAY,
-    FOUR_DAY,
-    NIGHT_ONLY_TWO_DAY
+    ONE_DAY(false, 7400, 1),
+    TWO_DAY(false, 13200, 2),
+    FOUR_DAY(false, 22400, 4),
+    NIGHT_ONLY_TWO_DAY(true, 7400, 2);
+
+    private final boolean isNightTicket;
+    private final int price;
+    private final int validDays;
+
+    TicketType(boolean isNightTicket, int price, int validDays){
+        this.isNightTicket = isNightTicket;
+        this.price = price;
+        this.validDays = validDays;
+    }
+
+    public boolean isRegularTicket() {
+        return !isNightTicket;
+    }
+
+    public boolean isNightTicket() {
+        return isNightTicket;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public int getValidDays() {
+        return validDays;
+    }
 }
 // 暗黙的にEnumクラスを継承している。(extends Enum)
 // 質問: ordinalを使うことあるか？

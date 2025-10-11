@@ -176,7 +176,7 @@ public class Step05ClassTest extends PlainTestCase {
         // uncomment out after modifying the method
         TicketBooth booth = new TicketBooth();
         Ticket oneDayPassport = booth.buyTicket(ONE_DAY, 10000).getTicket();
-        log(oneDayPassport.getPrice()); // should be same as one-day price
+        log(oneDayPassport.getType().getPrice()); // should be same as one-day price
         log(oneDayPassport.hasExpired()); // should be false
         oneDayPassport.useForOneDay();
         log(oneDayPassport.hasExpired()); // should be true
@@ -194,7 +194,7 @@ public class Step05ClassTest extends PlainTestCase {
         TicketBuyResult buyResult = booth.buyTicket(TWO_DAY, handedMoney);
         Ticket twoDayPassport = buyResult.getTicket();
         int change = buyResult.getChange();
-        log(twoDayPassport.getPrice() + change); // should be same as money
+        log(twoDayPassport.getType().getPrice() + change); // should be same as money
     }
 
     /**
@@ -292,7 +292,7 @@ public class Step05ClassTest extends PlainTestCase {
         log("Sales proceeds: " + booth.getSalesProceeds());
         Ticket ticket = buyResult.getTicket();
         log("The customer checks the ticket...");
-        log("Remaining days: " + ticket.getRemainingDays() + ", price: " + ticket.getPrice() + " yen");
+        log("Remaining days: " + ticket.getRemainingDays() + ", price: " + ticket.getType().getPrice() + " yen");
         log("The customer uses ticket");
         ticket.useForOneDay();
         log("The ticket has expired?: " + ticket.hasExpired());

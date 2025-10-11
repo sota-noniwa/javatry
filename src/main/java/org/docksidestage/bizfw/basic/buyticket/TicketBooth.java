@@ -15,8 +15,6 @@
  */
 package org.docksidestage.bizfw.basic.buyticket;
 
-import static org.docksidestage.bizfw.basic.buyticket.TicketType.*;
-
 import java.util.EnumMap;
 import java.util.Map;
 
@@ -47,8 +45,7 @@ public class TicketBooth {
     // → oneDay, twoDay, と列挙すると間違いやすいのでMap
     //    → それはGoodだけど、regularとnightを分けた理由は？
     //
-    private final Map<TicketType, Integer> regularTicketsQuantity = new EnumMap<>(TicketType.class);
-    private final Map<TicketType, Integer> nightTicketsQuantity = new EnumMap<>(TicketType.class);
+    private final Map<TicketType, Integer> ticketQuantity = new EnumMap<>(TicketType.class);
     private int salesProceeds = 0;
 
     // ===================================================================================
@@ -56,10 +53,10 @@ public class TicketBooth {
     //                                                                         ===========
     public TicketBooth() {
         // #1on1: ここでどのチケット種別がnightなのか？を定義しているに等しい (2025/10/10)
-        regularTicketsQuantity.put(ONE_DAY, 10);
-        regularTicketsQuantity.put(TWO_DAY, 10);
-        regularTicketsQuantity.put(FOUR_DAY, 10);
-        nightTicketsQuantity.put(NIGHT_ONLY_TWO_DAY, 10);
+        // 各チケットを10枚ずつ用意する
+        for (TicketType type: TicketType.values()) {
+            ticketQuantity.put(type, 10);
+        }
     }
 
     // ===================================================================================
@@ -76,58 +73,36 @@ public class TicketBooth {
     // done noniwa [いいね] e.g. ONE_DAY の例えば列挙がとてもわかりやすい by jflute (2025/10/10)
     /**
      * Buy a ticket, method for park guest.
-     * @param ticketType Type of ticket e.g. ONE_DAY.
+     * @param type Type of ticket e.g. ONE_DAY.
      * @param handedMoney The money (amount) handed over from park guest. (NotNull, NotMinus)
      * @return An object contains information about bought ticket and change.
-     * @throws TicketSoldOutException When ticket in booth is sold out.
      * @throws TicketShortMoneyException When the specified money is short for purchase.
-     * @throws InvalidTicketTypeException When ticket type is not supported.
+     * @throws TicketSoldOutException When ticket in booth is sold out.
      */
-    public TicketBuyResult buyTicket(TicketType ticketType, int handedMoney) {
-        // TODO noniwa nightかどうかの判定を、enumだけでできないか？ by jflute (2025/10/10)
+    public TicketBuyResult buyTicket(TicketType type, int handedMoney) {
+        // done noniwa nightかどうかの判定を、enumだけでできないか？ by jflute (2025/10/10)
         // (現状、BoothのMapの割り振りでnightを判定している)
         // 本来、そのチケット(種別)が、nightかどうか？という情報はどこで持つのが自然だろうか？
-        Ticket ticket;
-        if (regularTicketsQuantity.containsKey(ticketType)) {
-            ticket = Ticket.issueRegular(ticketType);
-        } else if (nightTicketsQuantity.containsKey(ticketType)) {
-            ticket = Ticket.issueNight(ticketType);
-        } else {
-            throw new InvalidTicketTypeException("Ticket type not supported: " + ticketType);
-        }
-        if (handedMoney < ticket.getPrice()) {
+        // TODO jflute nightかどうかの情報をTicketTypeに持たせることにしました
+        //  そのおかげでファクトリーメソッドが１つだけで済むようになり、呼び出し側がチケット種別ごとに呼び出すファクトリーメソッドを意識しなくて良くなりました
+        //  （常にissueメソッドを呼び出せばいい、チケットがnightかどうかは気にしなくて良い）
+        Ticket ticket = Ticket.issue(type);
+        if (handedMoney < type.getPrice()) {
             throw new TicketShortMoneyException("Short money: " + handedMoney);
         }
-        consumeTicket(ticket.getType());
-        salesProceeds += ticket.getPrice();
-        return new TicketBuyResult(ticket, handedMoney - ticket.getPrice());
-    }
-
-    private void consumeTicket(TicketType ticketType) {
-        if (regularTicketsQuantity.containsKey(ticketType)) {
-            if (regularTicketsQuantity.get(ticketType) <= 0) {
-                throw new TicketSoldOutException("Sold out");
-            }
-            regularTicketsQuantity.put(ticketType, regularTicketsQuantity.get(ticketType) - 1);
-        } else {
-            if (nightTicketsQuantity.get(ticketType) <= 0) {
-                throw new TicketSoldOutException("Sold out");
-            }
-            nightTicketsQuantity.put(ticketType, nightTicketsQuantity.get(ticketType) - 1);
+        if (ticketQuantity.get(type) <= 0) {
+            throw new TicketSoldOutException("Sold out");
         }
+        ticketQuantity.put(type, ticketQuantity.get(type) - 1);
+        salesProceeds += type.getPrice();
+        return new TicketBuyResult(ticket, handedMoney - type.getPrice());
     }
 
     // ===================================================================================
     //                                                                            Accessor
     //                                                                            ========
-    public int getTicketQuantity(TicketType ticketType) {
-        if (regularTicketsQuantity.containsKey(ticketType)) {
-            return regularTicketsQuantity.get(ticketType);
-        } else if (nightTicketsQuantity.containsKey(ticketType)) {
-            return nightTicketsQuantity.get(ticketType);
-        } else {
-            throw new InvalidTicketTypeException("Ticket type not supported: " + ticketType);
-        }
+    public int getTicketQuantity(TicketType type) {
+        return ticketQuantity.get(type);
     }
 
     public Integer getSalesProceeds() {
