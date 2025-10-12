@@ -19,15 +19,16 @@ import static org.docksidestage.bizfw.basic.buyticket.TicketType.*;
 
 import org.docksidestage.bizfw.basic.buyticket.Ticket;
 import org.docksidestage.bizfw.basic.buyticket.TicketBooth;
-import org.docksidestage.bizfw.basic.buyticket.TicketBuyResult;
-import org.docksidestage.bizfw.basic.objanimal.Animal;
-import org.docksidestage.bizfw.basic.objanimal.BarkedSound;
-import org.docksidestage.bizfw.basic.objanimal.Cat;
-import org.docksidestage.bizfw.basic.objanimal.Dog;
-import org.docksidestage.bizfw.basic.objanimal.Zombie;
+import org.docksidestage.bizfw.basic.objanimal.*;
+import org.docksidestage.bizfw.basic.objanimal.barking.BarkedSound;
 import org.docksidestage.bizfw.basic.objanimal.loud.AlarmClock;
 import org.docksidestage.bizfw.basic.objanimal.loud.Loudable;
 import org.docksidestage.bizfw.basic.objanimal.runner.FastRunner;
+import org.docksidestage.javatry.basic.st6.dbms.Dbms;
+import org.docksidestage.javatry.basic.st6.dbms.St6MySql;
+import org.docksidestage.javatry.basic.st6.dbms.St6PostgreSql;
+import org.docksidestage.javatry.basic.st6.os.MacOs;
+import org.docksidestage.javatry.basic.st6.os.St6OperationSystem;
 import org.docksidestage.unit.PlainTestCase;
 
 /**
@@ -56,7 +57,9 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         // simulation: actually these variables should be more wide scope
         int oneDayPrice = 7400;
         int quantity = 10;
-        Integer salesProceeds = null;
+        // fixed: primitive int is enough instead of Integer
+        // fixed: initial value 0 is more suitable for calculation instead of null
+        int salesProceeds = 0;
 
         //
         // [buy one-day passport]
@@ -70,7 +73,8 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         if (handedMoney < oneDayPrice) {
             throw new IllegalStateException("Short money: handedMoney=" + handedMoney);
         }
-        salesProceeds = handedMoney;
+        // fixed: wrong calculation
+        salesProceeds += oneDayPrice;
 
         //
         // [ticket info]
@@ -88,14 +92,16 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         //
         // simulation: actually this process should be called by other trigger
         if (alreadyIn) {
-            throw new IllegalStateException("Already in park by this ticket: displayPrice=" + quantity);
+            // fixed: wrong variable was used
+            throw new IllegalStateException("Already in park by this ticket: displayPrice=" + oneDayPrice);
         }
         alreadyIn = true;
 
         //
         // [final process]
         //
-        saveBuyingHistory(quantity, displayPrice, salesProceeds, alreadyIn);
+        // fixed: wrong order of parameters
+        saveBuyingHistory(quantity, salesProceeds, displayPrice, alreadyIn);
     }
 
     private void saveBuyingHistory(int quantity, Integer salesProceeds, int displayPrice, boolean alreadyIn) {
@@ -136,9 +142,9 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         // [buy one-day passport]
         //
         // if step05 has been finished, you can use this code by jflute (2019/06/15)
-        //Ticket ticket = booth.buyOneDayPassport(10000);
-        TicketBuyResult receipt = booth.buyTicket(ONE_DAY, 10000); // as temporary, remove if you finished step05
-        Ticket ticket = receipt.getTicket(); // also here
+        Ticket ticket = booth.buyTicket(ONE_DAY, 10000).getTicket();
+        //        TicketBuyResult receipt = booth.buyTicket(ONE_DAY, 10000); // as temporary, remove if you finished step05
+        //        Ticket ticket = receipt.getTicket(); // also here
 
         // *buyOneDayPassport() has this process:
         //if (quantity <= 0) {
@@ -194,7 +200,12 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
     // write your memo here:
     // _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
     // what is object?
-    //
+    // クラスを概念・物質の鋳型とするならば、オブジェクトはその鋳型から作られた1つ1つの実体
+    // 同じクラスから作られたオブジェクトは同じ性質を持つが、同じ値を持つわけではない
+    // colorというメンバー変数を持つBallクラスから作られたオブジェクトは、あるものは赤色であるものは青色
+    // つまり同じcolorという性質を持つがその値はそれぞれ異なる
+    // オブジェクトはビジネスロジックを内包することもできる、例えばpaintメソッドなど
+    // colorをprivateにすることでオブジェクトの性質を外側から隠すこともできる
     // _/_/_/_/_/_/_/_/_/_/
 
     // ===================================================================================
@@ -208,9 +219,9 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         Dog dog = new Dog();
         BarkedSound sound = dog.bark();
         String sea = sound.getBarkWord();
-        log(sea); // your answer? => 
+        log(sea); // your answer? => wan(o)
         int land = dog.getHitPoint();
-        log(land); // your answer? => 
+        log(land); // your answer? => 7(o)
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
@@ -218,9 +229,10 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         Animal animal = new Dog();
         BarkedSound sound = animal.bark();
         String sea = sound.getBarkWord();
-        log(sea); // your answer? => 
+        log(sea); // your answer? => wan(o)
         int land = animal.getHitPoint();
-        log(land); // your answer? => 
+        log(land); // your answer? => 7(o)
+        // DogをAnimal型として定義しているが、DogはAnimalを継承しているのでエラーは起こらない
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
@@ -228,9 +240,10 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         Animal animal = createAnyAnimal();
         BarkedSound sound = animal.bark();
         String sea = sound.getBarkWord();
-        log(sea); // your answer? => 
+        log(sea); // your answer? => wan(o)
         int land = animal.getHitPoint();
-        log(land); // your answer? => 
+        log(land); // your answer? => 7(o)
+        // createAnyAnimalはDogインスタンスを返しているので、ログの結果は前の質問と同じ
     }
 
     private Animal createAnyAnimal() {
@@ -246,9 +259,9 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
     private void doAnimalSeaLand_for_4th(Animal animal) {
         BarkedSound sound = animal.bark();
         String sea = sound.getBarkWord();
-        log(sea); // your answer? => 
+        log(sea); // your answer? => wan(o)
         int land = animal.getHitPoint();
-        log(land); // your answer? => 
+        log(land); // your answer? => 7(o)
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
@@ -256,9 +269,10 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         Animal animal = new Cat();
         BarkedSound sound = animal.bark();
         String sea = sound.getBarkWord();
-        log(sea); // your answer? => 
+        log(sea); // your answer? => nya-(o)
         int land = animal.getHitPoint();
-        log(land); // your answer? => 
+        log(land); // your answer? => 5(o)
+        //CatオブジェクトはdownHitPointメソッドの仕様が他と違う
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
@@ -266,9 +280,10 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         Animal animal = new Zombie();
         BarkedSound sound = animal.bark();
         String sea = sound.getBarkWord();
-        log(sea); // your answer? => 
+        log(sea); // your answer? => uooo(o)
         int land = animal.getHitPoint();
-        log(land); // your answer? => 
+        log(land); // your answer? => -1(o)
+        // downHitPointで何もしていないのでhitPointは初期値のまま
     }
 
     /**
@@ -279,7 +294,11 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         // write your memo here:
         // _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
         // what is happy?
-        //
+        // DogやCatなどAnimalに依存するクラスを同じ型として扱うことができるので、変更容易性が向上する
+        // 例えば、Dogの代わりにCatを使う仕様に変更したい場合、instantiationの部分をDog()からCat()に変えるだけで良い
+        // DogとCatが共通のAnimal abstract classに依存していなかった場合、彼らの持つフィールドや
+        // メソッドが共通の名前、引数の数・型・順序、戻り値の型などが同じだと約束されていないため
+        // Dogのinstantiation部分だけでなく、メソッド呼び出しやフィールドへのアクセスをしている部分も変更しなければならない
         // _/_/_/_/_/_/_/_/_/_/
     }
 
@@ -290,18 +309,18 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
     public void test_objectOriented_polymorphism_interface_dispatch() {
         Loudable loudable = new Zombie();
         String sea = loudable.soundLoudly();
-        log(sea); // your answer? => 
+        log(sea); // your answer? => uooo(o)
         String land = ((Zombie) loudable).bark().getBarkWord();
-        log(land); // your answer? => 
+        log(land); // your answer? => uooo(o)
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_objectOriented_polymorphism_interface_hierarchy() {
         Loudable loudable = new AlarmClock();
         String sea = loudable.soundLoudly();
-        log(sea); // your answer? => 
+        log(sea); // your answer? => jiri jiri jiri---(o)
         boolean land = loudable instanceof Animal;
-        log(land); // your answer? => 
+        log(land); // your answer? => false(o)
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
@@ -309,9 +328,11 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         Animal seaAnimal = new Cat();
         Animal landAnimal = new Zombie();
         boolean sea = seaAnimal instanceof FastRunner;
-        log(sea); // your answer? => 
+        log(sea); // your answer? => true(o)
         boolean land = landAnimal instanceof FastRunner;
-        log(land); // your answer? => 
+        log(land); // your answer? => false(o)
+        // Animal doesn't implement FastRunner
+        // Cat implements FastRunner while Zombie doesn't
     }
 
     /**
@@ -320,6 +341,9 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
      */
     public void test_objectOriented_polymorphism_interface_runnerImpl() {
         // your confirmation code here
+        Animal dog = new Dog();
+        boolean isDogFastRunner = dog instanceof FastRunner;
+        log(isDogFastRunner);
     }
 
     /**
@@ -330,7 +354,12 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         // write your memo here:
         // _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
         // what is difference?
-        //
+        // Abstract class                           | Interface
+        // can have concrete & abstract methods     | can only have abstract methods
+        // can have instance variables & constants  | can only have constants
+        // can have constructor                     | can not have constructor
+        // a class can extends one abstract class   | a class can implement multiple interfaces
+        // can depend on abstract class & interfaces| can only depend on interfaces
         // _/_/_/_/_/_/_/_/_/_/
     }
 
@@ -343,6 +372,8 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
      */
     public void test_objectOriented_polymorphism_makeConcrete() {
         // your confirmation code here
+        Animal bird = new Bird();
+        log(bird.bark().getBarkWord());
     }
 
     /**
@@ -351,6 +382,8 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
      */
     public void test_objectOriented_polymorphism_makeInterface() {
         // your confirmation code here
+        Flyable bird  = new Bird();
+        bird.fly();
     }
 
     // ===================================================================================
@@ -362,6 +395,10 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
      */
     public void test_objectOriented_writing_generalization_extractToAbstract() {
         // your confirmation code here
+        Dbms st6MySql = new St6MySql();
+        Dbms st6PostgreSql = new St6PostgreSql();
+        log(st6MySql.buildPagingQuery(10, 1));
+        log(st6PostgreSql.buildPagingQuery(15, 3));
     }
 
     /**
@@ -370,6 +407,9 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
      */
     public void test_objectOriented_writing_specialization_extractToConcrete() {
         // your confirmation code here
+        St6OperationSystem mac = new MacOs("password");
+        String path = mac.buildUserResourcePath("../dbms/Dbms.java");
+        log(path);
     }
 
     // ===================================================================================
@@ -381,6 +421,8 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
      */
     public void test_objectOriented_writing_withDelegation() {
         // your confirmation code here
+        Animal dog = new Dog();
+        log(dog.bark().getBarkWord());
     }
 
     /**
@@ -402,6 +444,8 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
      */
     public void test_objectOriented_writing_withPackageRefactoring() {
         // your confirmation code here
+        Animal dog = new Dog();
+        log(dog.bark().getBarkWord());
     }
 
     /**
@@ -412,7 +456,10 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         // write your memo here:
         // _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
         // is it correct?
-        //
+        // 現状はゾンビの状態や振る舞いがAnimalとかけ離れていないので適切だと思います。
+        // 例えばゾンビはhitPointを持たず、吠えもせず、吠えるための言葉も持たないが、代わりにゾンビに
+        // なってからの日数を保持していて、噛みついたり腐ったりするなど他のAnimalとは違う性質が多いので
+        // あればAnimalのsubclassとしては適切ではなくなると思います。
         // _/_/_/_/_/_/_/_/_/_/
     }
 }
