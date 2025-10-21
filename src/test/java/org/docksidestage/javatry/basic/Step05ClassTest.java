@@ -150,7 +150,7 @@ public class Step05ClassTest extends PlainTestCase {
         // Memo: コードの変更点を比較しやすいように一旦ここでcommitしておく
     }
 
-    // TODO jflute 次回1on1ここから (2025/09/26)
+    // done jflute 次回1on1ここから (2025/09/26)
     /**
      * Recycle duplicate logics between one-day and two-day by e.g. private method in class. (And confirm result of both before and after) <br>
      * (OneDayとTwoDayで冗長なロジックがあったら、クラス内のprivateメソッドなどで再利用しましょう (修正前と修正後の実行結果を確認))
@@ -269,6 +269,8 @@ public class Step05ClassTest extends PlainTestCase {
     public void test_class_moreFix_wonder_night() {
         // your confirmation code here
         // This test fails if it's not nighttime right now.
+        // TODO noniwa 修行++: 現在日時をどうにかして、テストのときに差し替えて実行できるようにしたい by jflute (2025/10/21)
+        // Java自身の現在日時は差し替えられない。PC日付が来ちゃう。PC日付は変えないように。
         TicketBooth booth = new TicketBooth();
         TicketBuyResult buyResult = booth.buyTicket(NIGHT_ONLY_TWO_DAY, 7500);
         log(buyResult.getTicket().getType());

@@ -14,6 +14,7 @@ package org.docksidestage.bizfw.basic.buyticket;
 // 使用感は、enumと全く(ほぼ)同じになる。
 // ↓ そして、これが文法になる。ということで、実はクラス。
 
+// TODO noniwa javadocお願いします by jflute (2025/10/21)
 public enum TicketType {
     ONE_DAY(false, 7400, 1),
     TWO_DAY(false, 13200, 2),
@@ -34,6 +35,7 @@ public enum TicketType {
         return !isNightTicket;
     }
 
+    // #1on1: 内部はnightTicketにするパターンもある (ここは好み)
     public boolean isNightTicket() {
         return isNightTicket;
     }

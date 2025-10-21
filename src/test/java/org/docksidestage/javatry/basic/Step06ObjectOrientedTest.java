@@ -31,6 +31,7 @@ import org.docksidestage.javatry.basic.st6.os.MacOs;
 import org.docksidestage.javatry.basic.st6.os.St6OperationSystem;
 import org.docksidestage.unit.PlainTestCase;
 
+// TODO noniwa javadocのauthor by jflute (2025/10/21)
 /**
  * The test of object-oriented. <br>
  * Operate exercise as javadoc. If it's question style, write your answer before test execution. <br>
@@ -61,6 +62,7 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         // fixed: initial value 0 is more suitable for calculation instead of null
         int salesProceeds = 0;
 
+        // TODO noniwa ここから残り3つ間違いが残っています by jflute (2025/10/21)
         //
         // [buy one-day passport]
         //
@@ -101,6 +103,19 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         // [final process]
         //
         // fixed: wrong order of parameters
+        // #1on1: 作り側の立場だったら...
+        // o オブジェクト指向の恩恵を受けて、オブジェクト単位でデータの引き渡しをする
+        // o なんかしらの方法で、int, int, int にはならないように工夫する
+        // #1on1: 呼び出し側の立場だったら...
+        // o 実装した直後に5秒指差し確認
+        // o 経験で、間違えやすいポイントを知ってる
+        //   (自分のバグ、他人のバグをたくさん見てきてつど解釈して積み重ねる)
+        //   (→ バグを見る体験を、経験をするかどうかは本人の意思)
+        // o さらに、自分の間違えやすいポイントを知ってる
+        //   (自分の間違いの思い出をいかに解釈して積み重ねるか)
+        //
+        // → 技術スキルというよりは、開発スキル (ものづくりスキル)
+        //
         saveBuyingHistory(quantity, salesProceeds, displayPrice, alreadyIn);
     }
 
@@ -196,6 +211,8 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
     private void doShowYourTicket(Ticket ticket) {
         log("Your Ticket: displayPrice={}, alreadyIn={}", ticket.getType().getPrice(), ticket.hasExpired());
     }
+    
+    // TODO jflute 次回1on1ここから (2025/10/21)
 
     // write your memo here:
     // _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/

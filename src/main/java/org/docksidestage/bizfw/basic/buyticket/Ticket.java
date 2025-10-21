@@ -56,10 +56,9 @@ public class Ticket {
         if (remainingDays <= 0) {
             throw new TicketAlreadyExpiredException("Ticket has already expired");
         }
-        // TODO jflute 次回1on1, UnitTestでの挙動の話 (2025/10/10)
-
+        // done jflute 次回1on1, UnitTestでの挙動の話 (2025/10/10)
         // done noniwa 18時ぴったりが弾かれるけど意図しているか？してなければ自然な形に by jflute (2025/10/10)
-        // TODO jflute 18:00:00〜21:59:59まではNightTicketが使える仕様にしました
+        // done jflute 18:00:00〜21:59:59まではNightTicketが使える仕様にしました
         if (type.isNightTicket() && !isNightTicketInValidTime()) {
             throw new InvalidTicketTimeException("Night ticket can be used only at night time");
         }
@@ -108,7 +107,17 @@ public class Ticket {
     // ===================================================================================
     //                                                                      Factory method
     //                                                                            ========
-    // TODO jflute 次回1on1にて、Ticketのコメントもうちょいじっくり (2025/10/10)
+    // done jflute 次回1on1にて、Ticketのコメントもうちょいじっくり (2025/10/10)
+    // ONE_DAY, TWO_DAY, and FOUR_DAY.
+    // 列挙断定してしまうと追加されたときにちょっと誤解を生みやすい文章になっちゃう。
+    // e.g.
+    //  Supported types are ONE_DAY, TWO_DAY, and FOUR_DAY, ...
+    //  Supported types are ONE_DAY, TWO_DAY, and FOUR_DAY など
+    //  Supported types are e.g. ONE_DAY, TWO_DAY, and FOUR_DAY
+    //  Supported types are 例えば ONE_DAY, TWO_DAY, and FOUR_DAY
+    // というように一部列挙方式にして、概念の説明はしつつ、個数は断定しないやり方。
+    // (AbstractSqlClause での e.g. の例)
+    // TODO noniwa ↑の通り、何かしらちょっと表現を変えてみてください by jflute (2025/10/21)
     /**
      * Issues a regular ticket for the specific type.
      * Supported types are ONE_DAY, TWO_DAY, and FOUR_DAY.
@@ -118,7 +127,7 @@ public class Ticket {
      */
     public static Ticket issue(TicketType type) {
         // done noniwa チケット種別が増えた時、できるだけenumの追加だけで済ませたい by jflute (2025/10/10)
-        // TODO jflute TicketType内で固定値を定義してあげたことでファクトリーメソッドがすっきりしました！
+        // done jflute TicketType内で固定値を定義してあげたことでファクトリーメソッドがすっきりしました！
         return new Ticket(type, type.getValidDays());
     }
 

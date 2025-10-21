@@ -18,6 +18,7 @@ package org.docksidestage.bizfw.basic.buyticket;
 import java.util.EnumMap;
 import java.util.Map;
 
+// TODO noniwa author追加しておいてください (他のTicketとかも同様) by jflute (2025/10/21)
 /**
  * @author jflute
  */
@@ -45,6 +46,8 @@ public class TicketBooth {
     // → oneDay, twoDay, と列挙すると間違いやすいのでMap
     //    → それはGoodだけど、regularとnightを分けた理由は？
     //
+    // TODO noniwa Mapの変数名、複数のものを所持している感を出して欲しい by jflute (2025/10/21)
+    // e.g. ticketQuantities, ticketQuantityMap
     private final Map<TicketType, Integer> ticketQuantity = new EnumMap<>(TicketType.class);
     private int salesProceeds = 0;
 
@@ -83,7 +86,7 @@ public class TicketBooth {
         // done noniwa nightかどうかの判定を、enumだけでできないか？ by jflute (2025/10/10)
         // (現状、BoothのMapの割り振りでnightを判定している)
         // 本来、そのチケット(種別)が、nightかどうか？という情報はどこで持つのが自然だろうか？
-        // TODO jflute nightかどうかの情報をTicketTypeに持たせることにしました
+        // done jflute nightかどうかの情報をTicketTypeに持たせることにしました
         //  そのおかげでファクトリーメソッドが１つだけで済むようになり、呼び出し側がチケット種別ごとに呼び出すファクトリーメソッドを意識しなくて良くなりました
         //  （常にissueメソッドを呼び出せばいい、チケットがnightかどうかは気にしなくて良い）
         Ticket ticket = Ticket.issue(type);
