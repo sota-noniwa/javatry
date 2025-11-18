@@ -37,6 +37,11 @@ import org.docksidestage.unit.PlainTestCase;
  */
 public class Step05ClassTest extends PlainTestCase {
 
+//    private static OffsetDateTime beforeNightStartTime = OffsetDateTime.parse("2025-11-18T17:59:00+09:00");
+//    private static OffsetDateTime nightStartTime = OffsetDateTime.parse("2025-11-18T18:00:00+09:00");
+//    private static OffsetDateTime beforeNightEndTime = OffsetDateTime.parse("2025-11-18T21:59:59+09:00");
+//    private static OffsetDateTime nightEndTime = OffsetDateTime.parse("2025-11-18T22:00:00+09:00");
+
     // ===================================================================================
     //                                                                          How to Use
     //                                                                          ==========
@@ -211,7 +216,8 @@ public class Step05ClassTest extends PlainTestCase {
         twoDayPassport.hasExpired(); // should be false
         twoDayPassport.useForOneDay();
         twoDayPassport.hasExpired(); // should be false
-        assertException(Ticket.TicketAlreadyExpiredException.class, () -> twoDayPassport.useForOneDay()); // should throw an Exception
+        assertException(Ticket.TicketAlreadyExpiredException.class,
+                () -> twoDayPassport.useForOneDay()); // should throw an Exception
         // TicketのコンストラクターでTicketTypeを引数として渡すようにした
         // Ticketクラスのフィールドの各初期値はTicketTypeによって決まる仕様にした
         // 後何日チケットを使用することができるかをremainingDaysという変数で管理した
@@ -289,7 +295,8 @@ public class Step05ClassTest extends PlainTestCase {
         TicketBooth booth = new TicketBooth();
         log("TWO_DAY ticket's quantity: " + booth.getTicketQuantity(TWO_DAY));
         TicketBuyResult buyResult = booth.buyTicket(TWO_DAY, 20000);
-        log("A customer bought " + buyResult.getTicket().getType() + " ticket and received " + buyResult.getChange() + " yen in change");
+        log("A customer bought " + buyResult.getTicket().getType() + " ticket and received " + buyResult.getChange()
+                + " yen in change");
         log("TWO_DAY ticket's quantity: " + booth.getTicketQuantity(TWO_DAY));
         log("Sales proceeds: " + booth.getSalesProceeds());
         Ticket ticket = buyResult.getTicket();

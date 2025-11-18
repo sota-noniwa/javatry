@@ -31,13 +31,13 @@ import org.docksidestage.javatry.basic.st6.os.MacOs;
 import org.docksidestage.javatry.basic.st6.os.St6OperationSystem;
 import org.docksidestage.unit.PlainTestCase;
 
-// TODO noniwa javadocのauthor by jflute (2025/10/21)
+// done noniwa javadocのauthor by jflute (2025/10/21)
 /**
  * The test of object-oriented. <br>
  * Operate exercise as javadoc. If it's question style, write your answer before test execution. <br>
  * (javadocの通りにエクササイズを実施。質問形式の場合はテストを実行する前に考えて答えを書いてみましょう)
  * @author jflute
- * @author your_name_here
+ * @author noniwa
  */
 public class Step06ObjectOrientedTest extends PlainTestCase {
 
@@ -82,7 +82,8 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         // [ticket info]
         //
         // simulation: actually these variables should be more wide scope
-        int displayPrice = quantity;
+        // fixed: wrong assignment
+        int displayPrice = oneDayPrice;
         boolean alreadyIn = false;
 
         // other processes here...
@@ -122,8 +123,9 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
     private void saveBuyingHistory(int quantity, Integer salesProceeds, int displayPrice, boolean alreadyIn) {
         if (alreadyIn) {
             // simulation: only logging here (normally e.g. DB insert)
-            showTicketBooth(displayPrice, salesProceeds);
-            showYourTicket(quantity, alreadyIn);
+            // fixed: wrong parameters were passed
+            showTicketBooth(quantity, salesProceeds);
+            showYourTicket(displayPrice, alreadyIn);
         }
     }
 
