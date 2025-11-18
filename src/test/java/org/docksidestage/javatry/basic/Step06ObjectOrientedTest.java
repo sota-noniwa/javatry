@@ -62,7 +62,9 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         // fixed: initial value 0 is more suitable for calculation instead of null
         int salesProceeds = 0;
 
-        // TODO noniwa ここから残り3つ間違いが残っています by jflute (2025/10/21)
+        // done noniwa ここから残り3つ間違いが残っています by jflute (2025/10/21)
+        // TODO noniwa この辺に残り1つ間違いが。それぞれの行だけでは間違いにはならない。 by jflute (2025/11/18)
+        // (逆に、その行だけで間違いと言えるものは、e.g. int displayPrice = quantity)
         //
         // [buy one-day passport]
         //
@@ -214,7 +216,7 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         log("Your Ticket: displayPrice={}, alreadyIn={}", ticket.getType().getPrice(), ticket.hasExpired());
     }
     
-    // TODO jflute 次回1on1ここから (2025/10/21)
+    // done jflute 次回1on1ここから (2025/10/21)
 
     // write your memo here:
     // _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
@@ -284,6 +286,7 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         int land = animal.getHitPoint();
         log(land); // your answer? => 7(o)
         // createAnyAnimalはDogインスタンスを返しているので、ログの結果は前の質問と同じ
+        // #1on1: とうとう、test_メソッドが、(直接的に)Dogに依存しなくなった。
     }
 
     private Animal createAnyAnimal() {
@@ -302,6 +305,7 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         log(sea); // your answer? => wan(o)
         int land = animal.getHitPoint();
         log(land); // your answer? => 7(o)
+        // #1on1: (直接的に)Dogに依存してないってところは同じ
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
@@ -340,6 +344,9 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         // メソッドが共通の名前、引数の数・型・順序、戻り値の型などが同じだと約束されていないため
         // Dogのinstantiation部分だけでなく、メソッド呼び出しやフィールドへのアクセスをしている部分も変更しなければならない
         // _/_/_/_/_/_/_/_/_/_/
+        // #1on1: 再利用性もさることながら、(実体を変えるとき)処理のロジックに手を入れずに済む、
+        // というが、開発実務上とても嬉しい。(1行でも手を入れたら、変な間違いが入る可能性がある)
+        // #1on1: 日常でもポリモーフィズム、それをプログラムでも使いたい。
     }
 
     // ===================================================================================
@@ -401,6 +408,36 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         // a class can extends one abstract class   | a class can implement multiple interfaces
         // can depend on abstract class & interfaces| can only depend on interfaces
         // _/_/_/_/_/_/_/_/_/_/
+        // #1on1: ↑は正しくて丁寧でGood, ただ上記は文法的な違い。
+        // 概念的な違い、例えば上記の文法的な違いはなぜ生まれるのか？
+        //
+        // abstractは、なにをするべきか + どう動かすか？も示す
+        // interfaceは、なにをするべきかを示す
+        //
+        // ↑abstract の方が機能が多くて、interfaceを包含しているように見えちゃうけど？
+        // interfaceは、複数定義できるので細かく分けられる？？？ by のにわさん
+        // そう、包含と言っちゃいましたが、実際には包含ではなく、複数継承できるできないがある。
+        // でも、もうちょい頑張れば、複数abstract継承できたらinterface要らないのに!?
+        //
+        // pp まずコンセプトが違う
+        // o interfaceが操作中心のコンセプト (呼ばれることを最初から意識)
+        // o abstractはあくまでオブジェクト中心のコンセプト (結局、呼ばれるけどね)
+        //
+        // extendsは is-aの関係: Dog is a(n) Animal (いぬは動物である)
+        // implementsは can-doの関係: Dog can loud, Dog can fast-run
+        //
+        // 別のコンセプトなので、似た部分は出てくる (e.g. ポリモーフィズム)
+        // だからこそ、以下のようにかぶる部分が出てくる:
+        //  abstractは、なにをするべきか + どう動かすか？も示す
+        //  interfaceは、なにをするべきかを示す
+        //
+        // Javaは、実は100%オブジェクト指向言語じゃない。多重継承ができない。(わざとできないようにしてる)
+        // C++などで、ダイヤモンド継承などとにかく多重継承がなかなか大変だったという人類の体験。
+        // interfaceを導入すれば、多重ポリモーフィズム(造語)できるけど、多重実装継承は抑えられる。
+        // Javaのオブジェクト指向の足らないところをinterfaceが補完する。
+        //
+        // ↑ここまで基本の考え方
+        // TODO jflute interfaceの特殊な使われ方は次回1on1にて (ColorBox) (2025/11/18)
     }
 
     // ===================================================================================
