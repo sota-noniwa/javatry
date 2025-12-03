@@ -47,7 +47,7 @@ public class Step07ExceptionTest extends PlainTestCase {
         } finally {
             sea.append("broadway");
         }
-        log(sea); // your answer? =>
+        log(sea); // your answer? => "hangerbroadway"(o)
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
@@ -60,7 +60,15 @@ public class Step07ExceptionTest extends PlainTestCase {
         } catch (IllegalStateException e) {
             sea = e.getMessage();
         }
-        log(sea); // your answer? =>
+        log(sea); // your answer? => "null"(x), "oneman at showbase"(o)
+        // 間違えた理由：
+        // e.getMessageから飛んで、これがThrowable classが保持しているdetailMessageを返すものだと認識
+        // St7BasicExceptionThrowerでdetailMessageフィールドを保持していないのでnullになると判断
+        // 正解に気づくためのアクション：
+        // e.getMessage -> Throwable classでdetailMessageを返している
+        // thrower.land -> St7BasicExceptionThrower classのonemanメソッドでIllegalStateExceptionのコンストラクタを読んでいる
+        // IllegalStateException -> RuntimeException -> Exception -> Throwableの順で継承しており、
+        // 順番に親のコンストラクタを呼び出し、最終的にはThrowableのコンストラクタでdetailMessageに引数がセットされていることがわかる
     }
 
     /**
