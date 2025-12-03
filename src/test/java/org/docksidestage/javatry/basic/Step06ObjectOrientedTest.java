@@ -63,8 +63,10 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         int salesProceeds = 0;
 
         // done noniwa ここから残り3つ間違いが残っています by jflute (2025/10/21)
-        // TODO noniwa この辺に残り1つ間違いが。それぞれの行だけでは間違いにはならない。 by jflute (2025/11/18)
+        // done noniwa この辺に残り1つ間違いが。それぞれの行だけでは間違いにはならない。 by jflute (2025/11/18)
         // (逆に、その行だけで間違いと言えるものは、e.g. int displayPrice = quantity)
+        // TODO jflute 受け取った金額が不足しているかどうかのチェックをする前にチケット枚数を減らしていましたね
+        // 実際にブースにお客様が来てチケットを買う姿を想像することで気づくことができました
         //
         // [buy one-day passport]
         //
@@ -73,12 +75,13 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         if (quantity <= 0) {
             throw new IllegalStateException("Sold out");
         }
-        --quantity;
         if (handedMoney < oneDayPrice) {
             throw new IllegalStateException("Short money: handedMoney=" + handedMoney);
         }
         // fixed: wrong calculation
         salesProceeds += oneDayPrice;
+        // fixed: quantity was reduced before checking exception
+        --quantity;
 
         //
         // [ticket info]
