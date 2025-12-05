@@ -19,4 +19,11 @@ package org.docksidestage.javatry.basic.st6.dbms;
  * @author jflute
  */
 public class St6MySql extends Dbms {
+    
+    // TODO noniwa Dbmsに、PostgreSQLの実装が入ってて、MySQLが継承しているので、文字列がおかしい by jflute (2025/12/05)
+    // ↓が元々のMySQLの実装
+    //public String buildPagingQuery(int pageSize, int pageNumber) {
+    //    int offset = pageSize * (pageNumber - 1);
+    //    return "limit " + offset + ", " + pageSize;
+    //}
 }

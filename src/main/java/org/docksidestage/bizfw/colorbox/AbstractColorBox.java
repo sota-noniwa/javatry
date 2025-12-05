@@ -40,7 +40,7 @@ public abstract class AbstractColorBox implements ColorBox {
     public AbstractColorBox(BoxColor color) {
         this.color = color;
     }
-
+    
     // ===================================================================================
     //                                                                      Space Handling
     //                                                                      ==============

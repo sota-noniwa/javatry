@@ -24,6 +24,7 @@ import org.docksidestage.bizfw.basic.objanimal.barking.BarkedSound;
 import org.docksidestage.bizfw.basic.objanimal.loud.AlarmClock;
 import org.docksidestage.bizfw.basic.objanimal.loud.Loudable;
 import org.docksidestage.bizfw.basic.objanimal.runner.FastRunner;
+import org.docksidestage.bizfw.colorbox.ColorBox;
 import org.docksidestage.javatry.basic.st6.dbms.Dbms;
 import org.docksidestage.javatry.basic.st6.dbms.St6MySql;
 import org.docksidestage.javatry.basic.st6.dbms.St6PostgreSql;
@@ -440,9 +441,27 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         // Javaのオブジェクト指向の足らないところをinterfaceが補完する。
         //
         // ↑ここまで基本の考え方
-        // TODO jflute interfaceの特殊な使われ方は次回1on1にて (ColorBox) (2025/11/18)
+        // done jflute interfaceの特殊な使われ方は次回1on1にて (ColorBox) (2025/11/18)
+        // public abstract class AbstractColorBox implements ColorBox {
+        //
+        // インターフェース: ポリモーフィズム
+        // 抽象クラス: ポリモーフィズム + 具象クラスの形付け
+        //
+        // ColorBoxの場合、抽象クラスがポリモーフィズムを捨てて、具象クラスの形付けにだけ集中している。
+        // インターフェースは、本来抽象クラスだけで足りるところを、ポリモーフィズムの役割を担っている。
+        //
+        // メリット:
+        // 1. 呼べるもの一覧があってわかりやすい (ただ小さな理由)
+        // 2. 内部処理用のpublicメソッドをインターフェースで隠蔽できる (100%じゃないけど)
+        // 3. ラッパークラスやダミークラスなどを作るときは抽象クラスの実装が邪魔なのでポリモーフィズムが独立してると良い
+        //
+        // 2の実例で、LastaFluteのTimeManager, SimpleTimeManagerを見た
+        // 3の実例で、DBFlute の ListResultBean を見た
+        //
+        // 抽象クラスは「内政」に集中して、インターフェースが「外交」をする、みたいな。
     }
 
+    // TODO jflute 次回1on1ここから (2025/12/05)
     // ===================================================================================
     //                                                                 Polymorphism Making
     //                                                                 ===================
