@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 /**
  * The object for cat(猫).
  * @author jflute
+ * @author noniwa
  */
 public class Cat extends Animal implements FastRunner {
 

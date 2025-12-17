@@ -2,6 +2,9 @@ package org.docksidestage.bizfw.basic.objanimal.barking;
 
 import org.docksidestage.bizfw.basic.objanimal.Animal;
 
+/**
+ * @author noniwa
+ */
 public class BarkProcess{
 
     private final Animal animal;
