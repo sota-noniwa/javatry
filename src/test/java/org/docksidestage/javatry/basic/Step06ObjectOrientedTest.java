@@ -253,7 +253,7 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
     // // リファクタリングは思考のツール
     // https://jflute.hatenadiary.jp/entry/20121202/1354442627
 
-    // TODO jflute 次回1on1ここから (2025/11/07)
+    // done jflute 次回1on1ここから (2025/11/07)
     // ===================================================================================
     //                                                              Polymorphism Beginning
     //                                                              ======================
@@ -461,7 +461,7 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         // 抽象クラスは「内政」に集中して、インターフェースが「外交」をする、みたいな。
     }
 
-    // TODO jflute 次回1on1ここから (2025/12/05)
+    // done jflute 次回1on1ここから (2025/12/05)
     // ===================================================================================
     //                                                                 Polymorphism Making
     //                                                                 ===================
@@ -481,6 +481,7 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
      */
     public void test_objectOriented_polymorphism_makeInterface() {
         // your confirmation code here
+        // TODO noniwa Flyable, loud/runnerみたいに、操作コンセプトのpackageを作って配置しましょう by jflute (2025/12/19)
         Flyable bird  = new Bird();
         bird.fly();
     }
@@ -506,6 +507,7 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
      */
     public void test_objectOriented_writing_specialization_extractToConcrete() {
         // your confirmation code here
+        // TODO noniwa 単なる勘違いだったようですが、Windowsクラスとかも作ってみましょう by jflute (2025/12/19)
         St6OperationSystem mac = new MacOs("password");
         String path = mac.buildUserResourcePath("../dbms/Dbms.java");
         log(path);
@@ -561,5 +563,33 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         // あればAnimalのsubclassとしては適切ではなくなると思います。
         // ただ、これだと、かけ離れているかどうかの判断基準は人それぞれになってしまうと思いました
         // _/_/_/_/_/_/_/_/_/_/
+        // #1on1: "噛みついたり腐ったりするなど他のAnimalとは違う性質が多い" のところは... (2025/12/19)
+        // これは単にZombieクラスで実装すれば良いだけの振る舞いと言えるので、不適切の要因にはならないかなと。
+        //
+        // 一方で、"吠えもせず" のところはその通りで、「(実装からすると) Animalは吠える」わけなので、
+        // Zombieが吠えないのであれば、そこで矛盾が発生する。
+        //
+        // そう考えると、現状はhitPointを打ち消しているので、コード量は少なくても、
+        // 特性を打ち消していることで、矛盾が発生しているとも言える。
+        //
+        // ↑ここまでは、ボトムアップで要所要所で判断を考えてみましたが...
+        // トップダウンだと？
+        // 「ゾンビは動物である Zombie is an Animal」というのが自然かどうか？
+        // (これが俗に言うと「is-aの関係」)
+        // → その概念にフォーカス当てて考える
+        // 
+        // それでも迷うのは、Zombieという概念の定義が曖昧。
+        //
+        // バイオハザードの例、犬も狼もゾンビになる。
+        // すべての動物はゾンビになりうるのでは？であれば、動物の特性の一つ。
+        // 状態として実装したほうが良いのかも。
+        //
+        // 一方で、ゾンビ王国の復讐、ゾンビの王様とゾンビの王妃がいて、
+        // かっこいいゾンビの王子様が生まれて、冒険に出るみたいなストーリー。
+        // ゾンビという種族がいるみたいな扱いをしているのであれば、今の実装でもいいかも。
+        //
+        // 業務概念を正確に捉えるって難しいし、曖昧だと実装がへんてこりんになる。
+        // (DDDの話も少し)
+        // (DB設計の話も少し、JJUGでのDB設計話、業務知識大事)
     }
 }
