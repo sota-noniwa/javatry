@@ -1,5 +1,6 @@
 package org.docksidestage.bizfw.basic.objanimal;
 
+import org.docksidestage.bizfw.basic.objanimal.flying.Flyable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

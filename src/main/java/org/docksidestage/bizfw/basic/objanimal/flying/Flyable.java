@@ -1,4 +1,4 @@
-package org.docksidestage.bizfw.basic.objanimal;
+package org.docksidestage.bizfw.basic.objanimal.flying;
 
 /**
  * @author noniwa
