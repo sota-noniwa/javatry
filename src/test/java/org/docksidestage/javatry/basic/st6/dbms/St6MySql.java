@@ -18,9 +18,31 @@ package org.docksidestage.javatry.basic.st6.dbms;
 /**
  * @author jflute
  */
-public class St6MySql extends Dbms {
-    
-    // TODO noniwa Dbmsに、PostgreSQLの実装が入ってて、MySQLが継承しているので、文字列がおかしい by jflute (2025/12/05)
+public class St6MySql extends Dbms implements InterfaceDbms {
+
+    // ===================================================================================
+    //                                                                            Abstract
+    //                                                                            ========
+    @Override
+    protected String generateQueryString(int pageSize, int offset) {
+        return "limit " + offset + ", " + pageSize;
+    }
+
+    // ===================================================================================
+    //                                                                           Interface
+    //                                                                           =========
+    @Override
+    public String interfaceBuildPagingQuery(int pageSize, int pageNumber) {
+        // #1on1: インターフェースだけだと、素直に再利用がしづらい。 (2026/01/09)
+        // インターフェースは、ポリモーフィズムは提供するけど、実装面の最適化は基本的にタッチしない。
+        int offset = pageSize * (pageNumber - 1);
+        return "limit " + offset + ", " + pageSize;
+    }
+
+    // ===================================================================================
+    //                                                                             おもいで
+    //                                                                             =======
+    // done noniwa Dbmsに、PostgreSQLの実装が入ってて、MySQLが継承しているので、文字列がおかしい by jflute (2025/12/05)
     // ↓が元々のMySQLの実装
     //public String buildPagingQuery(int pageSize, int pageNumber) {
     //    int offset = pageSize * (pageNumber - 1);
