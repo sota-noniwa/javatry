@@ -26,7 +26,6 @@ import org.docksidestage.bizfw.basic.objanimal.Animal;
 import org.docksidestage.bizfw.basic.objanimal.Bird;
 import org.docksidestage.bizfw.basic.objanimal.Cat;
 import org.docksidestage.bizfw.basic.objanimal.Dog;
-import org.docksidestage.bizfw.basic.objanimal.Flyable;
 import org.docksidestage.bizfw.basic.objanimal.Zombie;
 import org.docksidestage.bizfw.basic.objanimal.barking.BarkedSound;
 import org.docksidestage.bizfw.basic.objanimal.flying.Flyable;
@@ -79,7 +78,7 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         // done noniwa ここから残り3つ間違いが残っています by jflute (2025/10/21)
         // done noniwa この辺に残り1つ間違いが。それぞれの行だけでは間違いにはならない。 by jflute (2025/11/18)
         // (逆に、その行だけで間違いと言えるものは、e.g. int displayPrice = quantity)
-        // TODO jflute 受け取った金額が不足しているかどうかのチェックをする前にチケット枚数を減らしていましたね
+        // done jflute 受け取った金額が不足しているかどうかのチェックをする前にチケット枚数を減らしていましたね
         // 実際にブースにお客様が来てチケットを買う姿を想像することで気づくことができました
         //
         // [buy one-day passport]
@@ -553,7 +552,7 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
      */
     public void test_objectOriented_writing_specialization_extractToConcrete() {
         // your confirmation code here
-        // TODO noniwa 単なる勘違いだったようですが、Windowsクラスとかも作ってみましょう by jflute (2025/12/19)
+        // done noniwa 単なる勘違いだったようですが、Windowsクラスとかも作ってみましょう by jflute (2025/12/19)
         St6OperationSystem mac = new MacOs("1234");
         String macPath = mac.buildUserResourcePath("../dbms/MySql.java");
         St6OperationSystem windows = new Windows("abcd");
