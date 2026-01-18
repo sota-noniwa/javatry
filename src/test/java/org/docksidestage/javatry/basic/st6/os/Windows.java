@@ -1,14 +1,14 @@
 package org.docksidestage.javatry.basic.st6.os;
 
-public class MacOs extends St6OperationSystem {
+public class Windows extends St6OperationSystem {
 
-    public MacOs(String loginId) {
+    public Windows(String loginId) {
         super(loginId);
     }
 
     @Override
     public String getFileSeparator() {
-        return "/";
+        return "\\";
     }
 
     @Override

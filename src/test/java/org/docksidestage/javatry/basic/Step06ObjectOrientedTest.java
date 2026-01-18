@@ -29,10 +29,13 @@ import org.docksidestage.javatry.basic.st6.dbms.Dbms;
 import org.docksidestage.javatry.basic.st6.dbms.St6MySql;
 import org.docksidestage.javatry.basic.st6.dbms.St6PostgreSql;
 import org.docksidestage.javatry.basic.st6.os.MacOs;
+import org.docksidestage.javatry.basic.st6.os.OldWindows;
 import org.docksidestage.javatry.basic.st6.os.St6OperationSystem;
+import org.docksidestage.javatry.basic.st6.os.Windows;
 import org.docksidestage.unit.PlainTestCase;
 
 // done noniwa javadocのauthor by jflute (2025/10/21)
+
 /**
  * The test of object-oriented. <br>
  * Operate exercise as javadoc. If it's question style, write your answer before test execution. <br>
@@ -219,7 +222,7 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
     private void doShowYourTicket(Ticket ticket) {
         log("Your Ticket: displayPrice={}, alreadyIn={}", ticket.getType().getPrice(), ticket.hasExpired());
     }
-    
+
     // done jflute 次回1on1ここから (2025/10/21)
 
     // write your memo here:
@@ -482,7 +485,7 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
     public void test_objectOriented_polymorphism_makeInterface() {
         // your confirmation code here
         // done noniwa Flyable, loud/runnerみたいに、操作コンセプトのpackageを作って配置しましょう by jflute (2025/12/19)
-        Flyable bird  = new Bird();
+        Flyable bird = new Bird();
         bird.fly();
     }
 
@@ -508,9 +511,15 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
     public void test_objectOriented_writing_specialization_extractToConcrete() {
         // your confirmation code here
         // TODO noniwa 単なる勘違いだったようですが、Windowsクラスとかも作ってみましょう by jflute (2025/12/19)
-        St6OperationSystem mac = new MacOs("password");
-        String path = mac.buildUserResourcePath("../dbms/Dbms.java");
-        log(path);
+        St6OperationSystem mac = new MacOs("1234");
+        String macPath = mac.buildUserResourcePath("../dbms/MySql.java");
+        St6OperationSystem windows = new Windows("abcd");
+        String WindowsPath = windows.buildUserResourcePath("../dbms/MariaDb.java");
+        St6OperationSystem oldWindows = new OldWindows("password");
+        String OldWindowsPath = oldWindows.buildUserResourcePath("../dbms/MongoDb.java");
+        log("mac:        " + macPath);
+        log("windows:    " + WindowsPath);
+        log("oldWindows: " + OldWindowsPath);
     }
 
     // ===================================================================================
