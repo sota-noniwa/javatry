@@ -14,7 +14,12 @@ package org.docksidestage.bizfw.basic.buyticket;
 // 使用感は、enumと全く(ほぼ)同じになる。
 // ↓ そして、これが文法になる。ということで、実はクラス。
 
-// TODO noniwa javadocお願いします by jflute (2025/10/21)
+// done noniwa javadocお願いします by jflute (2025/10/21)
+
+/**
+ * 購入可能なチケットの種類を示します。
+ * @author noniwa
+ */
 public enum TicketType {
     ONE_DAY(false, 7400, 1),
     TWO_DAY(false, 13200, 2),

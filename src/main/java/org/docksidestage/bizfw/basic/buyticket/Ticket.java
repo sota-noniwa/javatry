@@ -20,6 +20,7 @@ import java.time.LocalTime;
 
 /**
  * @author jflute
+ * @author noniwa
  */
 public class Ticket {
 

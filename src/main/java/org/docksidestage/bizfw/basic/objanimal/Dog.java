@@ -21,7 +21,8 @@ import org.slf4j.LoggerFactory;
 
 /**
  * The object for dog(犬).
- * @author jflute noniwa
+ * @author jflute
+ * @author noniwa
  */
 public class Dog extends Animal implements FastRunner {
 

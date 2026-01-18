@@ -18,9 +18,10 @@ package org.docksidestage.bizfw.basic.buyticket;
 import java.util.EnumMap;
 import java.util.Map;
 
-// TODO noniwa author追加しておいてください (他のTicketとかも同様) by jflute (2025/10/21)
+// done noniwa author追加しておいてください (他のTicketとかも同様) by jflute (2025/10/21)
 /**
  * @author jflute
+ * @author noniwa
  */
 public class TicketBooth {
 

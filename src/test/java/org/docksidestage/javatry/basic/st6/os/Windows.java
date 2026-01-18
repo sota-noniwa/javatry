@@ -1,5 +1,8 @@
 package org.docksidestage.javatry.basic.st6.os;
 
+/**
+ * @author noniwa
+ */
 public class Windows extends St6OperationSystem {
 
     public Windows(String loginId) {

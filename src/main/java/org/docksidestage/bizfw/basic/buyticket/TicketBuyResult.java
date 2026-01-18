@@ -1,5 +1,8 @@
 package org.docksidestage.bizfw.basic.buyticket;
 
+/**
+ * @author noniwa
+ */
 public class TicketBuyResult {
 
     private Ticket ticket;

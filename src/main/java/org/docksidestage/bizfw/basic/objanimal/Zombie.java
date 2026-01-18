@@ -17,7 +17,8 @@ package org.docksidestage.bizfw.basic.objanimal;
 
 /**
  * The object for zombie(ゾンビ).
- * @author jflute noniwa
+ * @author jflute
+ * @author noniwa
  */
 public class Zombie extends Animal {
 
