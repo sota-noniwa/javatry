@@ -69,6 +69,7 @@ public class Step07ExceptionTest extends PlainTestCase {
         // thrower.land -> St7BasicExceptionThrower classのonemanメソッドでIllegalStateExceptionのコンストラクタを読んでいる
         // IllegalStateException -> RuntimeException -> Exception -> Throwableの順で継承しており、
         // 順番に親のコンストラクタを呼び出し、最終的にはThrowableのコンストラクタでdetailMessageに引数がセットされていることがわかる
+        // #1on1: ↑を一緒にたどって再確認した (2026/01/09)
     }
 
     /**

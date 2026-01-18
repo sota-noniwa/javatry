@@ -15,17 +15,26 @@
  */
 package org.docksidestage.javatry.basic;
 
-import static org.docksidestage.bizfw.basic.buyticket.TicketType.*;
+import static org.docksidestage.bizfw.basic.buyticket.TicketType.ONE_DAY;
+
+import java.util.Comparator;
+import java.util.stream.Stream;
 
 import org.docksidestage.bizfw.basic.buyticket.Ticket;
 import org.docksidestage.bizfw.basic.buyticket.TicketBooth;
-import org.docksidestage.bizfw.basic.objanimal.*;
+import org.docksidestage.bizfw.basic.objanimal.Animal;
+import org.docksidestage.bizfw.basic.objanimal.Bird;
+import org.docksidestage.bizfw.basic.objanimal.Cat;
+import org.docksidestage.bizfw.basic.objanimal.Dog;
+import org.docksidestage.bizfw.basic.objanimal.Flyable;
+import org.docksidestage.bizfw.basic.objanimal.Zombie;
 import org.docksidestage.bizfw.basic.objanimal.barking.BarkedSound;
 import org.docksidestage.bizfw.basic.objanimal.flying.Flyable;
 import org.docksidestage.bizfw.basic.objanimal.loud.AlarmClock;
 import org.docksidestage.bizfw.basic.objanimal.loud.Loudable;
 import org.docksidestage.bizfw.basic.objanimal.runner.FastRunner;
 import org.docksidestage.javatry.basic.st6.dbms.Dbms;
+import org.docksidestage.javatry.basic.st6.dbms.InterfaceDbms;
 import org.docksidestage.javatry.basic.st6.dbms.St6MySql;
 import org.docksidestage.javatry.basic.st6.dbms.St6PostgreSql;
 import org.docksidestage.javatry.basic.st6.os.MacOs;
@@ -33,6 +42,7 @@ import org.docksidestage.javatry.basic.st6.os.OldWindows;
 import org.docksidestage.javatry.basic.st6.os.St6OperationSystem;
 import org.docksidestage.javatry.basic.st6.os.Windows;
 import org.docksidestage.unit.PlainTestCase;
+import org.docksidestage.unit.flute.util.Srl;
 
 // done noniwa javadocのauthor by jflute (2025/10/21)
 
@@ -498,10 +508,43 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
      */
     public void test_objectOriented_writing_generalization_extractToAbstract() {
         // your confirmation code here
-        Dbms st6MySql = new St6MySql();
-        Dbms st6PostgreSql = new St6PostgreSql();
-        log(st6MySql.buildPagingQuery(10, 1));
-        log(st6PostgreSql.buildPagingQuery(15, 3));
+        Integer maxLength = calculateDbmsClassNameMaxLength();
+
+        log("");
+        log("[abstract way]");
+        executeAbstractPagingQuery(new St6MySql(), 10, 1, maxLength);
+        executeAbstractPagingQuery(new St6PostgreSql(), 15, 3, maxLength);
+
+        log("");
+        log("[interface way]");
+        executeInterfacePagingQuery(new St6MySql(), 10, 1, maxLength);
+        executeInterfacePagingQuery(new St6PostgreSql(), 15, 3, maxLength);
+    }
+
+    private Integer calculateDbmsClassNameMaxLength() {
+        // 具象クラスが増えた時は、ここに追加すること by jflute (2026/01/09)
+        Class<?>[] dbmsTypes = new Class<?>[] { St6MySql.class, St6PostgreSql.class };
+        Integer maxLength = Stream.of(dbmsTypes).map(dbmsType -> {
+            return dbmsType.getSimpleName().length();
+        }).max(Comparator.naturalOrder()).get();
+        log("maxLength: " + maxLength);
+        return maxLength;
+    }
+
+    private void executeAbstractPagingQuery(Dbms dbms, int pageSize, int pageNumber, Integer maxLength) {
+        String dbmsLabel = convertToDbmsLabel(maxLength, dbms.getClass().getSimpleName());
+        String pagingQuery = dbms.buildPagingQuery(pageSize, pageNumber);
+        log(dbmsLabel + " : " + pagingQuery);
+    }
+
+    private void executeInterfacePagingQuery(InterfaceDbms interfaceDbms, int pageSize, int pageNumber, Integer maxLength) {
+        String dbmsLabel = convertToDbmsLabel(maxLength, interfaceDbms.getClass().getSimpleName());
+        String pagingQuery = interfaceDbms.interfaceBuildPagingQuery(pageSize, pageNumber);
+        log(dbmsLabel + " : " + pagingQuery);
+    }
+
+    private String convertToDbmsLabel(Integer maxLength, String dbmsName) {
+        return Srl.rfill(dbmsName, maxLength, ' ');
     }
 
     /**

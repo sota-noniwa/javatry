@@ -18,5 +18,22 @@ package org.docksidestage.javatry.basic.st6.dbms;
 /**
  * @author jflute
  */
-public class St6PostgreSql extends Dbms {
+public class St6PostgreSql extends Dbms implements InterfaceDbms {
+
+    // ===================================================================================
+    //                                                                            Abstract
+    //                                                                            ========
+    @Override
+    protected String generateQueryString(int pageSize, int offset) {
+        return "offset " + offset + " limit " + pageSize;
+    }
+
+    // ===================================================================================
+    //                                                                           Interface
+    //                                                                           =========
+    @Override
+    public String interfaceBuildPagingQuery(int pageSize, int pageNumber) {
+        int offset = pageSize * (pageNumber - 1);
+        return "offset " + offset + " limit " + pageSize;
+    }
 }
