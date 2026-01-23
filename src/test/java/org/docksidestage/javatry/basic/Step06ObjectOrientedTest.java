@@ -583,6 +583,7 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         // DIコンテナのコンポーネント登録のコンセプトと実装の歴史。
         // Spring Framework, Google Guice, Seasar, Lasta Di
         
+        // TODO jflute 次回思考トレーニング1をやる (2026/01/23)
         // #1on1: 思考トレーニング1:  (2026/01/23)
     }
 
