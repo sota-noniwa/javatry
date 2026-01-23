@@ -562,6 +562,28 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         log("mac:        " + macPath);
         log("windows:    " + WindowsPath);
         log("oldWindows: " + OldWindowsPath);
+
+        // #1on1: DIの本の話とつながった by のにわさん (2026/01/23)
+        // DIの方の前提のニュアンスはたぶんこんな感じ:
+        //@Resource
+        //private OS os;
+        //
+        //protected String getFileSeparator() {
+        //    return os.getFileSeparator();
+        //}
+        // 若干前提が違うけど、でも根本は似たところある。
+        
+        // #1on1: フレームワークのコンセプトの話 (2026/01/23)
+        // 何を重視したプロダクトなのか？Spring と LastaFlute の例。
+        // (DIコンテナ作ってる話から、作ったきっかけは？の質問)
+        //
+        // // フレームワークの思想、意識して使っていますか？
+        // https://jflute.hatenadiary.jp/entry/20181014/fwthought
+        //
+        // DIコンテナのコンポーネント登録のコンセプトと実装の歴史。
+        // Spring Framework, Google Guice, Seasar, Lasta Di
+        
+        // #1on1: 思考トレーニング1:  (2026/01/23)
     }
 
     // ===================================================================================
