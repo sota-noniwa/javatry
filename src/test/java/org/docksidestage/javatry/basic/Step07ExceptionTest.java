@@ -257,8 +257,13 @@ public class Step07ExceptionTest extends PlainTestCase {
             throwCauseFirstLevel(); // IllegalStateException is thrown
             fail("always exception but none"); // unreachable
         } catch (IllegalStateException e) {
+            // _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
+            // IllegalStateException       // e
+            //  |-IllegalArgumentException // e.getCause()
+            //     |-NumberFormatException // e.getCause().getCause()
+            // _/_/_/_/_/_/_/_/
             Throwable cause = e.getCause();
-            sea = cause.getMessage();
+            sea = cause.getMessage(); // IllegalArgumentExceptionの例外メッセージ
             land = cause.getClass().getSimpleName();
             log("sea: " + sea); // your answer? => "Failed to call the second help method: symbol=1"(x)
             // "Failed to call the third help method: symbol=-1"(o)
