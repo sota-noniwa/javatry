@@ -140,6 +140,8 @@ public class Step07ExceptionTest extends PlainTestCase {
         boolean sea = exp instanceof Exception;
         log(sea); // your answer? => false(o)
         // Throwable は Exception の subclass ではない
+        
+        // #1on1: パッケージ名の中のドメインの話 (2026/02/06)
     }
 
     // ===================================================================================
@@ -199,6 +201,17 @@ public class Step07ExceptionTest extends PlainTestCase {
         } catch (NullPointerException e) {
             log(e);
         }
+        // #1on1: 最新のJavaだと、NullPointerExceptionがメッセージを出力するようになって... (2026/02/06)
+        // どの変数がnullだったかを教えてくれる。
+        //
+        // 別の例:
+        // assertTrue(sea && land);
+        //  ↓
+        // assertTrue(sea);
+        // assertTrue(land);
+        //
+        // 質問: 実際に変数出して行を分けるか？ (NullPointerの例) (2026/02/06)
+        // ケースバイケース、危ない変数かどうか？コアな場面のプログラムかどうか？
     }
 
     // ===================================================================================
@@ -217,6 +230,16 @@ public class Step07ExceptionTest extends PlainTestCase {
             log("Error message: " + e.getMessage());
             log("Stack trace: " + e);
         }
+        // #1on1: チェック例外の話 (2026/02/06)
+        // 思想としては、例外ハンドリングを強制させることができる。コンパイルセーフでcatchさせることができる (2026/02/06)
+        // ただ、このチェック例外、流行ってない。
+        // o 節操のないチェック例外の使われ方が多くて、呼び出し側が面倒だった (こともある)
+        // o 時代が進んで、インフラ周りのでエラーの可能性がすごく少なくなった (隕石のこと気にしない)
+        // o 止めをさされたのが、Lambda式で究極に相性が悪い
+        // 一応、1問だけ体験してもらう。
+        // 一方で、機能の思想自体は悪くないものだし、本当にフィットする場面なら便利。
+        // (jfluteは、3,4回便利だなと思ったことがある)
+        // 他の言語での話。Go言語やKotlinなど。
     }
 
     // ===================================================================================
@@ -244,6 +267,13 @@ public class Step07ExceptionTest extends PlainTestCase {
             // cause.getMessage() はIllegalStateExceptionのコンストラクタを使って作成されたもので、
             // cause.getClass().getSimpleName() はIllegalArgumentExceptionなのか…
             // Exceptionの呼ばれ方を勉強する必要がありそう
+
+            // #1on1: ThrowableがThrowableを持って数珠繋ぎにすることができる (2026/02/06)
+            // 一つの「落ちた」というイベント付き、複数の例外インスタンスをthrowすることができる。
+            // (Javaはthrowできるのは一つの例外だけだけど、数珠繋ぎにすれば実質複数の例外を投げられる)
+            // 元の例外を別の例外で「翻訳」して、(レイヤーごとの)情報を付け足している。
+            // (例外の翻訳)
+            log(e);
         }
     }
 
