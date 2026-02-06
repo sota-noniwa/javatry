@@ -15,6 +15,9 @@
  */
 package org.docksidestage.javatry.basic;
 
+import java.io.File;
+import java.io.IOException;
+
 import org.docksidestage.bizfw.basic.supercar.SupercarClient;
 import org.docksidestage.javatry.basic.st7.St7BasicExceptionThrower;
 import org.docksidestage.javatry.basic.st7.St7ConstructorChallengeException;
@@ -84,7 +87,13 @@ public class Step07ExceptionTest extends PlainTestCase {
         } catch (IllegalStateException e) {
             log(e);
         }
-        // your answer? => 
+        // your answer? =>
+        // class name: St7BasicExceptionThrower.java
+        // method name: oneman
+        // row number: 40
+        // ログから判断
+        // java.lang.IllegalStateException: oneman at showbase
+        //	at org.docksidestage.javatry.basic.st7.St7BasicExceptionThrower.oneman(St7BasicExceptionThrower.java:40)
     }
 
     // ===================================================================================
@@ -97,35 +106,40 @@ public class Step07ExceptionTest extends PlainTestCase {
     public void test_exception_hierarchy_Runtime_instanceof_RuntimeException() {
         Object exp = new IllegalStateException("mystic");
         boolean sea = exp instanceof RuntimeException;
-        log(sea); // your answer? => 
+        log(sea); // your answer? => true(o)
+        // IllegalStateException は RuntimeException の subclass
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_exception_hierarchy_Runtime_instanceof_Exception() {
         Object exp = new IllegalStateException("mystic");
         boolean sea = exp instanceof Exception;
-        log(sea); // your answer? => 
+        log(sea); // your answer? => true(o)
+        // IllegalStateException は Exception の subclass
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_exception_hierarchy_Runtime_instanceof_Error() {
         Object exp = new IllegalStateException("mystic");
         boolean sea = exp instanceof Error;
-        log(sea); // your answer? => 
+        log(sea); // your answer? => false(o)
+        // Error は RuntimeException の subclass ではない
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_exception_hierarchy_Runtime_instanceof_Throwable() {
         Object exp = new IllegalStateException("mystic");
         boolean sea = exp instanceof Throwable;
-        log(sea); // your answer? => 
+        log(sea); // your answer? => true(o)
+        // IllegalStateException は Throwable の subclass
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_exception_hierarchy_Throwable_instanceof_Exception() {
         Object exp = new Throwable("mystic");
         boolean sea = exp instanceof Exception;
-        log(sea); // your answer? => 
+        log(sea); // your answer? => false(o)
+        // Throwable は Exception の subclass ではない
     }
 
     // ===================================================================================
@@ -144,7 +158,11 @@ public class Step07ExceptionTest extends PlainTestCase {
         } catch (NullPointerException e) {
             log(e);
         }
-        // your answer? => 
+        // your answer? =>
+        // variable: land
+        // row number: 153
+        // java.lang.NullPointerException: null
+        //	at org.docksidestage.javatry.basic.Step07ExceptionTest.test_exception_nullpointer_basic(Step07ExceptionTest.java:153)
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
@@ -158,7 +176,11 @@ public class Step07ExceptionTest extends PlainTestCase {
         } catch (NullPointerException e) {
             log(e);
         }
-        // your answer? => 
+        // your answer? =>
+        // variable: land
+        // row number: 171
+        // java.lang.NullPointerException: null
+        //	at org.docksidestage.javatry.basic.Step07ExceptionTest.test_exception_nullpointer_headache(Step07ExceptionTest.java:171)
     }
 
     /**
@@ -170,7 +192,9 @@ public class Step07ExceptionTest extends PlainTestCase {
             String sea = "mystic";
             String land = !!!sea.equals("mystic") ? null : "oneman";
             String piari = !!!sea.equals("mystic") ? "plaza" : null;
-            int sum = land.length() + piari.length();
+            int landLength = land.length();
+            int piariLength = piari.length();
+            int sum = landLength + piariLength;
             log(sum);
         } catch (NullPointerException e) {
             log(e);
@@ -185,6 +209,14 @@ public class Step07ExceptionTest extends PlainTestCase {
      * (new java.io.File(".") の canonical path を取得してログに表示、I/Oエラーの時はメッセージとスタックトレースを代わりに表示)
      */
     public void test_exception_checkedException_basic() {
+        try {
+            File file = new File(".");
+            String canonicalPath = file.getCanonicalPath();
+            log("Canonical path: \"" + canonicalPath + "\"");
+        } catch (IOException e) {
+            log("Error message: " + e.getMessage());
+            log("Stack trace: " + e);
+        }
     }
 
     // ===================================================================================
@@ -199,20 +231,24 @@ public class Step07ExceptionTest extends PlainTestCase {
         String sea = "mystic";
         String land = "oneman";
         try {
-            throwCauseFirstLevel();
-            fail("always exception but none");
+            throwCauseFirstLevel(); // IllegalStateException is thrown
+            fail("always exception but none"); // unreachable
         } catch (IllegalStateException e) {
             Throwable cause = e.getCause();
             sea = cause.getMessage();
             land = cause.getClass().getSimpleName();
-            log(sea); // your answer? => 
-            log(land); // your answer? => 
-            log(e); // your answer? => 
+            log("sea: " + sea); // your answer? => "Failed to call the second help method: symbol=1"(x)
+            // "Failed to call the third help method: symbol=-1"(o)
+            log("land: " + land); // your answer? => "IllegalArgumentException"(o)
+            log("e: " + e); // your answer? => "java.lang.IllegalStateException: Failed to call the second help method: symbol=1"(x)
+            // cause.getMessage() はIllegalStateExceptionのコンストラクタを使って作成されたもので、
+            // cause.getClass().getSimpleName() はIllegalArgumentExceptionなのか…
+            // Exceptionの呼ばれ方を勉強する必要がありそう
         }
     }
 
     private void throwCauseFirstLevel() {
-        int symbol = Integer.MAX_VALUE - 0x7ffffffe;
+        int symbol = Integer.MAX_VALUE - 0x7ffffffe; // symbol = 1
         try {
             throwCauseSecondLevel(symbol);
         } catch (IllegalArgumentException e) {
@@ -222,8 +258,8 @@ public class Step07ExceptionTest extends PlainTestCase {
 
     private void throwCauseSecondLevel(int symbol) {
         try {
-            --symbol;
-            symbol--;
+            --symbol;  // 0
+            symbol--; // -1
             if (symbol < 0) {
                 throwCauseThirdLevel(symbol);
             }
@@ -234,7 +270,7 @@ public class Step07ExceptionTest extends PlainTestCase {
 
     private void throwCauseThirdLevel(int symbol) {
         if (symbol < 0) {
-            Integer.valueOf("piari");
+            Integer.valueOf("piari"); // throw NumberFormatException
         }
     }
 
