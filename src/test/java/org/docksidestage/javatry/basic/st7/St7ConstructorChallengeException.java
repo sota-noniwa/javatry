@@ -25,4 +25,8 @@ public class St7ConstructorChallengeException extends RuntimeException {
     public St7ConstructorChallengeException(String msg) {
         super(msg);
     }
+
+    public St7ConstructorChallengeException(String msg, Throwable cause) {
+        super(msg, cause);
+    }
 }

@@ -343,6 +343,8 @@ public class Step07ExceptionTest extends PlainTestCase {
         } catch (RuntimeException e) {
             log("*No hint here for training.", e);
         }
+        // cause をパラメーターで渡してあげて、例外を投げることで スタックトレースに "Caused by" と表示され、
+        // 例外情報が追いやすくなった (Chained Exception)
     }
 
     // ===================================================================================
@@ -358,13 +360,15 @@ public class Step07ExceptionTest extends PlainTestCase {
         } catch (St7ConstructorChallengeException e) {
             log("Thrown by help method", e); // should show also "Caused-by" information
         }
+        // Chained Exception を使っていなかったので、最後に投げられた例外以外はスタックトレースに表示されていなかった
+        // cause を例外のコンストラクタで渡せるようにしたので、例外情報が追えるようになった
     }
 
     private void helpSurprisedYabaiCatch() {
         try {
             helpThrowIllegalState();
         } catch (IllegalStateException e) {
-            throw new St7ConstructorChallengeException("Failed to do something.");
+            throw new St7ConstructorChallengeException("Failed to do something.", e);
         }
     }
 
@@ -386,9 +390,10 @@ public class Step07ExceptionTest extends PlainTestCase {
         // _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
         // Write here. (ここに書いてみましょう)
         // - - - - - - - - - -
-        //
-        //
-        //
+        // Error - これが投げられる時はアプリケーションがクラッシュする時を想定している。
+        //         Error をハンドルすることは想定していないし、すべきでない。
+        // Exception - 予期できる不具合が発生した時に投げることを想定している。
+        //             Exception はキャッチされ、適切に処理されるべき。
         // _/_/_/_/_/_/_/_/_/_/
     }
 }
