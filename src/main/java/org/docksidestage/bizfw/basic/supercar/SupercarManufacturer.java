@@ -29,7 +29,13 @@ public class SupercarManufacturer {
         Integer steeringWheelId = catalog.findSteeringWheelSpecId(catalogKey);
 
         SupercarSteeringWheelManufacturer wheelManufacturer = createSupercarSteeringWheelManufacturer();
-        SteeringWheel steeringWheel = wheelManufacturer.makeSteeringWheel(steeringWheelId);
+        SteeringWheel steeringWheel;
+        try {
+            steeringWheel = wheelManufacturer.makeSteeringWheel(steeringWheelId);
+        } catch (IllegalStateException e) {
+            String msg = "Failed to make supercar: cannot create steering wheel for catalogKey=" + catalogKey;
+            throw new IllegalStateException(msg, e);
+        }
 
         return new Supercar(steeringWheel);
     }

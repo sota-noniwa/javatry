@@ -15,6 +15,8 @@
  */
 package org.docksidestage.bizfw.basic.screw;
 
+import static com.sun.activation.registries.LogSupport.log;
+
 import org.docksidestage.bizfw.basic.screw.exception.ScrewCannotMakeBySpecException;
 
 /**
@@ -33,7 +35,7 @@ public class SpecialScrewManufacturer {
 
     private boolean isKawaiiFaceScrewSpec(ScrewSpec screwSpec) {
         String specText = screwSpec.getSpecText();
-        String kawaiiText = new String(new byte[] { 0x5c, 0x28, 0x5e, 0x5f, 0x5e, 0x29, 0x2f });
+        String kawaiiText = new String(new byte[] { 0x5c, 0x28, 0x5e, 0x5f, 0x5e, 0x29, 0x2f }); // \(^_^)/
         return specText.equals(kawaiiText);
     }
 }

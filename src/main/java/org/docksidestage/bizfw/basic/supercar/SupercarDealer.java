@@ -25,14 +25,19 @@ public class SupercarDealer {
 
     public Supercar orderSupercar(String clientRequirement) {
         SupercarManufacturer supercarManufacturer = createSupercarManufacturer();
-        if (clientRequirement.contains("steering wheel is like sea")) {
-            return supercarManufacturer.makeSupercar("piari");
-        } else if (clientRequirement.contains("steering wheel is useful on land")) {
-            return supercarManufacturer.makeSupercar("land");
-        } else if (clientRequirement.contains("steering wheel has many shop")) {
-            return supercarManufacturer.makeSupercar("piari");
-        } else {
-            throw new IllegalStateException("Cannot understand the client requirement: " + clientRequirement);
+        try {
+            if (clientRequirement.contains("steering wheel is like sea")) {
+                return supercarManufacturer.makeSupercar("piari");
+            } else if (clientRequirement.contains("steering wheel is useful on land")) {
+                return supercarManufacturer.makeSupercar("land");
+            } else if (clientRequirement.contains("steering wheel has many shop")) {
+                return supercarManufacturer.makeSupercar("piari");
+            } else {
+                throw new IllegalStateException("Cannot understand the client requirement: " + clientRequirement);
+            }
+        } catch (IllegalStateException e) {
+            String msg = "Failed to order supercar: clientRequirement=" + clientRequirement;
+            throw new IllegalStateException(msg, e);
         }
     }
 
