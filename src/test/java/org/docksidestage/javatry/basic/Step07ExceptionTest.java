@@ -337,6 +337,7 @@ public class Step07ExceptionTest extends PlainTestCase {
      * できるだけ例外情報だけでその状況が理解できるように、Supercarのクラスたちの例外ハンドリングを改善しましょう。
      */
     public void test_exception_translation_improveChallenge() {
+        // TODO noniwa ねじ会社のthrowでもkawaii faceの情報を例外メッセージに入れましょう by jflute (2026/02/20)
         try {
             new SupercarClient().buySupercar(); // you can fix the classes
             fail("always exception but none");
@@ -345,6 +346,50 @@ public class Step07ExceptionTest extends PlainTestCase {
         }
         // cause をパラメーターで渡してあげて、例外を投げることで スタックトレースに "Caused by" と表示され、
         // 例外情報が追いやすくなった (Chained Exception)
+        
+        // #1on1: throwをピンポイントにするか？IllegalStateでアバウトにするか？ (2026/02/20)
+        // ピンポイントの業務制御を入れる可能性があるケースであれば、独自例外でピンポイント e.g. TicketSoldOutException
+        // 単にデバッグ充実のためだけとかであれば、まあIllegalStateでアバウトでもOK (ピンポイント制御を諦める)
+        //
+        // 一方で、catchをポイントにするか？RuntimeExceptionでアバウトにするか？
+        // これもピンポイントのニュアンスでデバッグ充実をするのであれば、ピンポイントcatchしたいところ。
+        // (ただし、throw側がピンポイントで投げていればの話。投げてなかったらできない)
+        // 他の原因の例外でもデバッグ充実させるとかなら、RuntimeException catchでOK。
+        
+        // done noniwa IllegalState の catch は少々中途半端なのでどっちかに寄せましょう by jflute (2026/02/20)
+        
+        // #1on1: 例外の翻訳
+        /*
+                 catch        catch        catch
+     <---- 例外  /      例外  /     例外    /    例外
+             \ /         \ /          \ /       |
+   o          |           |            |         \
+  /|\   ->    A     ->    B    ->     C      ->      D -> D'
+  /\           |     |        PK           ^^v
+               |     |                     も
+               +設定ファイル (PK)
+         */
+        // 一つの落ちたと言うイベントに付き、(レイヤーごとに)複数のエラーメッセージがある。
+        // すべてのエラーメッセージを読んでこそ全体が把握できる。
+        //
+        // // エラーメッセージ読め読め大合唱
+        // https://jflute.hatenadiary.jp/entry/20130522/errorsinging
+        //
+        // SpringBootの例外を全部は読んでなかったので読みます by のにわさん
+        
+        // #1on1: じゃあ全部毎回try/catchするのか？ (2026/02/20)
+        // それはさすがにしんどいのでは？
+        // したら、必要なところだけtry/catchすればいい？
+        // その「必要なところだけ」ってどこ？
+        //
+        // ある程度は経験、翻訳されてなくてもつらかった思い出を何度経験しているか？
+        // 一方で、一つ指針としてあるのは、レイヤーがわかれたとき。
+        // あと、落ちそうなところ(これがまた経験かな)、落ちた時に業務的にやばいところ。などなど。
+        // 多少ここは結論が曖昧になるけど、そういうことを意識して仕事を続けていけば積み重なる。
+        
+        // #1on1: 現実、なかなか現場で例外の翻訳を積極的にやる人は少ないので... (2026/02/20)
+        // フレームワークによる翻訳で賄ってる部分はある。
+        // LastaFlute + DBFlute の例を見てもらった。
     }
 
     // ===================================================================================
@@ -368,6 +413,9 @@ public class Step07ExceptionTest extends PlainTestCase {
         try {
             helpThrowIllegalState();
         } catch (IllegalStateException e) {
+            // #1on1: やばい例外ハンドリングはスタックトレースが途切れてとてもつらい (2026/02/20)
+            // 別の例外をthrowしておいて引き継がないってことは99.999%ない。
+            // #1on1: コンストラクターの作り方のコツ、起点用と翻訳用、メッセージ必須 (2026/02/20)
             throw new St7ConstructorChallengeException("Failed to do something.", e);
         }
     }
@@ -387,6 +435,7 @@ public class Step07ExceptionTest extends PlainTestCase {
      * (ExceptionとErrorのコンセプトの違いはなんでしょうか？コメント上に書きましょう)
      */
     public void test_exception_zone_differenceExceptionError() {
+        // TODO jflute 次回1on1ここから (2026/02/20)
         // _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
         // Write here. (ここに書いてみましょう)
         // - - - - - - - - - -

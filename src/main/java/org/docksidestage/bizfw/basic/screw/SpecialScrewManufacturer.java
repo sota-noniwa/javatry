@@ -15,8 +15,6 @@
  */
 package org.docksidestage.bizfw.basic.screw;
 
-import static com.sun.activation.registries.LogSupport.log;
-
 import org.docksidestage.bizfw.basic.screw.exception.ScrewCannotMakeBySpecException;
 
 /**

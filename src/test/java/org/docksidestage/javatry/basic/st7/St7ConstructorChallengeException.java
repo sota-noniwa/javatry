@@ -22,11 +22,11 @@ public class St7ConstructorChallengeException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
 
-    public St7ConstructorChallengeException(String msg) {
+    public St7ConstructorChallengeException(String msg) { // 起点用
         super(msg);
     }
 
-    public St7ConstructorChallengeException(String msg, Throwable cause) {
+    public St7ConstructorChallengeException(String msg, Throwable cause) { // 翻訳用
         super(msg, cause);
     }
 }
