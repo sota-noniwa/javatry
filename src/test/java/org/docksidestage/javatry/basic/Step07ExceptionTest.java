@@ -416,6 +416,11 @@ public class Step07ExceptionTest extends PlainTestCase {
             // #1on1: やばい例外ハンドリングはスタックトレースが途切れてとてもつらい (2026/02/20)
             // 別の例外をthrowしておいて引き継がないってことは99.999%ない。
             // #1on1: コンストラクターの作り方のコツ、起点用と翻訳用、メッセージ必須 (2026/02/20)
+            // #1on1: 翻訳用コンストラクター作るのか？実装しない理由も書いて良い (2026/02/20)
+            // 上長の「言い訳が書いてあると嬉しい」という言葉、素晴らしい。
+            // TODO noniwa [読み物課題] オートマティックおうむ返しコメントより背景や理由を by jflute (2026/02/20)
+            // https://jflute.hatenadiary.jp/entry/20180625/repeatablecomment
+            // (言い訳コメントも良い訳)
             throw new St7ConstructorChallengeException("Failed to do something.", e);
         }
     }
