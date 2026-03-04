@@ -337,7 +337,7 @@ public class Step07ExceptionTest extends PlainTestCase {
      * できるだけ例外情報だけでその状況が理解できるように、Supercarのクラスたちの例外ハンドリングを改善しましょう。
      */
     public void test_exception_translation_improveChallenge() {
-        // TODO noniwa ねじ会社のthrowでもkawaii faceの情報を例外メッセージに入れましょう by jflute (2026/02/20)
+        // done noniwa ねじ会社のthrowでもkawaii faceの情報を例外メッセージに入れましょう by jflute (2026/02/20)
         try {
             new SupercarClient().buySupercar(); // you can fix the classes
             fail("always exception but none");
