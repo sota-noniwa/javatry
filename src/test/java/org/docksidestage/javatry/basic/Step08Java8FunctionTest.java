@@ -50,9 +50,16 @@ public class Step08Java8FunctionTest extends PlainTestCase {
     public void test_java8_lambda_callback_basic() {
         String title = "over";
 
+        // Consumer(functional interface)を継承している具象クラス(St8BasicConsumer)を引数として渡している
+        // functional interface (FIとする) = 抽象メソッドを1つだけ持つインターフェース
+        // クラスを引数として渡しており、helpCallbackConsumerが引数のクラスのメソッドを呼び出す(callback)
+        // St8BasicConsumerでFIのメソッドをoverrideしている
         log("...Executing named class callback(!?)");
         helpCallbackConsumer(new St8BasicConsumer(title));
 
+        // Anonymous class を引数として渡している
+        // new ClassName() はコンストラクタ呼び出しによるインスタンス生成だが、new ClassName(){} は anonymous classを定義して、インスタンスを生成している
+        // anonymous class の中でacceptメソッドをoverrideしている
         log("...Executing anonymous class callback");
         helpCallbackConsumer(new Consumer<String>() {
             public void accept(String stage) {
@@ -60,15 +67,20 @@ public class Step08Java8FunctionTest extends PlainTestCase {
             }
         });
 
+        // ラムダ式
+        // FIの抽象メソッドをoverrideできる
+        // この場合、acceptメソッドをoverrideしている
         log("...Executing lambda block style callback");
         helpCallbackConsumer(stage -> {
             log(stage + ": " + title);
         });
 
+        // ラムダ式の省略記法
+        // ステートメントが1つだけの場合は{}を省略できる
         log("...Executing lambda expression style callback");
         helpCallbackConsumer(stage -> log(stage + ": " + title));
 
-        // your answer? => 
+        // your answer? => わかりませんでした => 同じ(o)
 
         // cannot reassign because it is used at callback process
         //title = "wave";
