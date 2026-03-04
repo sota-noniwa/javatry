@@ -140,7 +140,7 @@ public class Step07ExceptionTest extends PlainTestCase {
         boolean sea = exp instanceof Exception;
         log(sea); // your answer? => false(o)
         // Throwable は Exception の subclass ではない
-        
+
         // #1on1: パッケージ名の中のドメインの話 (2026/02/06)
     }
 
@@ -268,7 +268,8 @@ public class Step07ExceptionTest extends PlainTestCase {
             log("sea: " + sea); // your answer? => "Failed to call the second help method: symbol=1"(x)
             // "Failed to call the third help method: symbol=-1"(o)
             log("land: " + land); // your answer? => "IllegalArgumentException"(o)
-            log("e: " + e); // your answer? => "java.lang.IllegalStateException: Failed to call the second help method: symbol=1"(x)
+            log("e: "
+                    + e); // your answer? => "java.lang.IllegalStateException: Failed to call the second help method: symbol=1"(x)
             // cause.getMessage() はIllegalStateExceptionのコンストラクタを使って作成されたもので、
             // cause.getClass().getSimpleName() はIllegalArgumentExceptionなのか…
             // Exceptionの呼ばれ方を勉強する必要がありそう
@@ -346,7 +347,7 @@ public class Step07ExceptionTest extends PlainTestCase {
         }
         // cause をパラメーターで渡してあげて、例外を投げることで スタックトレースに "Caused by" と表示され、
         // 例外情報が追いやすくなった (Chained Exception)
-        
+
         // #1on1: throwをピンポイントにするか？IllegalStateでアバウトにするか？ (2026/02/20)
         // ピンポイントの業務制御を入れる可能性があるケースであれば、独自例外でピンポイント e.g. TicketSoldOutException
         // 単にデバッグ充実のためだけとかであれば、まあIllegalStateでアバウトでもOK (ピンポイント制御を諦める)
@@ -355,9 +356,9 @@ public class Step07ExceptionTest extends PlainTestCase {
         // これもピンポイントのニュアンスでデバッグ充実をするのであれば、ピンポイントcatchしたいところ。
         // (ただし、throw側がピンポイントで投げていればの話。投げてなかったらできない)
         // 他の原因の例外でもデバッグ充実させるとかなら、RuntimeException catchでOK。
-        
+
         // done noniwa IllegalState の catch は少々中途半端なのでどっちかに寄せましょう by jflute (2026/02/20)
-        
+
         // #1on1: 例外の翻訳
         /*
                  catch        catch        catch
@@ -376,7 +377,7 @@ public class Step07ExceptionTest extends PlainTestCase {
         // https://jflute.hatenadiary.jp/entry/20130522/errorsinging
         //
         // SpringBootの例外を全部は読んでなかったので読みます by のにわさん
-        
+
         // #1on1: じゃあ全部毎回try/catchするのか？ (2026/02/20)
         // それはさすがにしんどいのでは？
         // したら、必要なところだけtry/catchすればいい？
@@ -386,7 +387,7 @@ public class Step07ExceptionTest extends PlainTestCase {
         // 一方で、一つ指針としてあるのは、レイヤーがわかれたとき。
         // あと、落ちそうなところ(これがまた経験かな)、落ちた時に業務的にやばいところ。などなど。
         // 多少ここは結論が曖昧になるけど、そういうことを意識して仕事を続けていけば積み重なる。
-        
+
         // #1on1: 現実、なかなか現場で例外の翻訳を積極的にやる人は少ないので... (2026/02/20)
         // フレームワークによる翻訳で賄ってる部分はある。
         // LastaFlute + DBFlute の例を見てもらった。
@@ -418,7 +419,9 @@ public class Step07ExceptionTest extends PlainTestCase {
             // #1on1: コンストラクターの作り方のコツ、起点用と翻訳用、メッセージ必須 (2026/02/20)
             // #1on1: 翻訳用コンストラクター作るのか？実装しない理由も書いて良い (2026/02/20)
             // 上長の「言い訳が書いてあると嬉しい」という言葉、素晴らしい。
-            // TODO noniwa [読み物課題] オートマティックおうむ返しコメントより背景や理由を by jflute (2026/02/20)
+            // done noniwa [読み物課題] オートマティックおうむ返しコメントより背景や理由を by jflute (2026/02/20)
+            // TODO jflute ジュニアとシニアでは「読んだらわかる」の基準が違うことも不要なコメントが残ってしまう要因になるのかなと思いました。
+            //  ジュニアエンジニアは自分基準で考えるのではなく、「シニアエンジニアの〇〇さんが読んだらわかるかな？」と考えると良さそう。
             // https://jflute.hatenadiary.jp/entry/20180625/repeatablecomment
             // (言い訳コメントも良い訳)
             throw new St7ConstructorChallengeException("Failed to do something.", e);
