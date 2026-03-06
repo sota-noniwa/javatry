@@ -87,7 +87,9 @@ public class Step05ClassTest extends PlainTestCase {
         TicketBooth booth = new TicketBooth();
         int handedMoney = 7399; // insufficient amount of money
         try {
+            // システム内部でチケットを新規補充(100枚)して、公開する前に特別なお客さんに3枚確保する
             booth.buyTicket(ONE_DAY, handedMoney);
+            
             fail("always exception but none");
         } catch (TicketShortMoneyException continued) {
             log("Failed to buy one-day passport: money=" + handedMoney, continued);
