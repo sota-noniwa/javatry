@@ -96,7 +96,8 @@ public class Step08Java8FunctionTest extends PlainTestCase {
             log(stage);
         });
         log("lost river");
-        // your answer? => 
+        // your answer? => harbor, broadway, dockside, hangar, lost river(o)
+        // acceptメソッドをラムダ式でoverrideしているので、helpCallbackConsumer内部でacceptが呼ばれるタイミングでlog(stage);の処理が実行される
     }
 
     private class St8BasicConsumer implements Consumer<String> {
@@ -128,7 +129,8 @@ public class Step08Java8FunctionTest extends PlainTestCase {
         String sea = helpCallbackFunction(number -> {
             return label + ": " + number;
         });
-        log(sea); // your answer? => 
+        log(sea); // your answer? => number: 7(o)
+        // function interface である Function の accept メソッドをラムダ式で override している
     }
 
     private String helpCallbackFunction(Function<Integer, String> oneArgLambda) {
@@ -153,17 +155,11 @@ public class Step08Java8FunctionTest extends PlainTestCase {
      * </pre>
      */
     public void test_java8_lambda_convertStyle_basic() {
-        helpCallbackSupplier(new Supplier<String>() { // sea
-            public String get() {
-                return "broadway";
-            }
-        });
+        helpCallbackSupplier(() -> {return "broadway";}); // sea
 
-        helpCallbackSupplier(() -> { // land
-            return "dockside";
-        });
+        helpCallbackSupplier(() -> "dockside"); // land
 
-        helpCallbackSupplier(() -> "hangar"); // piari
+        helpCallbackSupplier(() -> {return "hangar";}); // piari
     }
 
     private void helpCallbackSupplier(Supplier<String> oneArgLambda) {
@@ -188,7 +184,7 @@ public class Step08Java8FunctionTest extends PlainTestCase {
             St8Member member = optMember.get();
             log(member.getMemberId(), member.getMemberName());
         }
-        // your answer? => 
+        // your answer? => 同じ(o)
     }
 
     /**
@@ -204,7 +200,8 @@ public class Step08Java8FunctionTest extends PlainTestCase {
         optMember.ifPresent(member -> {
             log(member.getMemberId(), member.getMemberName());
         });
-        // your answer? => 
+        // your answer? => 同じ(o)
+        // 2つ目のlogはConsumerのacceptをoverrideしている。ifPresentはreceiverであるoptMemberがnullでない時にacceptメソッドを呼ぶ。
     }
 
     /**
@@ -240,11 +237,11 @@ public class Step08Java8FunctionTest extends PlainTestCase {
 
         // flatMap style
         String piari = optMemberFirst.flatMap(mb -> mb.getWithdrawal())
-                .flatMap(wdl -> wdl.getPrimaryReason())
+                .flatMap(wdl -> wdl.getPrimaryReason()) // 返り値がOptional<String>なのでflatMapを使う
                 .orElse("*no reason: someone was not present");
 
         // flatMap and map style
-        String bonvo = optMemberFirst.flatMap(mb -> mb.getWithdrawal())
+        String bonvo = optMemberFirst.flatMap(mb -> mb.getWithdrawal()) // Optional<St8Withdrawal>をflatにしてSt8Withdrawal
                 .map(wdl -> wdl.oldgetPrimaryReason())
                 .orElse("*no reason: someone was not present");
 
@@ -259,18 +256,17 @@ public class Step08Java8FunctionTest extends PlainTestCase {
                 .orElse("*no reason: someone was not present");
 
         int defaultWithdrawalId = -1;
-        Integer miraco = facade.selectMember(2)
-                .flatMap(mb -> mb.getWithdrawal())
-                .map(wdl -> wdl.getWithdrawalId()) // ID here
-                .orElse(defaultWithdrawalId);
+        Integer miraco =
+                facade.selectMember(2).flatMap(mb -> mb.getWithdrawal()).map(wdl -> wdl.getWithdrawalId()) // ID here
+                        .orElse(defaultWithdrawalId);
 
-        log(sea); // your answer? => 
-        log(land); // your answer? => 
-        log(piari); // your answer? => 
-        log(bonvo); // your answer? => 
-        log(dstore); // your answer? => 
-        log(amba); // your answer? => 
-        log(miraco); // your answer? => 
+        log(sea); // your answer? => music
+        log(land); // your answer? => music
+        log(piari); // your answer? => music
+        log(bonvo); // your answer? => music
+        log(dstore); // your answer? => *no reason: someone was not present
+        log(amba); // your answer? => *no reason: someone was not present
+        log(miraco); // your answer? => 12
     }
 
     /**
