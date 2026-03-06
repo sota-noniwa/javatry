@@ -279,13 +279,13 @@ public class Step08Java8FunctionTest extends PlainTestCase {
         String sea = "the";
         try {
             String reason = member.getWithdrawal().map(wdl -> wdl.oldgetPrimaryReason()).orElseThrow(() -> {
-                return new IllegalStateException("wave");
-            });
+                return new IllegalStateException("wave"); // Supplierのget()をoverride
+            }); // orElseThrow()でIllegalStateException("wave") が投げられる
             sea = reason;
         } catch (IllegalStateException e) {
             sea = e.getMessage();
         }
-        log(sea); // your answer? => 
+        log(sea); // your answer? => wave
     }
 
     // ===================================================================================
@@ -304,14 +304,14 @@ public class Step08Java8FunctionTest extends PlainTestCase {
             }
         }
         String sea = oldfilteredNameList.toString();
-        log(sea); // your answer? => 
+        log(sea); // your answer? => [broadway, dockside]
 
-        List<String> filteredNameList = memberList.stream() //
-                .filter(mb -> mb.getWithdrawal().isPresent()) //
-                .map(mb -> mb.getMemberName()) //
+        List<String> filteredNameList = memberList.stream() // Streamに変換
+                .filter(mb -> mb.getWithdrawal().isPresent()) // memberId=1,2のもののみ
+                .map(mb -> mb.getMemberName()) // broadway, dockside
                 .collect(Collectors.toList());
         String land = filteredNameList.toString();
-        log(land); // your answer? => 
+        log(land); // your answer? => [broadway, dockside]
     }
 
     /**
@@ -325,9 +325,9 @@ public class Step08Java8FunctionTest extends PlainTestCase {
                 .flatMap(mb -> mb.getPurchaseList().stream())
                 .filter(pur -> pur.getPurchaseId() > 100)
                 .mapToInt(pur -> pur.getPurchasePrice())
-                .distinct()
+                .distinct() // 100, 200, 300
                 .sum();
-        log(sea); // your answer? => 
+        log(sea); // your answer? => 600
     }
 
     // *Stream API will return at Step12 again, it's worth the wait!
