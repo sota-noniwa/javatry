@@ -57,11 +57,16 @@ public class Step08Java8FunctionTest extends PlainTestCase {
         log("...Executing named class callback(!?)");
         helpCallbackConsumer(new St8BasicConsumer(title));
 
+        // #1on1: A → B
+        //        A ← B // 厳密にはA'
+        // コールバックとは？
+        
         // Anonymous class を引数として渡している
         // new ClassName() はコンストラクタ呼び出しによるインスタンス生成だが、new ClassName(){} は anonymous classを定義して、インスタンスを生成している
         // anonymous class の中でacceptメソッドをoverrideしている
         log("...Executing anonymous class callback");
         helpCallbackConsumer(new Consumer<String>() {
+            @Override
             public void accept(String stage) {
                 log(stage + ": " + title);
             }
@@ -133,6 +138,7 @@ public class Step08Java8FunctionTest extends PlainTestCase {
         // function interface である Function の accept メソッドをラムダ式で override している
     }
 
+    // #1on1: Genericの変数名のお話 // (2026/03/19)
     private String helpCallbackFunction(Function<Integer, String> oneArgLambda) {
         return oneArgLambda.apply(7);
     }
@@ -155,6 +161,11 @@ public class Step08Java8FunctionTest extends PlainTestCase {
      * </pre>
      */
     public void test_java8_lambda_convertStyle_basic() {
+        // #1on1: 1statementでも中が込み入ってる場合は、blockスタイルで見栄えを帰ることもある話 (2026/03/19)
+        // e.g.
+        //memberBhv.selectList(cb -> {
+        //    cb.query().setMemberName_LikeSearch("S", op -> op.likePrefix());
+        //});
         helpCallbackSupplier(() -> {return "broadway";}); // sea
 
         helpCallbackSupplier(() -> "dockside"); // land
@@ -175,6 +186,25 @@ public class Step08Java8FunctionTest extends PlainTestCase {
      * (二つのlog()によって出力される文字列は同じでしょうか？ (yes or no))
      */
     public void test_java8_optional_concept() {
+        // #1on1: Optionalの良いところは？ (2026/03/19)
+        // o 描きやすさ (nullチェックを最後にできる) by のにわさん
+        // o nullの例外の回避 by のにわさん
+        
+        // 根源的なメリット:
+        // o ないかもしれないことを意識させてくれる
+        // o ないかもしれないことへの対処を強制させてくれる
+        //  (nullチェックをコンパイルエラーで教えてくれる)
+        //
+        // JavaのOptionalが2015年あたりに入った。
+        // なんで、こんなに導入が遅れたんだろう？話
+        // Lambda式, ifPresent(), map()
+        //
+        // KotlinとJavaの違い。
+        // Javaだと、Optionalじゃない戻り値のとき、絶対に存在するとは言い切れない。
+        // (Optionalで戻ってきた時だけメリットがある、Javaは半分)
+        //
+        // KotlinとJavaの採用の話。
+        // 言語の流行りの歴史の話。
         St8Member oldmember = new St8DbFacade().oldselectMember(1);
         if (oldmember != null) {
             log(oldmember.getMemberId(), oldmember.getMemberName());
@@ -230,6 +260,7 @@ public class Step08Java8FunctionTest extends PlainTestCase {
 
         Optional<St8Member> optMemberFirst = facade.selectMember(1);
 
+        // TODO jflute 次回1on1, map/flat (2026/03/19)
         // map style
         String land = optMemberFirst.map(mb -> mb.oldgetWithdrawal())
                 .map(wdl -> wdl.oldgetPrimaryReason())
@@ -274,6 +305,7 @@ public class Step08Java8FunctionTest extends PlainTestCase {
      * (メソッド終了時の変数 sea の中身は？)
      */
     public void test_java8_optional_orElseThrow() {
+        // TODO jflute 次回1on1, orElseThrow()のジレンマ (2026/03/19)
         Optional<St8Member> optMember = new St8DbFacade().selectMember(2);
         St8Member member = optMember.orElseThrow(() -> new IllegalStateException("over"));
         String sea = "the";
