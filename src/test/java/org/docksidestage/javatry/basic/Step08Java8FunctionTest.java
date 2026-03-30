@@ -260,7 +260,17 @@ public class Step08Java8FunctionTest extends PlainTestCase {
 
         Optional<St8Member> optMemberFirst = facade.selectMember(1);
 
-        // TODO jflute 次回1on1, map/flat (2026/03/19)
+        // #1on1: ないかもしれないことを、保留してプログラムを先に進める (2026/03/30)
+        // 実際にはmap()の中にif文が隠されているみたいな感じ。
+        // そして、どこで途切れたかは気にせず「一つのないかもしれない」に集約してる。
+        // なので、厳密には等価ではない。どこで途切れたかという情報をロスしている。
+        // なのでなので、どこで途切れたか次第で分岐が必要な場合は使いづらい。
+
+        // done jflute 次回1on1, map/flatMap (2026/03/19)
+        // https://dbflute.seasar.org/ja/manual/topic/programming/java/java8/mapandflat.html
+        // じっくりお話。
+        // コードが便利になった一方で、概念理解は求められるようになっている。
+
         // map style
         String land = optMemberFirst.map(mb -> mb.oldgetWithdrawal())
                 .map(wdl -> wdl.oldgetPrimaryReason())
@@ -271,6 +281,18 @@ public class Step08Java8FunctionTest extends PlainTestCase {
                 .flatMap(wdl -> wdl.getPrimaryReason()) // 返り値がOptional<String>なのでflatMapを使う
                 .orElse("*no reason: someone was not present");
 
+        /* ベタに書くと
+String piari = optMemberFirst.flatMap(mb -> {
+    Optional<St8Withdrawal> optWithdrawal = mb.getWithdrawal();
+    return optWithdrawal;
+}).flatMap(wdl -> {
+    Optional<String> optPrimaryReason = wdl.getPrimaryReason();
+    return optPrimaryReason;
+}) // → Optional<String> optPrimaryReason
+        // memberやwithdrawalのないかもしれないも集約されてる
+        .orElse("*no reason: someone was not present");
+         */
+        
         // flatMap and map style
         String bonvo = optMemberFirst.flatMap(mb -> mb.getWithdrawal()) // Optional<St8Withdrawal>をflatにしてSt8Withdrawal
                 .map(wdl -> wdl.oldgetPrimaryReason())
@@ -351,6 +373,8 @@ public class Step08Java8FunctionTest extends PlainTestCase {
      * (メソッド終了時の変数 sea の中身は？)
      */
     public void test_java8_stream_map_flatMap() {
+        // #1on1: Stream APIも便利な分、概念理解が求められるとも言える (2026/03/30)
+        // なので、こういうのを採用しない言語もある。
         List<St8Member> memberList = new St8DbFacade().selectMemberListAll();
         int sea = memberList.stream()
                 .filter(mb -> mb.getWithdrawal().isPresent())
