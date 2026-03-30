@@ -47,9 +47,9 @@ public class TicketBooth {
     // → oneDay, twoDay, と列挙すると間違いやすいのでMap
     //    → それはGoodだけど、regularとnightを分けた理由は？
     //
-    // TODO noniwa Mapの変数名、複数のものを所持している感を出して欲しい by jflute (2025/10/21)
+    // done noniwa Mapの変数名、複数のものを所持している感を出して欲しい by jflute (2025/10/21)
     // e.g. ticketQuantities, ticketQuantityMap
-    private final Map<TicketType, Integer> ticketQuantity = new EnumMap<>(TicketType.class);
+    private final Map<TicketType, Integer> ticketQuantities = new EnumMap<>(TicketType.class);
     private int salesProceeds = 0;
 
     // ===================================================================================
@@ -59,7 +59,7 @@ public class TicketBooth {
         // #1on1: ここでどのチケット種別がnightなのか？を定義しているに等しい (2025/10/10)
         // 各チケットを10枚ずつ用意する
         for (TicketType type: TicketType.values()) {
-            ticketQuantity.put(type, 10);
+            ticketQuantities.put(type, 10);
         }
     }
 
@@ -94,10 +94,10 @@ public class TicketBooth {
         if (handedMoney < type.getPrice()) {
             throw new TicketShortMoneyException("Short money: " + handedMoney);
         }
-        if (ticketQuantity.get(type) <= 0) {
+        if (ticketQuantities.get(type) <= 0) {
             throw new TicketSoldOutException("Sold out");
         }
-        ticketQuantity.put(type, ticketQuantity.get(type) - 1);
+        ticketQuantities.put(type, ticketQuantities.get(type) - 1);
         salesProceeds += type.getPrice();
         return new TicketBuyResult(ticket, handedMoney - type.getPrice());
     }
@@ -106,7 +106,7 @@ public class TicketBooth {
     //                                                                            Accessor
     //                                                                            ========
     public int getTicketQuantity(TicketType type) {
-        return ticketQuantity.get(type);
+        return ticketQuantities.get(type);
     }
 
     public Integer getSalesProceeds() {

@@ -118,10 +118,10 @@ public class Ticket {
     //  Supported types are 例えば ONE_DAY, TWO_DAY, and FOUR_DAY
     // というように一部列挙方式にして、概念の説明はしつつ、個数は断定しないやり方。
     // (AbstractSqlClause での e.g. の例)
-    // TODO noniwa ↑の通り、何かしらちょっと表現を変えてみてください by jflute (2025/10/21)
+    // done noniwa ↑の通り、何かしらちょっと表現を変えてみてください by jflute (2025/10/21)
     /**
      * Issues a regular ticket for the specific type.
-     * Supported types are ONE_DAY, TWO_DAY, and FOUR_DAY.
+     * Supported types are ONE_DAY, TWO_DAY, etc.
      * @param type The type of regular ticket to issue.
      * @return A new Ticket instance for the specified type.
      * @throws WrongMethodTypeException When the specified type is not a regular ticket.
