@@ -15,6 +15,10 @@
  */
 package org.docksidestage.javatry.framework;
 
+import org.docksidestage.bizfw.di.nondi.NonDiDirectFirstAction;
+import org.docksidestage.bizfw.di.nondi.NonDiDirectSecondAction;
+import org.docksidestage.bizfw.di.nondi.NonDiFactoryMethodAction;
+import org.docksidestage.bizfw.di.nondi.NonDiIndividualFactoryAction;
 import org.docksidestage.unit.PlainTestCase;
 
 /**
@@ -37,8 +41,8 @@ public class Step41DependencyInjectionBeginnerTest extends PlainTestCase {
         // What is Dependency Injection?
         // - - - - - (your answer?)
         //
-        //
-        //
+        // クラスAがクラスBに依存しているとき、クラスB（依存）のオブジェクトの生成・管理を外部に任せて、コンストラクタなどでクラスAに注入すること。
+        // クラスAが直接クラスBを生成する = 密結合, DIを利用する = 疎結合
         // _/_/_/_/_/_/_/_/_/_/
     }
 
@@ -50,8 +54,15 @@ public class Step41DependencyInjectionBeginnerTest extends PlainTestCase {
      * (NonDiDirectFirstAction と NonDiDirectSecondAction の違いは？)
      */
     public void test_nondi_difference_between_first_and_second() {
-        // your answer? => 
+        // your answer? => NonDiDirectFirstAction は必要なオブジェクトの生成を自身で行っている
+        // NonDiDirectSecondAction はそれに加えて、オブジェクト生成に必要なセットアップメソッドの呼び出しも行なっている
+        // どちらも1つのクラス内部でオブジェクト生成・セットアップ・ビジネスロジックの実行の3つの責務を持っているので、コードが複雑になる
         // and your confirmation code here freely
+        NonDiDirectFirstAction nonDiDirectFirstAction = new NonDiDirectFirstAction();
+        nonDiDirectFirstAction.callFriend();
+        System.out.println("-------------------------");
+        NonDiDirectSecondAction nonDiDirectSecondAction = new NonDiDirectSecondAction();
+        nonDiDirectSecondAction.callFriend();
     }
 
     /**
@@ -59,8 +70,14 @@ public class Step41DependencyInjectionBeginnerTest extends PlainTestCase {
      * (NonDiDirectSecondAction と NonDiFactoryMethodAction の違いは？)
      */
     public void test_nondi_difference_between_second_and_FactoryMethod() {
-        // your answer? => 
+        // your answer? => NonDiFactoryMethodAction はオブジェクトの生成をファクトリーメソッドに切り出している
+        // 重複コードが少し減ったが、ファクトリーメソッドも同じクラス内にあるため、1クラスの責務が多いままになっている
         // and your confirmation code here freely
+        NonDiDirectSecondAction nonDiDirectSecondAction = new NonDiDirectSecondAction();
+        nonDiDirectSecondAction.callFriend();
+        System.out.println("-------------------------");
+        NonDiFactoryMethodAction nonDiFactoryMethodAction = new NonDiFactoryMethodAction();
+        nonDiFactoryMethodAction.callFriend();
     }
 
     /**
@@ -68,8 +85,15 @@ public class Step41DependencyInjectionBeginnerTest extends PlainTestCase {
      * (NonDiFactoryMethodAction と NonDiIndividualFactoryAction の違いは？)
      */
     public void test_nondi_difference_between_FactoryMethod_and_IndividualFactory() {
-        // your answer? => 
+        // your answer? => NonDiIndividualFactoryAction はオブジェクトの生成をファクトリークラスに切り出している
+        // NonDiIndividualFactoryAction クラスはオブジェクト生成・セットアップの責務のみを持つようになったが、具象クラスである
+        // NonDiAnimalFactory を直接生成しているため、密結合になっている
         // and your confirmation code here freely
+        NonDiFactoryMethodAction nonDiFactoryMethodAction = new NonDiFactoryMethodAction();
+        nonDiFactoryMethodAction.callFriend();
+        System.out.println("-------------------------");
+        NonDiIndividualFactoryAction nonDiIndividualFactoryAction = new NonDiIndividualFactoryAction();
+        nonDiIndividualFactoryAction.callFriend();
     }
 
     // ===================================================================================
