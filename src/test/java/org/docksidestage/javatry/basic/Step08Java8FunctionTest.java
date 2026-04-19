@@ -260,7 +260,17 @@ public class Step08Java8FunctionTest extends PlainTestCase {
 
         Optional<St8Member> optMemberFirst = facade.selectMember(1);
 
-        // TODO jflute 次回1on1, map/flat (2026/03/19)
+        // #1on1: ないかもしれないことを、保留してプログラムを先に進める (2026/03/30)
+        // 実際にはmap()の中にif文が隠されているみたいな感じ。
+        // そして、どこで途切れたかは気にせず「一つのないかもしれない」に集約してる。
+        // なので、厳密には等価ではない。どこで途切れたかという情報をロスしている。
+        // なのでなので、どこで途切れたか次第で分岐が必要な場合は使いづらい。
+
+        // done jflute 次回1on1, map/flatMap (2026/03/19)
+        // https://dbflute.seasar.org/ja/manual/topic/programming/java/java8/mapandflat.html
+        // じっくりお話。
+        // コードが便利になった一方で、概念理解は求められるようになっている。
+
         // map style
         String land = optMemberFirst.map(mb -> mb.oldgetWithdrawal())
                 .map(wdl -> wdl.oldgetPrimaryReason())
@@ -271,6 +281,18 @@ public class Step08Java8FunctionTest extends PlainTestCase {
                 .flatMap(wdl -> wdl.getPrimaryReason()) // 返り値がOptional<String>なのでflatMapを使う
                 .orElse("*no reason: someone was not present");
 
+        /* ベタに書くと
+String piari = optMemberFirst.flatMap(mb -> {
+    Optional<St8Withdrawal> optWithdrawal = mb.getWithdrawal();
+    return optWithdrawal;
+}).flatMap(wdl -> {
+    Optional<String> optPrimaryReason = wdl.getPrimaryReason();
+    return optPrimaryReason;
+}) // → Optional<String> optPrimaryReason
+        // memberやwithdrawalのないかもしれないも集約されてる
+        .orElse("*no reason: someone was not present");
+         */
+        
         // flatMap and map style
         String bonvo = optMemberFirst.flatMap(mb -> mb.getWithdrawal()) // Optional<St8Withdrawal>をflatにしてSt8Withdrawal
                 .map(wdl -> wdl.oldgetPrimaryReason())
@@ -305,7 +327,69 @@ public class Step08Java8FunctionTest extends PlainTestCase {
      * (メソッド終了時の変数 sea の中身は？)
      */
     public void test_java8_optional_orElseThrow() {
-        // TODO jflute 次回1on1, orElseThrow()のジレンマ (2026/03/19)
+        // done jflute 次回1on1, orElseThrow()のジレンマ (2026/03/19)
+        // #1on1: orElseThrow()を使う場面ってどんなところ？
+        // orElse() ？ :: throwする必要はないとき
+        // orElseThrow() ？ :: ビジネス的な例外を投げたい → なかったら処理続行できないよ (by のにわさん)
+        //                  :: システム的な例外を投げたい → なかったらバグ/論外
+        // でも、なかったらバグ/論外なのであれば、そもそも戻り値をOptionalにしないのでは？
+        // Optionalを戻してると言うことは、ないかもしれないケースがあるからそうしている。
+        //
+        // 呼び出し側と呼び出されてる側の立場の違い:
+        // o 呼び出し側は、呼び出し側のレベルでどういう状況での呼び出しなのか知ってる (全体像を知ってる)
+        // o 呼び出されてる側は、自分がどういう状況で呼ばれてるのかわからない (全体像を知らない)
+        // (step7の復習した)
+        // 
+        // そのギャップで、業務的に必ず存在する場面でOptional戻り値を呼び出すこともある。
+        // (引数のニュアンスが呼び出し側で変わる。適当なIDなのか、存在する前提のIDなのか)
+        // というところで、ビジネス的な例外も投げれば、システム的な例外も投げることある。
+        //
+        // なので、教科書的には、業務的に必ず存在する場面ならorElseThrow()になる。
+        // (万が一のバグのときに、orElse(デフォルト)やifPresent()とかで変に動いても困るので)
+        //
+        // そして、Optionalでよく言われるのが「問答無用get()」は避けましょう話。
+        // Optionalのコンセプトを考えると、それはそれで一理ある話ではあるが...
+        // 業務的に必ず存在する場面での「問答無用get()」はどう？
+        // orElseThrow()と何が違う？
+        // → 意図を伝えられる(by のにわさん)
+        // → もういっこ例外メッセージ (デバッグ情報を入れられる)
+        // 逆に言うと、デバッグ情報を入れないorElseThrow()は、ほぼほぼ「問答無用get()」と変わらない。
+        // なので、残念なorElseThrow()を書かないように注意しましょう。 ⭐︎まず大事なポイント
+        // (残念なorElseThrow()に用はない)
+        //
+        // ここまで教科書的なセオリー。
+        //
+        // o そう言う場面が何個も連続で続く場合
+        // o すぐ上の自分の実装を疑うだけのorElseThrow()な場合
+        // (特にDB周りのプログラミングだとこういうの多い)
+        //
+        // という場面において、なかなかちゃんとしたorElseThrow()が実装される気がしない。
+        // 残念なorElseThrow()を書くくらいなら「問答無用get()」と変わらない。
+        //
+        // A. 教科書のセオリーにしたがって、まじめにちゃんとしたorElseThrow()を書き続けるパターン
+        // B. 教科書のセオリーに薄くしたがって、残念なorElseThrow()を書き続けるパターン
+        // C. 教科書のセオリーをやぶって、問答無用get()で割り切るパターン
+        //
+        // jflute個人的にはBは避けたい。状況を理解してない新人とかが残念なorElseThrow()を真似ていく。
+        // なので、A or C と言う感じ。
+        //
+        // そして、Java10から、Optionalに新しいメソッドが追加された。
+        // St8Member member = optMember.orElseThrow(); → Bを後押し or Cをマシに
+        // つまり、内部処理はget()と何も変わらない。ただメソッド名が違うだけ。
+        //
+        // Kotlinでののにわさんの実例のお話。UnitTestでの問答無用get()のお話。
+        // 現場でBがないかどうか？
+        // そのときの業務のニュアンスをしっかり捉えて、
+        // ifPresent(), orElse(), orElseThrow(...) (業務例外？システム例外？) を使い分ける。
+        //
+        // (後ストーリー)
+        // なので、jfluteはこのジレンマを解決するために、DBFluteのOptionalを作った。
+        // (DBFluteのOptionalについては、DBFluteハンズオンをやったときに、お楽しみに)
+        //
+        //
+        // #1on1: 業務プログラミングなので、業務理解が大事 (2026/04/17)
+        // 業務理解が薄い状態で書いても、どこか抜けが発生する可能性が高い。
+        // (jfluteの昔の業務の話。モデリングツールのお話)
         Optional<St8Member> optMember = new St8DbFacade().selectMember(2);
         St8Member member = optMember.orElseThrow(() -> new IllegalStateException("over"));
         String sea = "the";
@@ -351,6 +435,8 @@ public class Step08Java8FunctionTest extends PlainTestCase {
      * (メソッド終了時の変数 sea の中身は？)
      */
     public void test_java8_stream_map_flatMap() {
+        // #1on1: Stream APIも便利な分、概念理解が求められるとも言える (2026/03/30)
+        // なので、こういうのを採用しない言語もある。
         List<St8Member> memberList = new St8DbFacade().selectMemberListAll();
         int sea = memberList.stream()
                 .filter(mb -> mb.getWithdrawal().isPresent())
