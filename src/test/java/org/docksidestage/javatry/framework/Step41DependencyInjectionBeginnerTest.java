@@ -135,6 +135,10 @@ public class Step41DependencyInjectionBeginnerTest extends PlainTestCase {
         // DIコンテナに合わせた形に集約された、とも言える。
         // それにより、アプリの業務コードが自分でFactory経由で取りに行くのではなく、
         // 待っていればDIコンテナがインスタンスをくれるという形になる。
+        
+        // #1on1: DIコンテナーのコードに興味を持ったのはなぜ？ (2026/05/01)
+        // Seasarの話。そして、Lasta Diの話。
+        // そもそもフレームワークのコードを追うようになったのはなぜ？
     }
 
     /**
