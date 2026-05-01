@@ -15,10 +15,15 @@
  */
 package org.docksidestage.javatry.framework;
 
+import org.docksidestage.bizfw.basic.objanimal.Dog;
+import org.docksidestage.bizfw.di.container.SimpleDiContainer;
 import org.docksidestage.bizfw.di.nondi.NonDiDirectFirstAction;
 import org.docksidestage.bizfw.di.nondi.NonDiDirectSecondAction;
 import org.docksidestage.bizfw.di.nondi.NonDiFactoryMethodAction;
 import org.docksidestage.bizfw.di.nondi.NonDiIndividualFactoryAction;
+import org.docksidestage.bizfw.di.usingdi.UsingDiAccessorAction;
+import org.docksidestage.bizfw.di.usingdi.UsingDiAnnotationAction;
+import org.docksidestage.bizfw.di.usingdi.settings.UsingDiModule;
 import org.docksidestage.unit.PlainTestCase;
 
 /**
@@ -104,8 +109,22 @@ public class Step41DependencyInjectionBeginnerTest extends PlainTestCase {
      * (UsingDiAccessorAction と UsingDiAnnotationAction の違いは？)
      */
     public void test_usingdi_difference_between_Accessor_and_Annotation() {
-        // your answer? => 
+        // your answer? => UsingDiAccessorAction はセッターで依存注入しているので、callFriendメソッドなどを呼ぶ前に
+        // 呼び出し側でセッターメソッドを呼び出す必要がある。（依存管理も呼び出し側の責務）
+        // UsingDiAnnotationAction はフィールドにアノテーションを付与して依存注入しており、呼び出し側ではなくDIが依存を管理する。
         // and your confirmation code here freely
+        UsingDiAccessorAction usingDiAccessorAction = new UsingDiAccessorAction();
+        usingDiAccessorAction.setAnimal(new Dog());
+        usingDiAccessorAction.callFriend();
+        System.out.println("-------------------------");
+        // instantiate & setup DI container
+        SimpleDiContainer container = SimpleDiContainer.getInstance();
+        container.registerModule(new UsingDiModule());
+        container.resolveDependency();
+        // get a component from DI container
+        UsingDiAnnotationAction action =
+                (UsingDiAnnotationAction) container.getComponent(UsingDiAnnotationAction.class);
+        action.callFriend();
     }
 
     /**
@@ -166,7 +185,7 @@ public class Step41DependencyInjectionBeginnerTest extends PlainTestCase {
     /**
      * What is class or file of DI settings that defines MemberBhv class as DI component in the following Lasta Di application? <br>
      * (以下のLasta DiアプリケーションでMemberBhvクラスをDIコンポーネントとして定義しているDI設定クラスもしくはファイルは？) <br>
-     * 
+     *
      * https://github.com/lastaflute/lastaflute-example-harbor
      */
     public void test_zone_search_component_on_LastaDi() {
@@ -176,7 +195,7 @@ public class Step41DependencyInjectionBeginnerTest extends PlainTestCase {
     /**
      * What is class or file of DI settings that defines MemberBhv class as DI component in the following Spring application? <br>
      * (以下のSpringアプリケーションでMemberBhvクラスをDIコンポーネントとして定義しているDI設定クラスもしくはファイルは？) <br>
-     * 
+     *
      * https://github.com/dbflute-example/dbflute-example-on-springboot
      */
     public void test_zone_search_component_on_Spring() {
