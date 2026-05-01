@@ -56,12 +56,16 @@ public abstract class Animal implements Loudable {
         return new BarkProcess(this).bark();
     }
 
-    // TODO noniwa 修行++: bark専用のロジックなので、BarkProcessに持っていきたいところ by jflute (2025/12/19)
+    // TODO noniwa bark専用のロジックなので、BarkProcessに持っていきたいところ by jflute (2025/12/19)
+    // とりあえず、持っていくはやってみてください。すると、downHitPoint()をpublicをせざるを得なくなる。
+    // それはそれで、downHitPoint()の課題にするので、publicにしてもいいからBarkProcessに持っていく。
+    // ただ、持っていくとZombieがコンパイルエラーになると思うので、それはそれで課題にするので一旦はエラー放置でOK。
     public void breatheIn() { // actually depends on barking
         logger.debug("...Breathing in for barking"); // dummy implementation
         downHitPoint();
     }
 
+    // TODO noniwa こちらもとりあえずBarkProcessに持っていきましょう by jflute (2026/05/01)
     public void prepareAbdominalMuscle() { // also actually depends on barking
         logger.debug("...Using my abdominal muscle for barking"); // dummy implementation
         downHitPoint();
@@ -70,6 +74,8 @@ public abstract class Animal implements Loudable {
     // TODO noniwa 修行++: getBarkWord(), protectedに戻したい by jflute (2025/12/19)
     // リファクタリングで可視性を広げてしまっている。この場合、単なるStringなので、
     // 公開してもそこまで業務的な支障はないかもだけど、できれば隠したい。
+    // hint1: getBarkWord()のpublicに関しては、step6までの文法知識でどうにかなる。
+    // downHitPoint()とは違ってももっと単純な話。(解決方法が違う)
     public abstract String getBarkWord();
 
     public BarkedSound doBark(String barkWord) {

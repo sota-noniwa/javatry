@@ -125,6 +125,16 @@ public class Step41DependencyInjectionBeginnerTest extends PlainTestCase {
         UsingDiAnnotationAction action =
                 (UsingDiAnnotationAction) container.getComponent(UsingDiAnnotationAction.class);
         action.callFriend();
+        
+        // #1on1: アプリの業務コード、アプリの仕組みコード、DIコンテナの三者 (2026/05/01)
+        // 疎結合にしたいのはアプリの業務コードだけ。ここでいうとActionクラス、そこでDIしたい。
+        // そのための土台として、アプリの仕組みコードがDIコンテナに働きかけてDIをしてもらう。
+        // (仕組みコードがDIコンテナにインスタンスのnewとセットアップを教えてあげる)
+        //
+        // そういう意味では、NonDiAnimalFactory が消えたと言うよりも、
+        // DIコンテナに合わせた形に集約された、とも言える。
+        // それにより、アプリの業務コードが自分でFactory経由で取りに行くのではなく、
+        // 待っていればDIコンテナがインスタンスをくれるという形になる。
     }
 
     /**
