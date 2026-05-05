@@ -53,7 +53,7 @@ public abstract class Animal implements Loudable {
     //                                                                               Bark
     //                                                                              ======
     public BarkedSound bark() {
-        return new BarkProcess(this).bark();
+        return new BarkProcess(this).bark(getBarkWord());
     }
 
     // TODO noniwa bark専用のロジックなので、BarkProcessに持っていきたいところ by jflute (2025/12/19)
@@ -71,12 +71,16 @@ public abstract class Animal implements Loudable {
         downHitPoint();
     }
 
-    // TODO noniwa 修行++: getBarkWord(), protectedに戻したい by jflute (2025/12/19)
+    // done noniwa 修行++: getBarkWord(), protectedに戻したい by jflute (2025/12/19)
     // リファクタリングで可視性を広げてしまっている。この場合、単なるStringなので、
     // 公開してもそこまで業務的な支障はないかもだけど、できれば隠したい。
     // hint1: getBarkWord()のpublicに関しては、step6までの文法知識でどうにかなる。
     // downHitPoint()とは違ってももっと単純な話。(解決方法が違う)
-    public abstract String getBarkWord();
+    // TODO jflute: 以下の方法で対応しました by noniwa
+    // BarkWord が Animal クラスの getBarkWord() を呼ぶのではなく、
+    // BarkWord は Animal クラスで生成し、 BarkProcess に引数として渡すようにした。
+    // 結果、 getBarkWord() の可視性を public -> protected にすることができた。
+    protected abstract String getBarkWord();
 
     public BarkedSound doBark(String barkWord) {
         downHitPoint();

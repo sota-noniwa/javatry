@@ -5,7 +5,7 @@ import org.docksidestage.bizfw.basic.objanimal.Animal;
 /**
  * @author noniwa
  */
-public class BarkProcess{
+public class BarkProcess {
 
     private final Animal animal;
 
@@ -13,10 +13,9 @@ public class BarkProcess{
         this.animal = animal;
     }
 
-    public BarkedSound bark() {
+    public BarkedSound bark(String barkWord) {
         animal.breatheIn();
         animal.prepareAbdominalMuscle();
-        String barkWord = animal.getBarkWord();
         BarkedSound barkedSound = animal.doBark(barkWord);
         return barkedSound;
     }
