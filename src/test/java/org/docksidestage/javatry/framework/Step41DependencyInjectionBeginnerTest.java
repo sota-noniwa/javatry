@@ -15,6 +15,9 @@
  */
 package org.docksidestage.javatry.framework;
 
+import java.lang.reflect.Field;
+
+import org.docksidestage.bizfw.basic.objanimal.Cat;
 import org.docksidestage.bizfw.basic.objanimal.Dog;
 import org.docksidestage.bizfw.di.container.SimpleDiContainer;
 import org.docksidestage.bizfw.di.nondi.NonDiDirectFirstAction;
@@ -23,8 +26,11 @@ import org.docksidestage.bizfw.di.nondi.NonDiFactoryMethodAction;
 import org.docksidestage.bizfw.di.nondi.NonDiIndividualFactoryAction;
 import org.docksidestage.bizfw.di.usingdi.UsingDiAccessorAction;
 import org.docksidestage.bizfw.di.usingdi.UsingDiAnnotationAction;
+import org.docksidestage.bizfw.di.usingdi.UsingDiDelegatingAction;
+import org.docksidestage.bizfw.di.usingdi.UsingDiWebFrameworkProcess;
 import org.docksidestage.bizfw.di.usingdi.settings.UsingDiModule;
 import org.docksidestage.unit.PlainTestCase;
+import sun.java2d.pipe.SpanShapeRenderer;
 
 /**
  * The test of Dependency Injection (DI) as beginner level. <br>
@@ -125,7 +131,7 @@ public class Step41DependencyInjectionBeginnerTest extends PlainTestCase {
         UsingDiAnnotationAction action =
                 (UsingDiAnnotationAction) container.getComponent(UsingDiAnnotationAction.class);
         action.callFriend();
-        
+
         // #1on1: アプリの業務コード、アプリの仕組みコード、DIコンテナの三者 (2026/05/01)
         // 疎結合にしたいのはアプリの業務コードだけ。ここでいうとActionクラス、そこでDIしたい。
         // そのための土台として、アプリの仕組みコードがDIコンテナに働きかけてDIをしてもらう。
@@ -135,7 +141,7 @@ public class Step41DependencyInjectionBeginnerTest extends PlainTestCase {
         // DIコンテナに合わせた形に集約された、とも言える。
         // それにより、アプリの業務コードが自分でFactory経由で取りに行くのではなく、
         // 待っていればDIコンテナがインスタンスをくれるという形になる。
-        
+
         // #1on1: DIコンテナーのコードに興味を持ったのはなぜ？ (2026/05/01)
         // Seasarの話。そして、Lasta Diの話。
         // そもそもフレームワークのコードを追うようになったのはなぜ？
@@ -155,8 +161,20 @@ public class Step41DependencyInjectionBeginnerTest extends PlainTestCase {
      * (UsingDiAnnotationAction と UsingDiDelegatingAction の違いは？)
      */
     public void test_usingdi_difference_between_Annotation_and_Delegating() {
-        // your answer? => 
+        // your answer? => UsingDiAnnotationAction は caller が呼ぶためのメソッドを持ち、ロジックもそのメソッド内に直接書いてある。
+        // UsingDiDelegatingAction は caller が呼ぶためのメソッドを持ち、ロジックは別クラス (UsingDiDelegatingLogic) に委譲している。
         // and your confirmation code here freely
+        SimpleDiContainer container = SimpleDiContainer.getInstance();
+        container.registerModule(new UsingDiModule());
+        container.resolveDependency();
+
+        UsingDiAnnotationAction action1 =
+                (UsingDiAnnotationAction) container.getComponent(UsingDiAnnotationAction.class);
+        action1.callFriend();
+        System.out.println("-------------------------");
+        UsingDiDelegatingAction action2 =
+                (UsingDiDelegatingAction) container.getComponent(UsingDiDelegatingAction.class);
+        action2.goToOffice();
     }
 
     // ===================================================================================
@@ -168,6 +186,13 @@ public class Step41DependencyInjectionBeginnerTest extends PlainTestCase {
      */
     public void test_usingdi_UsingDiWebFrameworkProcess_callfriend_accessor() {
         // execution code here
+        SimpleDiContainer diContainer = SimpleDiContainer.getInstance();
+        diContainer.registerModule(new UsingDiModule());
+        diContainer.resolveDependency();
+
+        UsingDiWebFrameworkProcess diFrameWork = new UsingDiWebFrameworkProcess();
+        diFrameWork.requestAccessorCallFriend();
+        // DI コンテナからコンポーネントを取得して、 callFriend() を呼び出す作業を framework が代わりにやってくれている
     }
 
     /**
@@ -179,15 +204,43 @@ public class Step41DependencyInjectionBeginnerTest extends PlainTestCase {
      */
     public void test_usingdi_UsingDiWebFrameworkProcess_callfriend_annotation_delegating() {
         // execution code here
+        SimpleDiContainer container = SimpleDiContainer.getInstance();
+        UsingDiModule module = new UsingDiModule() {
+            @Override
+            protected Cat createPlayingCat() {
+                return new Cat() {
+                    @Override
+                    protected int getInitialHitPoint() {
+                        return 20;
+                    }
+                };
+            }
+        };
+        container.registerModule(module);
+        container.resolveDependency();
+
+        UsingDiWebFrameworkProcess framework = new UsingDiWebFrameworkProcess();
+        framework.requestAnnotationCallFriend();
+        framework.requestDelegatingCallFriend();
     }
 
     /**
      * What is concrete class of instance variable "animal" of UsingDiAnnotationAction? (when registering UsingDiModule) <br>
      * (UsingDiAnnotationAction のインスタンス変数 "animal" の実体クラスは？ (UsingDiModuleを登録した時))
      */
-    public void test_usingdi_whatis_animal() {
-        // your answer? => 
+    public void test_usingdi_whatis_animal() throws NoSuchFieldException, IllegalAccessException {
+        // your answer? => TooLazyDog. UsingDiModule.bind() で実体クラスを作成している
         // and your confirmation code here freely
+        SimpleDiContainer container = SimpleDiContainer.getInstance();
+        container.registerModule(new UsingDiModule());
+        container.resolveDependency();
+
+        UsingDiAnnotationAction action =
+                (UsingDiAnnotationAction) container.getComponent(UsingDiAnnotationAction.class);
+        Field field = action.getClass().getDeclaredField("animal");
+        field.setAccessible(true);
+        Object animal = field.get(action);
+        System.out.println(animal.getClass());
     }
 
     // ===================================================================================
@@ -198,7 +251,9 @@ public class Step41DependencyInjectionBeginnerTest extends PlainTestCase {
      * (DIコンテナとは？)
      */
     public void test_whatis_DIContainer() {
-        // your answer? => 
+        // your answer? => 登録したコンポーネントの生成・管理を行い、必要な時にコンポーネントを提供してくれる箱。
+        // サービスを使う側が依存するコンポーネントの生成・初期化・管理をしなくて済むので、使いやすくなる。
+        // 責務を分離できるので、コードを変更する際にどこを見れば良いかわかりやすい。（変更しやすい・可読性向上）
         // and your confirmation code here freely
     }
 
@@ -212,7 +267,10 @@ public class Step41DependencyInjectionBeginnerTest extends PlainTestCase {
      * https://github.com/lastaflute/lastaflute-example-harbor
      */
     public void test_zone_search_component_on_LastaDi() {
-        // your answer? => 
+        // your answer? => src/main/resources/dbflute.xml at line 16
+        // 同ディレクトリの app.xml でコンポーネントの登録ができると書いてある。
+        // https://dbflute.seasar.org/ja/lastaflute/lastadi/index.html
+        // app.xml から dbflute.xml を参照している。
     }
 
     /**
@@ -222,6 +280,9 @@ public class Step41DependencyInjectionBeginnerTest extends PlainTestCase {
      * https://github.com/dbflute-example/dbflute-example-on-springboot
      */
     public void test_zone_search_component_on_Spring() {
-        // your answer? => 
+        // your answer? => src/main/java/org/docksidestage/dbflute/allcommon/DBFluteBeansJavaConfig.java
+        // @ComponentScan(value="org.docksidestage.dbflute.exbhv", lazyInit=true) で exbhv ディレクトリ配下のコンポーネントを
+        // スキャンする設定をしている。
+        // MemberBhv クラスには @org.springframework.stereotype.Component("memberBhv") を付与し、スキャン対象としている。
     }
 }
