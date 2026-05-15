@@ -164,6 +164,8 @@ public class Step41DependencyInjectionBeginnerTest extends PlainTestCase {
         // your answer? => UsingDiAnnotationAction は caller が呼ぶためのメソッドを持ち、ロジックもそのメソッド内に直接書いてある。
         // UsingDiDelegatingAction は caller が呼ぶためのメソッドを持ち、ロジックは別クラス (UsingDiDelegatingLogic) に委譲している。
         // and your confirmation code here freely
+        // #1on1: DIがネストしてる、DIがチェーンしてるのを確認するエクササイズ (2026/05/15)
+        // #1on1: レイヤー依存関係のお話 (2026/05/15)
         SimpleDiContainer container = SimpleDiContainer.getInstance();
         container.registerModule(new UsingDiModule());
         container.resolveDependency();
@@ -193,6 +195,7 @@ public class Step41DependencyInjectionBeginnerTest extends PlainTestCase {
         UsingDiWebFrameworkProcess diFrameWork = new UsingDiWebFrameworkProcess();
         diFrameWork.requestAccessorCallFriend();
         // DI コンテナからコンポーネントを取得して、 callFriend() を呼び出す作業を framework が代わりにやってくれている
+        // #1on1: Lasta Di のコードも追っかけてみて、Actionをnewして、フィールドDIするところまでイメージしてみた (2026/05/15)
     }
 
     /**
@@ -235,6 +238,7 @@ public class Step41DependencyInjectionBeginnerTest extends PlainTestCase {
         container.registerModule(new UsingDiModule());
         container.resolveDependency();
 
+        // #1on1: リフレクションの実装できてるのGood (2026/05/15)
         UsingDiAnnotationAction action =
                 (UsingDiAnnotationAction) container.getComponent(UsingDiAnnotationAction.class);
         Field field = action.getClass().getDeclaredField("animal");
@@ -255,8 +259,41 @@ public class Step41DependencyInjectionBeginnerTest extends PlainTestCase {
         // サービスを使う側が依存するコンポーネントの生成・初期化・管理をしなくて済むので、使いやすくなる。
         // 責務を分離できるので、コードを変更する際にどこを見れば良いかわかりやすい。（変更しやすい・可読性向上）
         // and your confirmation code here freely
+        
+        // #1on1: コンポーネントの生成・初期化・管理をしなくて済むの補足 (2026/05/15)
+        // new SeaLogic("aaaaaa").initialize().xxxxxxx();
+        // ↑これを呼び出し側がやらなくていい。
+        // 責務を分離 → どこを見れば良いかわかりやすい、変更しやすい
+        
+        // 依存という言葉をしっかり使っていくと...
+        // 責務を分離 → クラス間の依存を排除している
+        // クラス間の依存とは？ A が B を呼ぶ時、B の実体がなんなのか？を A が知らなくていい。
+        // SeaLogicのつもりで呼び出していたら、実体はSeaLogicそのものではなく、ExtendedSeaLogicかもしれない。
+        // (ExtendedSeaLogic extends SeaLogic)
+        //
+        // ポリモーフィズムがやりやすくなっている。
+        //
+        // Animalの実体が、TooLazyDog から普通のDogに変えるってとき、Moduleクラスの一箇所直せばシステム全体変わる。
+        // Animalを使っているクラスたち(Action, Logic)は、Animalの実体を知らずにAnimalを使っている。
+        //
+        // DIコンテナーって、(抽象化された)巨大なファクトリメソッド群とも言える。
+        //
+        // ここでのポリモーフィズムは、interfaceでも抽象クラスでも具象クラスでもみんな同じ。
+        // interfaceでも抽象クラスでも具象クラスは別のトピック(最重要なことじゃない) by のにわさん
+        // 大事なのは、何をnewするか？を隠蔽していること by のにわさん
+        //
+        // 実際の身近なDIコンテナで差し替えている例。
+        // DIコンテナの@Transactionでの具象to具象のオーバーライドのお話。
+        //
+        // Interceptorも同じ仕組み by のにわさん
+        // yes, @Transactionも処理入れるところはInterceptor。
+        // Interceptorは、挟み込む処理の実装をするクラスを指している。
+        // 一方で、ServletFilterは、Servletの中で独自にフィルターチェーンさせてるだけなので、
+        // DIコンテナとは絡まない。し、ServletFilterでfilterしてるのは、
+        // requestという抽象要求なので、固定のメソッドの呼び出しに挟み込んでるわけじゃない。
     }
 
+    // TODO jflute 次回1on1にて、DIコンポーネントの登録方法について。歴史的な話も。 (2026/05/15)
     // ===================================================================================
     //                                                                           Good Luck
     //                                                                           =========

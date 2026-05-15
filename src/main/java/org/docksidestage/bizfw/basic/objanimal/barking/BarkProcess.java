@@ -28,7 +28,9 @@ public class BarkProcess {
     // とりあえず、持っていくはやってみてください。すると、downHitPoint()をpublicをせざるを得なくなる。
     // それはそれで、downHitPoint()の課題にするので、publicにしてもいいからBarkProcessに持っていく。
     // ただ、持っていくとZombieがコンパイルエラーになると思うので、それはそれで課題にするので一旦はエラー放置でOK。
-    // TODO jflute: 持ってきたが、downHitPoint() を public にしてしまいました。
+    // done jflute: 持ってきたが、downHitPoint() を public にしてしまいました。
+    // 想定通りでOKです by jflute (2026/05/15)
+    // TODO noniwa breatheIn()とprepareAbdominalMuscle()はpublicじゃなくて良い by jflute (2026/05/15)
     public void breatheIn() { // actually depends on barking
         logger.debug("...Breathing in for barking"); // dummy implementation
         animal.downHitPoint();

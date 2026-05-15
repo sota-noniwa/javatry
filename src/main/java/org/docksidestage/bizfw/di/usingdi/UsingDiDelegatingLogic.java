@@ -15,6 +15,8 @@
  */
 package org.docksidestage.bizfw.di.usingdi;
 
+import javax.transaction.Transactional;
+
 import org.docksidestage.bizfw.basic.objanimal.Animal;
 import org.docksidestage.bizfw.basic.supercar.SupercarDealer;
 import org.docksidestage.bizfw.basic.supercar.SupercarManufacturer.Supercar;

@@ -31,6 +31,7 @@ public abstract class Animal implements Loudable {
     // ===================================================================================
     //                                                                          Definition
     //                                                                          ==========
+    // TODO noniwa これもう unused の警告が出ているので削除でOKです by jflute (2026/05/15)
     private static final Logger logger = LoggerFactory.getLogger(Animal.class);
 
     // ===================================================================================
@@ -61,10 +62,14 @@ public abstract class Animal implements Loudable {
     // 公開してもそこまで業務的な支障はないかもだけど、できれば隠したい。
     // hint1: getBarkWord()のpublicに関しては、step6までの文法知識でどうにかなる。
     // downHitPoint()とは違ってももっと単純な話。(解決方法が違う)
-    // TODO jflute: 以下の方法で対応しました by noniwa
+    // done jflute: 以下の方法で対応しました by noniwa
     // BarkWord が Animal クラスの getBarkWord() を呼ぶのではなく、
     // BarkWord は Animal クラスで生成し、 BarkProcess に引数として渡すようにした。
     // 結果、 getBarkWord() の可視性を public -> protected にすることができた。
+    //
+    // #1on1: こっちは、参照するだけ、selectなので、結果さえ渡ればOK (2026/05/15)
+    // BarkProcessが求めているのは、getBarkWord()メソッドを呼ぶことではなく、その結果が欲しい。
+    // 引数/戻り値デザイン、灯台下暗し。
     protected abstract String getBarkWord();
 
     public BarkedSound doBark(String barkWord) {
@@ -78,6 +83,7 @@ public abstract class Animal implements Loudable {
     // TODO noniwa 修行#: downHitPoint(), protectedをキープしたい by jflute (2025/12/19)
     // (他のとぅどぅをやってると、publicにしたくなるときが来るはず)
     // (これは最悪、いったんpublicにして、後でゆっくり考えるでもOK)
+    // #1on1: こっちは、downHitPoint()メソッドを呼ぶことが重要。Animalの状態を変えたい。updateしたい。 (2026/05/15)
     public void downHitPoint() {
         --hitPoint;
         if (hitPoint <= 0) {

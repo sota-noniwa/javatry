@@ -54,6 +54,9 @@ public class Zombie extends Animal {
     // ===================================================================================
     //                                                                               Bark
     //                                                                              ======
+    // TODO noniwa 修行++: superのbreatheIn()がBarkProcessに移動しちゃったからコンパイルエラーになった by jflute (2026/05/15)
+    // でも、このままだと、Zombieの「息を吸ったら日記に回数を記録する」という機能がロスしたままになっちゃう。
+    // なので、どうにかして、Zombieがbark()して息を吸う時にcountする処理を付け足したい。
 //    @Override
 //    public void breatheIn() {
 //        super.breatheIn();
