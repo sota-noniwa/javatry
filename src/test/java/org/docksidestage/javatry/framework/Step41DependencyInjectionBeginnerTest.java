@@ -30,7 +30,6 @@ import org.docksidestage.bizfw.di.usingdi.UsingDiDelegatingAction;
 import org.docksidestage.bizfw.di.usingdi.UsingDiWebFrameworkProcess;
 import org.docksidestage.bizfw.di.usingdi.settings.UsingDiModule;
 import org.docksidestage.unit.PlainTestCase;
-import sun.java2d.pipe.SpanShapeRenderer;
 
 /**
  * The test of Dependency Injection (DI) as beginner level. <br>
