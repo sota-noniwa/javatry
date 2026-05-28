@@ -309,6 +309,31 @@ public class Step41DependencyInjectionBeginnerTest extends PlainTestCase {
         // https://dbflute.seasar.org/ja/lastaflute/lastadi/index.html
         // app.xml から dbflute.xml を参照している。
     }
+    // #1on1: コンポーネント登録方法の歴史 (2026/05/28)
+    // 最初、XMLでベタに教えてあげる。
+    //
+    // ここから、フレームワークが探しにくるという流れに。
+    //
+    // Seasarが規約ベースでコンポーネント登録。場所と名前で自動登録。
+    // Lasta Diが引き継いだ。
+    // 業務クラスは規約ベースちゃちゃっと。(数が多いのでその方が良い)
+    // 仕組みクラスはDIコンテナのフル機能を柔軟に使うためにxml。(数が少ないから問題ない)
+    // というハイブリッド。
+    //
+    // SpringがアノテーションでComponentスキャン登録。アプリは目印を付けておく。
+    // @Component系アノテーションを探していく。
+    //
+    // _/_/_/_/_/_/_/_/_/_/_/_/
+    // 自由度とレールのメリデメ。
+    // (現実世界でも同じ)
+    // _/_/_/_/
+    //
+    // Google Guice, クラスでやっていく。xmlがjavaになった。
+    // タイプセーフで自由度も高い。環境差し替えはしづらいけど、あんまやんないでしょうと。
+    // javatryがこのやり方。
+    //
+    // SpringのJavaConfig。仕組み的なクラス。(非定型なもの)
+    //
 
     /**
      * What is class or file of DI settings that defines MemberBhv class as DI component in the following Spring application? <br>
