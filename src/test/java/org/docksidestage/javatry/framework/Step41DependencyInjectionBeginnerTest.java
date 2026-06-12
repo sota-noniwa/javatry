@@ -292,7 +292,7 @@ public class Step41DependencyInjectionBeginnerTest extends PlainTestCase {
         // requestという抽象要求なので、固定のメソッドの呼び出しに挟み込んでるわけじゃない。
     }
 
-    // TODO jflute 次回1on1にて、DIコンポーネントの登録方法について。歴史的な話も。 (2026/05/15)
+    // done jflute 次回1on1にて、DIコンポーネントの登録方法について。歴史的な話も。 (2026/05/15)
     // ===================================================================================
     //                                                                           Good Luck
     //                                                                           =========
