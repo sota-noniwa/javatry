@@ -282,10 +282,10 @@ public class Step41DependencyInjectionBeginnerTest extends PlainTestCase {
         // 大事なのは、何をnewするか？を隠蔽していること by のにわさん
         //
         // 実際の身近なDIコンテナで差し替えている例。
-        // DIコンテナの@Transactionでの具象to具象のオーバーライドのお話。
+        // DIコンテナの@Transactionalでの具象to具象のオーバーライドのお話。
         //
         // Interceptorも同じ仕組み by のにわさん
-        // yes, @Transactionも処理入れるところはInterceptor。
+        // yes, @Transactionalも処理入れるところはInterceptor。
         // Interceptorは、挟み込む処理の実装をするクラスを指している。
         // 一方で、ServletFilterは、Servletの中で独自にフィルターチェーンさせてるだけなので、
         // DIコンテナとは絡まない。し、ServletFilterでfilterしてるのは、

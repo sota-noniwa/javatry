@@ -54,7 +54,13 @@ public abstract class Animal implements Loudable {
     //                                                                               Bark
     //                                                                              ======
     public BarkedSound bark() {
-        return new BarkProcess(this).bark(getBarkWord());
+        BarkProcess barkProcess = createBarkProcess(); // 実際にどんな具象クラスかは知らない
+        return barkProcess.bark(getBarkWord());
+    }
+
+    // ↓protectedにして具象クラス側でオーバーライドできるようにする (橋渡しの自由をサブクラスに与える)
+    protected BarkProcess createBarkProcess() { // どんな具象クラスかを決めるのはここ
+        return new BarkProcess(this); // Zombieのときはここに来ない
     }
 
     // done noniwa 修行++: getBarkWord(), protectedに戻したい by jflute (2025/12/19)

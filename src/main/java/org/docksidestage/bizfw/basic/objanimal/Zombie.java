@@ -15,6 +15,9 @@
  */
 package org.docksidestage.bizfw.basic.objanimal;
 
+import org.docksidestage.bizfw.basic.objanimal.barking.BarkProcess;
+import org.docksidestage.bizfw.basic.objanimal.barking.ZombieBarkProcess;
+
 /**
  * The object for zombie(ゾンビ).
  * @author jflute
@@ -54,7 +57,7 @@ public class Zombie extends Animal {
     // ===================================================================================
     //                                                                               Bark
     //                                                                              ======
-    // TODO noniwa 修行++: superのbreatheIn()がBarkProcessに移動しちゃったからコンパイルエラーになった by jflute (2026/05/15)
+    // done noniwa 修行++: superのbreatheIn()がBarkProcessに移動しちゃったからコンパイルエラーになった by jflute (2026/05/15)
     // でも、このままだと、Zombieの「息を吸ったら日記に回数を記録する」という機能がロスしたままになっちゃう。
     // なので、どうにかして、Zombieがbark()して息を吸う時にcountする処理を付け足したい。
 //    @Override
@@ -62,6 +65,21 @@ public class Zombie extends Animal {
 //        super.breatheIn();
 //        zombieDiary.countBreatheIn();
 //    }
+    // ↑の代わりに↓
+    @Override // Zombieインスタンスでbark()したときは、こっちのcreateが動いてZombieBarkProcessになる。
+    protected BarkProcess createBarkProcess() {
+        return new ZombieBarkProcess(this);
+        /* 無名インナークラスでちゃちゃっと済ませるならこんな感じ↓
+           ちゃちゃっと済ませてもやってることはZombieBarkProcessであることには変わりはない。
+        return new BarkProcess(this) {
+            @Override
+            public void breatheIn() {
+                super.breatheIn();
+                zombieDiary.countBreatheIn();
+            }
+        };
+         */
+    }
 
     @Override
     public String getBarkWord() {
