@@ -666,4 +666,7 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         // (DDDの話も少し)
         // (DB設計の話も少し、JJUGでのDB設計話、業務知識大事)
     }
+    
+    // #1on1: 考える力をどう養っていくか？ (2026/06/12)
+    // 世の中のエクササイズも良いと思う。javatryの続きもそういったエクササイズではある。
 }
