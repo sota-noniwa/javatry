@@ -1,8 +1,5 @@
 package org.docksidestage.bizfw.basic.objanimal.barking;
 
-import org.docksidestage.bizfw.basic.objanimal.Animal;
-import org.docksidestage.bizfw.basic.objanimal.Zombie;
-import org.docksidestage.bizfw.basic.objanimal.Zombie.ZombieDiary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,16 +13,22 @@ public class BarkProcess {
     // #1on1: 論理的循環参照の話 (2026/06/12)
     // Animal逆参照があると、汎用性としては低くなる。
     // ただ、それだけと言えばそれだけなので、すごく悪いというわけでもない。
-    private final Animal animal;
+    // 追記: コールinterfaceを入れたことで、Animalへの依存がなくなった。
+    private final DownHitPointコール downHitPointコール;
 
-    public BarkProcess(Animal animal) {
-        this.animal = animal;
+    public BarkProcess(DownHitPointコール downHitPointkコール) {
+        this.downHitPointコール = downHitPointkコール;
+    }
+    
+    public interface DownHitPointコール {
+        
+        void callDown();
     }
 
     public BarkedSound bark(String barkWord) {
         breatheIn();
         prepareAbdominalMuscle();
-        BarkedSound barkedSound = animal.doBark(barkWord);
+        BarkedSound barkedSound = doBark(barkWord);
         return barkedSound;
     }
 
@@ -35,10 +38,10 @@ public class BarkProcess {
     // ただ、持っていくとZombieがコンパイルエラーになると思うので、それはそれで課題にするので一旦はエラー放置でOK。
     // done jflute: 持ってきたが、downHitPoint() を public にしてしまいました。
     // 想定通りでOKです by jflute (2026/05/15)
-    // TODO noniwa breatheIn()とprepareAbdominalMuscle()はpublicじゃなくて良い by jflute (2026/05/15)
-    public void breatheIn() { // actually depends on barking
+    // done noniwa breatheIn()とprepareAbdominalMuscle()はpublicじゃなくて良い by jflute (2026/05/15)
+    protected void breatheIn() { // actually depends on barking
         logger.debug("...Breathing in for barking"); // dummy implementation
-        animal.downHitPoint();
+        downHitPointコール.callDown();
 
         // #1on1: もしベタにZombie問題を解決するとしたら... (2026/06/12)
         //if (animal instanceof Zombie) { // ぞんびだったら
@@ -123,8 +126,19 @@ public class BarkProcess {
     }
 
     // done noniwa こちらもとりあえずBarkProcessに持っていきましょう by jflute (2026/05/01)
-    public void prepareAbdominalMuscle() { // also actually depends on barking
+    protected void prepareAbdominalMuscle() { // also actually depends on barking
         logger.debug("...Using my abdominal muscle for barking"); // dummy implementation
-        animal.downHitPoint();
+        
+        // #1on1: なんとかして、ここで downHitPoint() の処理を動かさないといけない (2026/06/26)
+        // hint:
+        // 処理を呼びたい (自分で実行するわけじゃない。Animalにやって欲しい)
+        // 処理が実行されるように打診したい (何かしらを経由して最終的にやってもらえばいい)
+        // interface経由にすることで、処理の具体的な呼び方に対して依存がなくなる。
+        downHitPointコール.callDown();
+    }
+
+    protected BarkedSound doBark(String barkWord) {
+        downHitPointコール.callDown();
+        return new BarkedSound(barkWord);
     }
 }

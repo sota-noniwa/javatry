@@ -279,6 +279,7 @@ public class Step05ClassTest extends PlainTestCase {
         // This test fails if it's not nighttime right now.
         // TODO noniwa 修行++: 現在日時をどうにかして、テストのときに差し替えて実行できるようにしたい by jflute (2025/10/21)
         // Java自身の現在日時は差し替えられない。PC日付が来ちゃう。PC日付は変えないように。
+        // #1on1: step6でdownHitPoint()のジレンマがわかったのにわさんならできるかも!? (2026/06/26)
         TicketBooth booth = new TicketBooth();
         TicketBuyResult buyResult = booth.buyTicket(NIGHT_ONLY_TWO_DAY, 7500);
         log(buyResult.getTicket().getType());
