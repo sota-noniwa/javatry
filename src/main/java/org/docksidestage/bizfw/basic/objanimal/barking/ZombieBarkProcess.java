@@ -9,8 +9,8 @@ public class ZombieBarkProcess extends BarkProcess {
 
     private final Zombie zombie;
 
-    public ZombieBarkProcess(Zombie zombie) {
-        super(zombie);
+    public ZombieBarkProcess(Zombie zombie, DownHitPointコール downHitPointkコール) {
+        super(downHitPointkコール);
         this.zombie = zombie;
     }
 

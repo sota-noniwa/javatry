@@ -15,14 +15,10 @@
  */
 package org.docksidestage.bizfw.basic.objanimal;
 
-import java.util.function.Consumer;
-
 import org.docksidestage.bizfw.basic.objanimal.barking.BarkProcess;
 import org.docksidestage.bizfw.basic.objanimal.barking.BarkProcess.DownHitPointコール;
 import org.docksidestage.bizfw.basic.objanimal.barking.BarkedSound;
 import org.docksidestage.bizfw.basic.objanimal.loud.Loudable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * The object for animal(動物).

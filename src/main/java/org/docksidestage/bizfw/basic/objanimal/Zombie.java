@@ -16,6 +16,7 @@
 package org.docksidestage.bizfw.basic.objanimal;
 
 import org.docksidestage.bizfw.basic.objanimal.barking.BarkProcess;
+import org.docksidestage.bizfw.basic.objanimal.barking.BarkProcess.DownHitPointコール;
 import org.docksidestage.bizfw.basic.objanimal.barking.ZombieBarkProcess;
 
 /**
@@ -68,7 +69,13 @@ public class Zombie extends Animal {
     // ↑の代わりに↓
     @Override // Zombieインスタンスでbark()したときは、こっちのcreateが動いてZombieBarkProcessになる。
     protected BarkProcess createBarkProcess() {
-        return new ZombieBarkProcess(this);
+        // 実際は、このコールバックはAnimalと共通化した方が良いが(あとそもそもLambda式でとか)、
+        // Animal側の1on1フォローイングのコメントを残すために、ここでは辻褄合わせコピペ。 (2026/06/27)
+        return new ZombieBarkProcess(this, new DownHitPointコール() {
+            public void callDown() {
+                downHitPoint();
+            }
+        });
         /* 無名インナークラスでちゃちゃっと済ませるならこんな感じ↓
            ちゃちゃっと済ませてもやってることはZombieBarkProcessであることには変わりはない。
         return new BarkProcess(this) {
