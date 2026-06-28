@@ -235,7 +235,7 @@ public class Step04MethodTest extends PlainTestCase {
     //}
     
     // ２回同じループがあるので、ヘルパーメソッドとして抜き出すのもあり
-    // TODO jflute 確かに。ということで1on1でふぉろー予定 (2025/09/11)
+    // done jflute 確かに。ということで1on1でふぉろー予定 (2025/09/11)
     /* #1on1 e.g. こういうのもアリ (2025/09/26)
     private String quote(String s, String quotation) {
         StringBuilder quoted = new StringBuilder();
